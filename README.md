@@ -1,2 +1,2 @@
 # PlasticityProject
-creating abaqus subroutine for the course "Plasticity Theory"
+Creating Abaqus VUMAT subroutine for the PhD course "Plasticity Theory" at NTNU.
