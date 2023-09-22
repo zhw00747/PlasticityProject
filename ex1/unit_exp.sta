@@ -1,0 +1,28 @@
+Abaqus/Explicit 2022                            DATE 22-sep.-2023  TIME 17:09:02
+-------------------------------------------------------------------------------
+ PREPROCESSOR WARNING MESSAGES
+-------------------------------------------------------------------------------
+
+
+***WARNING: There are 3 warning messages in the data (.dat) file.  Please
+            check the data file for possible errors in the input file.
+
+
+-------------------------------------------------------------------------------
+  USER SUBROUTINE VUMAT
+-------------------------------------------------------------------------------
+
+
+***WARNING: A material defined in user subroutine VUMAT must be defined as
+            purely elastic (using the initial elastic modulus) at the
+            beginning of the analysis (stepTime=0). This is an informative
+            message. It does not necessarily indicate that user subroutine
+            VUMAT is incorrectly defined.
+
+
+
+***ERROR: Bad Material definition in element number 1 instance VUMAT: zero or
+          negative initial dilatational modulus caused by bad material data.
+          Please check your material input and any initial conditions if
+          necessary.
+

@@ -1,0 +1,126 @@
+*Heading
+*Preprint, echo=NO, model=NO, history=NO, contact=NO
+**----------------------------------------------------------------
+** PARTS
+**----------------------------------------------------------------
+*Part, name=VUMAT
+*Node
+      1, 5,    5,    5
+      2, 5,    0,    5
+      3, 5,    0,    0
+      4, 5,    5,    0
+      5, 0,    0,    5
+      6, 0,    0,    0
+      7, 0,    5,    0
+      8, 0,    5,    5  
+*Element, type=C3D8R
+1, 8, 5, 6, 7, 1, 2, 3, 4
+*Nset, nset=encas
+  2,  3,  5,  6
+*Nset, nset=symx
+  5,  6,  7,  8
+*Nset, nset=load
+  1,  4,  7,  8
+*Nset, nset=symz
+  3,  4,  6,  7
+*Elset, elset=solid
+ 1,
+*Solid Section, elset=solid, material=VUMAT
+,
+*End Part
+**----------------------------------------------------------------
+**----------------------------------------------------------------
+*Part, name=REF
+*Node
+      1, 11,    5,    5
+      2, 11,    0,    5
+      3, 11,    0,    0
+      4, 11,    5,    0
+      5,  6,    0,    5
+      6,  6,    0,    0
+      7,  6,    5,    0
+      8,  6,    5,    5  
+*Element, type=C3D8R
+1, 8, 5, 6, 7, 1, 2, 3, 4
+*Nset, nset=encas
+  2,  3,  5,  6
+*Nset, nset=symx
+  5,  6,  7,  8
+*Nset, nset=load
+  1,  4,  7,  8
+*Nset, nset=symz
+  3,  4,  6,  7
+*Elset, elset=solid
+ 1,
+*Solid Section, elset=solid, material=REF
+,
+*End Part
+**----------------------------------------------------------------
+** ASSEMBLY
+**----------------------------------------------------------------
+*Assembly, name=Assembly
+*Instance, name=VUMAT, part=VUMAT
+*End Instance
+*Instance, name=REF, part=REF
+*End Instance
+*End Assembly
+**----------------------------------------------------------------
+** MATERIALS
+**----------------------------------------------------------------
+*material,name=REF
+*density
+2.7e-9
+*elastic
+70000.0, 0.3
+*material,name=VUMAT
+*density
+2.7e-9
+*USER MATERIAL,CONSTANTS=8
+**      E0,     NU
+   70000.0,    0.3
+**----------------------------------------------------------------
+** BOUNDARY CONDITIONS
+**----------------------------------------------------------------
+*Amplitude, name=Amp-2, definition=SMOOTH STEP
+          0.,           0.,        0.001,           1,         10,         1		  
+*Boundary
+VUMAT.encas, YSYMM
+*Boundary
+VUMAT.symx, XSYMM
+*Boundary
+VUMAT.symz, ZSYMM
+*Boundary
+REF.encas, YSYMM
+*Boundary
+REF.symx, XSYMM
+*Boundary
+REF.symz, ZSYMM
+**----------------------------------------------------------------
+** STEP: load
+**----------------------------------------------------------------
+*Step, name=load
+*Dynamic, Explicit,scale factor=0.5
+, 0.05
+*Bulk Viscosity
+0.06, 1.2
+**----------------------------------------------------------------
+** BOUNDARY CONDITIONS
+**----------------------------------------------------------------
+*Boundary, amplitude=Amp-2, type=VELOCITY
+VUMAT.load, 2, 2, 100.0
+*Boundary, amplitude=Amp-2, type=VELOCITY
+REF.load, 2, 2, 100.0
+**----------------------------------------------------------------
+** OUTPUT REQUESTS
+**----------------------------------------------------------------
+*Restart, write, number interval=1, time marks=NO
+**----------------------------------------------------------------
+** FIELD OUTPUT: F-Output-1
+**----------------------------------------------------------------
+*OUTPUT,FIELD,NUMBER INTERVAL=150,TIME MARKS=YES
+*ELEMENT OUTPUT
+S,LE,SDV,STATUS
+*NODE OUTPUT
+U
+*Output, history, variable=PRESELECT, time interval=0.01
+*END STEP

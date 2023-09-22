@@ -1,0 +1,7 @@
+#!/bin/bash
+clear
+init_abaqus_subroutine
+
+abaqus double job=unit_exp user=VUMAT_ex1.f int ask_delete=off
+
+rm -f *.com *.mdl *.pac *.res *.stt *.src *.sel *.mdl *.prt *.abq

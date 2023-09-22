@@ -1,0 +1,59 @@
+<Description>
+      ABAQUS/package rank 0 encountered a SEGMENTATION VIOLATION referencing location 0x7f5f2f27aa58
+
+</Description>
+
+
+<Context>
+   PACKAGE
+</Context>
+
+<Phase>
+   pac_exe_Model | pac_exe_Procedure0 | all_and_fil_exe_Procedure | all_and_fil_exe_Procedure_dmn1
+</Phase>
+
+
+<Memory>
+   <Current>             558 MB </Current>
+   <Resident>            130 MB </Resident>
+   <Physical>          31744 MB </Physical>
+   <Limit>             20316 MB </Limit>
+   <Accessible>        31744 MB </Accessible>
+   <Allocator>            DL    </Allocator>
+   <HugePages>       madvise    </HugePages>
+</Memory>
+
+<Directories>
+  <current> /tmp/anders_unit_exp_71795     </current> <free>    504 GB </free>   <used>    105 GB </used> 
+    <indir> /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/ex1 </indir>   <free>    504 GB </free>  
+   <outdir> /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/ex1 </outdir>  <free>    504 GB </free> 
+   <tmpdir> /tmp/anders_unit_exp_71795     </tmpdir>  <free>    504 GB </free> 
+</Directories>
+
+<Installation>
+     <Version> 2022  </Version>
+       <Build> 2021_09_15-19.57.30 176069 </Build>
+  <Executable> /opt/abaqus/2022/linux_a64/code/bin/package </Executable>
+</Installation>
+
+<Callstack>
+   1) libirc.so                  0x00046330 ! __intel_avx_rep_memcpy ??:?
+   2) libifcoremt.so.5           0x000b56de ! for_write_seq_lis_xmit ??:?
+   3) libexplicitU.so            0x00004462 ! assert           ??:?
+   4) libexplicitU.so            0x000042c4 ! vumat            ??:?
+   5) libABQSMAPacModule.so      0x00ea158f ! fil_opt_vumatexp_ ??:?
+   6) libABQSMAPacModule.so      0x00f4ca5c ! fil_seg_optionbranch_ ??:?
+   7) libABQSMAPacModule.so      0x00f9a720 ! fil_seg_solidexp_ ??:?
+   8) libABQSMAPacModule.so      0x006543f8 ! fil_ele_solidsegexp ??:?
+   9) libABQSMAPacModule.so      0x00629ae5 ! fil_ele_solidexp_ ??:?
+  10) libABQSMAPacModule.so      0x004f0aa2 ! fil_cla_solidexp_ ??:?
+  11) libABQSMAPacModule.so      0x00eb3fd0 ! fil_pro_Explicit ??:?
+  12) libABQSMAPacModule.so      0x006934c6 ! fil_exe_Procedure ??:?
+  13) libABQSMAPacModule.so      0x011967b0 ! pac_exe_Procedure ??:?
+  14) libABQSMAPacModule.so      0x01199dc9 ! pac_exe_Procedure0 ??:?
+  15) libABQSMAPacModule.so      0x0117c08d ! pac_exe_Model    ??:?
+  16) libABQSMAPacModule.so      0x01180259 ! pac_exe_Package  ??:?
+  17) libABQSMAPacModule.so      0x01178c1e ! pac_exe_ExecutiveC ??:?
+  18) libABQSMAPacModule.so      0x011b18ae ! pac_ker_package  ??:?
+</Callstack>
+
