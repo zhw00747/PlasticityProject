@@ -1,4 +1,4 @@
-Abaqus/Explicit 2022                            DATE 22-sep.-2023  TIME 17:09:02
+Abaqus/Explicit 2022                            DATE 24-sep.-2023  TIME 18:57:28
 -------------------------------------------------------------------------------
  PREPROCESSOR WARNING MESSAGES
 -------------------------------------------------------------------------------
@@ -20,9 +20,543 @@ Abaqus/Explicit 2022                            DATE 22-sep.-2023  TIME 17:09:02
             VUMAT is incorrectly defined.
 
 
+-------------------------------------------------------------------------------
+ MODEL INFORMATION (IN GLOBAL X-Y COORDINATES)
+-------------------------------------------------------------------------------
 
-***ERROR: Bad Material definition in element number 1 instance VUMAT: zero or
-          negative initial dilatational modulus caused by bad material data.
-          Please check your material input and any initial conditions if
-          necessary.
+   Total mass in model = 6.75000E-07
+   Center of mass of model = ( 5.500000E+00, 2.500000E+00, 2.500000E+00)
+
+    Moments of Inertia :
+                 About Center of Mass              About Origin
+      I(XX)          8.437501E-06                  1.687500E-05
+      I(YY)          1.451250E-05                  3.915000E-05
+      I(ZZ)          1.451250E-05                  3.915000E-05
+      I(XY)         -4.351805E-13                 -9.281250E-06
+      I(YZ)         -1.421085E-13                 -4.218750E-06
+      I(ZX)         -4.351805E-13                 -9.281250E-06
+
+-------------------------------------------------------------------------------
+ STABLE TIME INCREMENT INFORMATION
+-------------------------------------------------------------------------------
+
+
+  The stable time increment estimate for each element is based on
+  linearization about the initial state.
+
+
+   Initial time increment = 5.37591E-07
+
+   Statistics for all elements:
+      Mean = 5.51739E-07
+      Standard deviation = 2.00061E-08
+
+   Most critical elements:
+    Element number   Rank    Time increment   Increment ratio
+    (Instance name)
+   ----------------------------------------------------------
+           1          1       5.375915E-07      1.000000E+00
+    VUMAT
+           1          2       5.658857E-07      9.500000E-01
+    REF
+
+
+  Instance name for the most critical element will be printed if the critical
+  element changes or at the beginning of a new page.
+
+
+
+Abaqus/Explicit 2022                            DATE 24-sep.-2023  TIME 18:57:29
+
+The double precision Abaqus/Explicit executable will be used in this analysis.
+
+
+-------------------------------------------------------------------------------
+ SOLUTION PROGRESS
+-------------------------------------------------------------------------------
+
+ STEP 1  ORIGIN 0.0000
+
+  Total memory used for step 1 is approximately 333.5 kilobytes.
+  Global time estimation algorithm will be used.
+  Scaling factor:  0.50000
+              STEP     TOTAL      WALL      STABLE    CRITICAL    KINETIC      TOTAL
+INCREMENT     TIME      TIME      TIME   INCREMENT     ELEMENT     ENERGY     ENERGY
+        0  0.000E+00 0.000E+00  00:00:00 2.688E-07           1  0.000E+00  0.000E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number   0, of  150, at step time 0.000E+00
+     1241  3.333E-04 3.333E-04  00:00:00 2.688E-07           1  9.804E-05 -2.651E-07
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number   1, of  150, at step time 3.333E-04
+     2483  6.667E-04 6.667E-04  00:00:00 2.686E-07           1  1.402E-03 -9.995E-05
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number   2, of  150, at step time 6.667E-04
+     3726  1.000E-03 1.000E-03  00:00:00 2.683E-07           1  2.245E-03 -1.040E-03
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number   3, of  150, at step time 1.000E-03
+     4970  1.333E-03 1.333E-03  00:00:00 2.679E-07           1  2.235E-03 -3.039E-03
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number   4, of  150, at step time 1.333E-03
+     6216  1.667E-03 1.667E-03  00:00:00 2.676E-07           1  2.224E-03 -5.992E-03
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number   5, of  150, at step time 1.667E-03
+     7464  2.000E-03 2.000E-03  00:00:00 2.672E-07           1  2.214E-03 -9.870E-03
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number   6, of  150, at step time 2.000E-03
+     8713  2.333E-03 2.333E-03  00:00:00 2.669E-07           1  2.205E-03 -1.465E-02
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number   7, of  150, at step time 2.333E-03
+     9964  2.667E-03 2.667E-03  00:00:00 2.665E-07           1  2.195E-03 -2.029E-02
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number   8, of  150, at step time 2.667E-03
+    11217  3.000E-03 3.000E-03  00:00:00 2.661E-07           1  2.186E-03 -2.678E-02
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number   9, of  150, at step time 3.000E-03
+    12471  3.333E-03 3.333E-03  00:00:00 2.658E-07           1  2.177E-03 -3.409E-02
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  10, of  150, at step time 3.333E-03
+    13727  3.667E-03 3.667E-03  00:00:00 2.654E-07           1  2.168E-03 -4.220E-02
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  11, of  150, at step time 3.667E-03
+    14985  4.000E-03 4.000E-03  00:00:00 2.650E-07           1  2.159E-03 -5.107E-02
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  12, of  150, at step time 4.000E-03
+    16245  4.333E-03 4.333E-03  00:00:00 2.646E-07           1  2.151E-03 -6.068E-02
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  13, of  150, at step time 4.333E-03
+    17507  4.667E-03 4.667E-03  00:00:00 2.643E-07           1  2.143E-03 -7.101E-02
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  14, of  150, at step time 4.667E-03
+    18770  5.000E-03 5.000E-03  00:00:00 2.639E-07           1  2.135E-03 -8.206E-02
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  15, of  150, at step time 5.000E-03
+    20035  5.333E-03 5.333E-03  00:00:00 2.635E-07           1  2.127E-03 -9.377E-02
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  16, of  150, at step time 5.333E-03
+    21302  5.667E-03 5.667E-03  00:00:00 2.631E-07           1  2.119E-03 -1.061E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  17, of  150, at step time 5.667E-03
+    22571  6.000E-03 6.000E-03  00:00:00 2.628E-07           1  2.112E-03 -1.192E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  18, of  150, at step time 6.000E-03
+    23842  6.333E-03 6.333E-03  00:00:00 2.624E-07           1  2.105E-03 -1.328E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  19, of  150, at step time 6.333E-03
+    25114  6.667E-03 6.667E-03  00:00:00 2.620E-07           1  2.097E-03 -1.470E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  20, of  150, at step time 6.667E-03
+    26388  7.000E-03 7.000E-03  00:00:00 2.616E-07           1  2.091E-03 -1.618E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  21, of  150, at step time 7.000E-03
+    27664  7.333E-03 7.333E-03  00:00:00 2.612E-07           1  2.084E-03 -1.772E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  22, of  150, at step time 7.333E-03
+    28942  7.667E-03 7.667E-03  00:00:00 2.608E-07           1  2.077E-03 -1.931E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  23, of  150, at step time 7.667E-03
+    30222  8.000E-03 8.000E-03  00:00:00 2.604E-07           1  2.071E-03 -2.096E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  24, of  150, at step time 8.000E-03
+    31504  8.333E-03 8.333E-03  00:00:01 2.600E-07           1  2.064E-03 -2.265E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  25, of  150, at step time 8.333E-03
+    32788  8.667E-03 8.667E-03  00:00:01 2.596E-07           1  2.058E-03 -2.440E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  26, of  150, at step time 8.667E-03
+    34074  9.000E-03 9.000E-03  00:00:01 2.592E-07           1  2.052E-03 -2.619E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  27, of  150, at step time 9.000E-03
+    35362  9.333E-03 9.333E-03  00:00:01 2.589E-07           1  2.046E-03 -2.803E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  28, of  150, at step time 9.333E-03
+    36652  9.667E-03 9.667E-03  00:00:01 2.585E-07           1  2.040E-03 -2.991E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  29, of  150, at step time 9.667E-03
+    37944  1.000E-02 1.000E-02  00:00:01 2.581E-07           1  2.035E-03 -3.184E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  30, of  150, at step time 1.000E-02
+    39238  1.033E-02 1.033E-02  00:00:01 2.577E-07           1  2.029E-03 -3.381E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  31, of  150, at step time 1.033E-02
+    40534  1.067E-02 1.067E-02  00:00:01 2.573E-07           1  2.024E-03 -3.582E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  32, of  150, at step time 1.067E-02
+    41832  1.100E-02 1.100E-02  00:00:01 2.569E-07           1  2.018E-03 -3.787E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  33, of  150, at step time 1.100E-02
+    43132  1.133E-02 1.133E-02  00:00:01 2.565E-07           1  2.013E-03 -3.996E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  34, of  150, at step time 1.133E-02
+    44434  1.167E-02 1.167E-02  00:00:01 2.561E-07           1  2.008E-03 -4.208E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  35, of  150, at step time 1.167E-02
+    45738  1.200E-02 1.200E-02  00:00:01 2.557E-07           1  2.003E-03 -4.424E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  36, of  150, at step time 1.200E-02
+    47044  1.233E-02 1.233E-02  00:00:01 2.553E-07           1  1.998E-03 -4.644E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  37, of  150, at step time 1.233E-02
+    48352  1.267E-02 1.267E-02  00:00:01 2.549E-07           1  1.993E-03 -4.867E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  38, of  150, at step time 1.267E-02
+    49662  1.300E-02 1.300E-02  00:00:01 2.545E-07           1  1.989E-03 -5.093E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  39, of  150, at step time 1.300E-02
+
+ STEP 1  ORIGIN 0.0000
+
+              STEP     TOTAL      WALL      STABLE    CRITICAL    KINETIC      TOTAL
+INCREMENT     TIME      TIME      TIME   INCREMENT     ELEMENT     ENERGY     ENERGY
+    50974  1.333E-02 1.333E-02  00:00:01 2.541E-07           1  1.984E-03 -5.322E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  40, of  150, at step time 1.333E-02
+    52288  1.367E-02 1.367E-02  00:00:01 2.537E-07           1  1.980E-03 -5.554E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  41, of  150, at step time 1.367E-02
+    53604  1.400E-02 1.400E-02  00:00:01 2.533E-07           1  1.975E-03 -5.789E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  42, of  150, at step time 1.400E-02
+    54922  1.433E-02 1.433E-02  00:00:01 2.529E-07           1  1.971E-03 -6.027E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  43, of  150, at step time 1.433E-02
+    56242  1.467E-02 1.467E-02  00:00:01 2.525E-07           1  1.967E-03 -6.268E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  44, of  150, at step time 1.467E-02
+    57564  1.500E-02 1.500E-02  00:00:01 2.521E-07           1  1.962E-03 -6.511E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  45, of  150, at step time 1.500E-02
+    58888  1.533E-02 1.533E-02  00:00:01 2.517E-07           1  1.958E-03 -6.757E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  46, of  150, at step time 1.533E-02
+    60214  1.567E-02 1.567E-02  00:00:01 2.513E-07           1  1.954E-03 -7.005E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  47, of  150, at step time 1.567E-02
+    61542  1.600E-02 1.600E-02  00:00:01 2.509E-07           1  1.950E-03 -7.256E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  48, of  150, at step time 1.600E-02
+    62872  1.633E-02 1.633E-02  00:00:01 2.505E-07           1  1.947E-03 -7.509E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  49, of  150, at step time 1.633E-02
+    64204  1.667E-02 1.667E-02  00:00:02 2.501E-07           1  1.943E-03 -7.764E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  50, of  150, at step time 1.667E-02
+    65538  1.700E-02 1.700E-02  00:00:02 2.497E-07           1  1.939E-03 -8.021E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  51, of  150, at step time 1.700E-02
+    66874  1.733E-02 1.733E-02  00:00:02 2.493E-07           1  1.936E-03 -8.281E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  52, of  150, at step time 1.733E-02
+    68213  1.767E-02 1.767E-02  00:00:02 2.489E-07           1  1.932E-03 -8.542E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  53, of  150, at step time 1.767E-02
+    69554  1.800E-02 1.800E-02  00:00:02 2.485E-07           1  1.929E-03 -8.805E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  54, of  150, at step time 1.800E-02
+    70897  1.833E-02 1.833E-02  00:00:02 2.481E-07           1  1.925E-03 -9.069E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  55, of  150, at step time 1.833E-02
+    72242  1.867E-02 1.867E-02  00:00:02 2.477E-07           1  1.922E-03 -9.336E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  56, of  150, at step time 1.867E-02
+    73589  1.900E-02 1.900E-02  00:00:02 2.473E-07           1  1.919E-03 -9.604E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  57, of  150, at step time 1.900E-02
+    74939  1.933E-02 1.933E-02  00:00:02 2.470E-07           1  1.915E-03 -9.874E-01
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  58, of  150, at step time 1.933E-02
+    76291  1.967E-02 1.967E-02  00:00:02 2.466E-07           1  1.912E-03 -1.015E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  59, of  150, at step time 1.967E-02
+    77645  2.000E-02 2.000E-02  00:00:02 2.462E-07           1  1.909E-03 -1.042E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  60, of  150, at step time 2.000E-02
+    79001  2.033E-02 2.033E-02  00:00:02 2.458E-07           1  1.906E-03 -1.069E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  61, of  150, at step time 2.033E-02
+    80359  2.067E-02 2.067E-02  00:00:02 2.454E-07           1  1.903E-03 -1.097E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  62, of  150, at step time 2.067E-02
+    81719  2.100E-02 2.100E-02  00:00:02 2.450E-07           1  1.900E-03 -1.124E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  63, of  150, at step time 2.100E-02
+    83081  2.133E-02 2.133E-02  00:00:02 2.446E-07           1  1.897E-03 -1.152E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  64, of  150, at step time 2.133E-02
+    84445  2.167E-02 2.167E-02  00:00:02 2.442E-07           1  1.895E-03 -1.180E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  65, of  150, at step time 2.167E-02
+    85811  2.200E-02 2.200E-02  00:00:02 2.438E-07           1  1.892E-03 -1.208E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  66, of  150, at step time 2.200E-02
+    87180  2.233E-02 2.233E-02  00:00:02 2.434E-07           1  1.889E-03 -1.236E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  67, of  150, at step time 2.233E-02
+    88551  2.267E-02 2.267E-02  00:00:02 2.431E-07           1  1.886E-03 -1.265E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  68, of  150, at step time 2.267E-02
+    89924  2.300E-02 2.300E-02  00:00:02 2.427E-07           1  1.884E-03 -1.293E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  69, of  150, at step time 2.300E-02
+    91300  2.333E-02 2.333E-02  00:00:02 2.423E-07           1  1.881E-03 -1.322E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  70, of  150, at step time 2.333E-02
+    92678  2.367E-02 2.367E-02  00:00:02 2.419E-07           1  1.879E-03 -1.350E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  71, of  150, at step time 2.367E-02
+    94058  2.400E-02 2.400E-02  00:00:02 2.415E-07           1  1.876E-03 -1.379E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  72, of  150, at step time 2.400E-02
+    95440  2.433E-02 2.433E-02  00:00:03 2.411E-07           1  1.874E-03 -1.407E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  73, of  150, at step time 2.433E-02
+    96824  2.467E-02 2.467E-02  00:00:03 2.408E-07           1  1.871E-03 -1.436E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  74, of  150, at step time 2.467E-02
+    98210  2.500E-02 2.500E-02  00:00:03 2.404E-07           1  1.869E-03 -1.465E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  75, of  150, at step time 2.500E-02
+    99598  2.533E-02 2.533E-02  00:00:03 2.400E-07           1  1.867E-03 -1.494E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  76, of  150, at step time 2.533E-02
+   100989  2.567E-02 2.567E-02  00:00:03 2.396E-07           1  1.864E-03 -1.523E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  77, of  150, at step time 2.567E-02
+   102382  2.600E-02 2.600E-02  00:00:03 2.392E-07           1  1.862E-03 -1.552E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  78, of  150, at step time 2.600E-02
+   103777  2.633E-02 2.633E-02  00:00:03 2.389E-07           1  1.860E-03 -1.581E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  79, of  150, at step time 2.633E-02
+
+ STEP 1  ORIGIN 0.0000
+
+              STEP     TOTAL      WALL      STABLE    CRITICAL    KINETIC      TOTAL
+INCREMENT     TIME      TIME      TIME   INCREMENT     ELEMENT     ENERGY     ENERGY
+   105175  2.667E-02 2.667E-02  00:00:03 2.385E-07           1  1.858E-03 -1.610E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  80, of  150, at step time 2.667E-02
+   106575  2.700E-02 2.700E-02  00:00:03 2.381E-07           1  1.856E-03 -1.639E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  81, of  150, at step time 2.700E-02
+   107977  2.733E-02 2.733E-02  00:00:03 2.377E-07           1  1.853E-03 -1.669E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  82, of  150, at step time 2.733E-02
+   109381  2.767E-02 2.767E-02  00:00:03 2.374E-07           1  1.851E-03 -1.698E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  83, of  150, at step time 2.767E-02
+   110787  2.800E-02 2.800E-02  00:00:03 2.370E-07           1  1.849E-03 -1.727E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  84, of  150, at step time 2.800E-02
+   112195  2.833E-02 2.833E-02  00:00:03 2.366E-07           1  1.847E-03 -1.757E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  85, of  150, at step time 2.833E-02
+   113605  2.867E-02 2.867E-02  00:00:03 2.362E-07           1  1.845E-03 -1.786E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  86, of  150, at step time 2.867E-02
+   115018  2.900E-02 2.900E-02  00:00:03 2.359E-07           1  1.844E-03 -1.816E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  87, of  150, at step time 2.900E-02
+   116433  2.933E-02 2.933E-02  00:00:03 2.355E-07           1  1.842E-03 -1.845E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  88, of  150, at step time 2.933E-02
+   117850  2.967E-02 2.967E-02  00:00:03 2.351E-07           1  1.840E-03 -1.874E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  89, of  150, at step time 2.967E-02
+   119270  3.000E-02 3.000E-02  00:00:03 2.348E-07           1  1.838E-03 -1.904E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  90, of  150, at step time 3.000E-02
+   120692  3.033E-02 3.033E-02  00:00:03 2.344E-07           1  1.836E-03 -1.933E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  91, of  150, at step time 3.033E-02
+   122116  3.067E-02 3.067E-02  00:00:03 2.340E-07           1  1.834E-03 -1.963E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  92, of  150, at step time 3.067E-02
+   123542  3.100E-02 3.100E-02  00:00:03 2.337E-07           1  1.833E-03 -1.993E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  93, of  150, at step time 3.100E-02
+   124970  3.133E-02 3.133E-02  00:00:03 2.333E-07           1  1.831E-03 -2.022E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  94, of  150, at step time 3.133E-02
+   126401  3.167E-02 3.167E-02  00:00:04 2.329E-07           1  1.829E-03 -2.052E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  95, of  150, at step time 3.167E-02
+   127834  3.200E-02 3.200E-02  00:00:04 2.326E-07           1  1.828E-03 -2.081E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  96, of  150, at step time 3.200E-02
+   129269  3.233E-02 3.233E-02  00:00:04 2.322E-07           1  1.826E-03 -2.111E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  97, of  150, at step time 3.233E-02
+   130706  3.267E-02 3.267E-02  00:00:04 2.319E-07           1  1.824E-03 -2.140E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  98, of  150, at step time 3.267E-02
+   132145  3.300E-02 3.300E-02  00:00:04 2.315E-07           1  1.823E-03 -2.170E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number  99, of  150, at step time 3.300E-02
+   133587  3.333E-02 3.333E-02  00:00:04 2.312E-07           1  1.821E-03 -2.200E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 100, of  150, at step time 3.333E-02
+   135031  3.367E-02 3.367E-02  00:00:04 2.308E-07           1  1.820E-03 -2.229E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 101, of  150, at step time 3.367E-02
+   136477  3.400E-02 3.400E-02  00:00:04 2.304E-07           1  1.818E-03 -2.259E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 102, of  150, at step time 3.400E-02
+   137926  3.433E-02 3.433E-02  00:00:04 2.301E-07           1  1.817E-03 -2.288E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 103, of  150, at step time 3.433E-02
+   139377  3.467E-02 3.467E-02  00:00:04 2.297E-07           1  1.815E-03 -2.318E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 104, of  150, at step time 3.467E-02
+   140830  3.500E-02 3.500E-02  00:00:04 2.294E-07           1  1.814E-03 -2.347E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 105, of  150, at step time 3.500E-02
+   142285  3.533E-02 3.533E-02  00:00:04 2.290E-07           1  1.812E-03 -2.377E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 106, of  150, at step time 3.533E-02
+   143742  3.567E-02 3.567E-02  00:00:04 2.287E-07           1  1.811E-03 -2.406E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 107, of  150, at step time 3.567E-02
+   145202  3.600E-02 3.600E-02  00:00:04 2.283E-07           1  1.810E-03 -2.436E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 108, of  150, at step time 3.600E-02
+   146664  3.633E-02 3.633E-02  00:00:04 2.280E-07           1  1.808E-03 -2.465E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 109, of  150, at step time 3.633E-02
+   148128  3.667E-02 3.667E-02  00:00:04 2.276E-07           1  1.807E-03 -2.495E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 110, of  150, at step time 3.667E-02
+   149594  3.700E-02 3.700E-02  00:00:04 2.273E-07           1  1.806E-03 -2.524E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 111, of  150, at step time 3.700E-02
+   151062  3.733E-02 3.733E-02  00:00:04 2.269E-07           1  1.804E-03 -2.554E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 112, of  150, at step time 3.733E-02
+   152533  3.767E-02 3.767E-02  00:00:04 2.266E-07           1  1.803E-03 -2.583E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 113, of  150, at step time 3.767E-02
+   154006  3.800E-02 3.800E-02  00:00:04 2.263E-07           1  1.802E-03 -2.612E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 114, of  150, at step time 3.800E-02
+   155481  3.833E-02 3.833E-02  00:00:04 2.259E-07           1  1.800E-03 -2.642E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 115, of  150, at step time 3.833E-02
+   156959  3.867E-02 3.867E-02  00:00:05 2.256E-07           1  1.799E-03 -2.671E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 116, of  150, at step time 3.867E-02
+   158439  3.900E-02 3.900E-02  00:00:05 2.252E-07           1  1.798E-03 -2.700E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 117, of  150, at step time 3.900E-02
+   159921  3.933E-02 3.933E-02  00:00:05 2.249E-07           1  1.797E-03 -2.729E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 118, of  150, at step time 3.933E-02
+   161405  3.967E-02 3.967E-02  00:00:05 2.246E-07           1  1.796E-03 -2.759E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 119, of  150, at step time 3.967E-02
+
+ STEP 1  ORIGIN 0.0000
+
+              STEP     TOTAL      WALL      STABLE    CRITICAL    KINETIC      TOTAL
+INCREMENT     TIME      TIME      TIME   INCREMENT     ELEMENT     ENERGY     ENERGY
+   162891  4.000E-02 4.000E-02  00:00:05 2.242E-07           1  1.794E-03 -2.788E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 120, of  150, at step time 4.000E-02
+   164380  4.033E-02 4.033E-02  00:00:05 2.239E-07           1  1.793E-03 -2.817E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 121, of  150, at step time 4.033E-02
+   165871  4.067E-02 4.067E-02  00:00:05 2.236E-07           1  1.792E-03 -2.846E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 122, of  150, at step time 4.067E-02
+   167364  4.100E-02 4.100E-02  00:00:05 2.232E-07           1  1.791E-03 -2.875E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 123, of  150, at step time 4.100E-02
+   168859  4.133E-02 4.133E-02  00:00:05 2.229E-07           1  1.790E-03 -2.904E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 124, of  150, at step time 4.133E-02
+   170356  4.167E-02 4.167E-02  00:00:05 2.226E-07           1  1.789E-03 -2.933E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 125, of  150, at step time 4.167E-02
+   171856  4.200E-02 4.200E-02  00:00:05 2.222E-07           1  1.788E-03 -2.962E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 126, of  150, at step time 4.200E-02
+   173358  4.233E-02 4.233E-02  00:00:05 2.219E-07           1  1.787E-03 -2.991E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 127, of  150, at step time 4.233E-02
+   174862  4.267E-02 4.267E-02  00:00:05 2.216E-07           1  1.786E-03 -3.020E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 128, of  150, at step time 4.267E-02
+   176368  4.300E-02 4.300E-02  00:00:05 2.212E-07           1  1.785E-03 -3.049E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 129, of  150, at step time 4.300E-02
+   177876  4.333E-02 4.333E-02  00:00:05 2.209E-07           1  1.784E-03 -3.077E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 130, of  150, at step time 4.333E-02
+   179387  4.367E-02 4.367E-02  00:00:05 2.206E-07           1  1.783E-03 -3.106E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 131, of  150, at step time 4.367E-02
+   180900  4.400E-02 4.400E-02  00:00:05 2.203E-07           1  1.782E-03 -3.135E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 132, of  150, at step time 4.400E-02
+   182415  4.433E-02 4.433E-02  00:00:05 2.199E-07           1  1.781E-03 -3.163E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 133, of  150, at step time 4.433E-02
+   183933  4.467E-02 4.467E-02  00:00:05 2.196E-07           1  1.780E-03 -3.192E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 134, of  150, at step time 4.467E-02
+   185453  4.500E-02 4.500E-02  00:00:05 2.193E-07           1  1.779E-03 -3.221E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 135, of  150, at step time 4.500E-02
+   186975  4.533E-02 4.533E-02  00:00:06 2.190E-07           1  1.778E-03 -3.249E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 136, of  150, at step time 4.533E-02
+   188499  4.567E-02 4.567E-02  00:00:06 2.187E-07           1  1.777E-03 -3.277E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 137, of  150, at step time 4.567E-02
+   190025  4.600E-02 4.600E-02  00:00:06 2.183E-07           1  1.776E-03 -3.306E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 138, of  150, at step time 4.600E-02
+   191554  4.633E-02 4.633E-02  00:00:06 2.180E-07           1  1.775E-03 -3.334E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 139, of  150, at step time 4.633E-02
+   193085  4.667E-02 4.667E-02  00:00:06 2.177E-07           1  1.775E-03 -3.362E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 140, of  150, at step time 4.667E-02
+   194618  4.700E-02 4.700E-02  00:00:06 2.174E-07           1  1.774E-03 -3.391E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 141, of  150, at step time 4.700E-02
+   196153  4.733E-02 4.733E-02  00:00:06 2.171E-07           1  1.773E-03 -3.419E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 142, of  150, at step time 4.733E-02
+   197690  4.767E-02 4.767E-02  00:00:06 2.168E-07           1  1.772E-03 -3.447E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 143, of  150, at step time 4.767E-02
+   199230  4.800E-02 4.800E-02  00:00:06 2.165E-07           1  1.771E-03 -3.475E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 144, of  150, at step time 4.800E-02
+   200772  4.833E-02 4.833E-02  00:00:06 2.161E-07           1  1.770E-03 -3.503E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 145, of  150, at step time 4.833E-02
+   202316  4.867E-02 4.867E-02  00:00:06 2.158E-07           1  1.770E-03 -3.531E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 146, of  150, at step time 4.867E-02
+   203862  4.900E-02 4.900E-02  00:00:06 2.155E-07           1  1.769E-03 -3.559E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 147, of  150, at step time 4.900E-02
+   205410  4.933E-02 4.933E-02  00:00:06 2.152E-07           1  1.768E-03 -3.587E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 148, of  150, at step time 4.933E-02
+   206961  4.967E-02 4.967E-02  00:00:06 2.149E-07           1  1.767E-03 -3.615E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Output Field Frame Number 149, of  150, at step time 4.967E-02
+   208514  5.000E-02 5.000E-02  00:00:06 2.146E-07           1  1.766E-03 -3.642E+00
+INSTANCE WITH CRITICAL ELEMENT: VUMAT
+Restart Number  1 at 5.00000E-02
+Output Field Frame Number 150, of  150, at step time 5.000E-02
+  EXPLICIT EXECUTABLE TIME SUMMARY
+       USER TIME (SEC)      =   5.2200
+       SYSTEM TIME (SEC)    =  0.87000
+       WALLCLOCK TIME (SEC) =            6
+              INIT (SEC) =          0
+              MAIN (SEC) =          6
+
+  THE ANALYSIS HAS COMPLETED SUCCESSFULLY
 
