@@ -55,10 +55,11 @@
 !-----------------------------------------------------------------------
 !-----Declaration elastic parameters
 !-----------------------------------------------------------------------
-		real*8 E0, nu, lame1, lame2, epsilon_v !lame1 = lambda, and lame2 = mu
+		real*8 E0, nu, lame1, lame2, dEpsilonV !lame1 = lambda, and lame2 = mu
 !-----------------------------------------------------------------------
 !-----Declare other variables
 		integer i
+      real*8 s1, s2, s3, s4, s5, s6 !Stress components 
 		real*8 t1, t2, t3, t4, t5, t6 !Trial stress components
 !
 !-----------------------------------------------------------------------
@@ -72,11 +73,12 @@
 			nu = props(2)
 			lame1 = nu * E0 / ((1 + nu)*(1 - 2*nu))
 			lame2 = E0 / (2 * (1 + nu)) 
+
 			do i = 1,nblock
-				epsilon_v = strainInc(i,1)+strainInc(i,2)+strainInc(i,3)
-				stressNew(i,1) = lame1*epsilon_v + 2.* lame2*strainInc(i,1)
-				stressNew(i,2) = lame1*epsilon_v + 2.* lame2*strainInc(i,2) 
-				stressNew(i,3) = lame1*epsilon_v + 2.* lame2*strainInc(i,3)  
+				dEpsilonV = strainInc(i,1) + strainInc(i,2) + strainInc(i,3)
+				stressNew(i,1) = lame1*dEpsilonV + 2.* lame2*strainInc(i,1)
+				stressNew(i,2) = lame1*dEpsilonV + 2.* lame2*strainInc(i,2) 
+				stressNew(i,3) = lame1*dEpsilonV + 2.* lame2*strainInc(i,3)  
 				stressNew(i,4) = 2.* lame2*strainInc(i, 4)
 				stressNew(i,5) = 2.* lame2*strainInc(i, 5)
 				stressNew(i,6) = 2.* lame2*strainInc(i, 6)		
@@ -86,20 +88,37 @@
 !-----Ordinary increment
 !-----------------------------------------------------------------------
 		else
+         E0 = props(1)
+         nu = props(2)
+         lame1 = nu * E0 / ((1 + nu)*(1 - 2*nu))
+         lame2 = E0 / (2 * (1 + nu)) 
+         ! print *, "E0 ",E0,", nu ",nu,", lame1 ",lame1,", lame2 ",lame2
+				
 			do i = 1,nblock
+!-----------------------------------------------------------------------
+!-----Gather old stress components (only to decrease variable name size
+!-----at this stage)
+!-----------------------------------------------------------------------
+            s1 = stressOld(i,1)
+            s2 = stressOld(i,2)
+            s3 = stressOld(i,3)
+            s4 = stressOld(i,4)
+            s5 = stressOld(i,5)
+            s6 = stressOld(i,6)
 !-----------------------------------------------------------------------
 !-----Trial stress
 !-----------------------------------------------------------------------
-				epsilon_v = strainInc(i,1) + strainInc(i,2) + strainInc(i,3)
-				t1 = lame1 * epsilon_v + 2. * lame2 * strainInc(i,1)
-				t2 = lame1 * epsilon_v + 2. * lame2 * strainInc(i,2)
-				t3 = lame1 * epsilon_v + 2. * lame2 * strainInc(i,3)
-				t4 = 2. * lame2 *strainInc(i, 4)
-				t5 = 2. * lame2 *strainInc(i, 5)
-				t6 = 2. * lame2 *strainInc(i, 6)
+            dEpsilonV = strainInc(i,1) + strainInc(i,2) + strainInc(i,3)
+				t1 = s1 + lame1 * dEpsilonV + 2. * lame2 * strainInc(i,1)
+				t2 = s2 + lame1 * dEpsilonV + 2. * lame2 * strainInc(i,2)
+				t3 = s3 + lame1 * dEpsilonV + 2. * lame2 * strainInc(i,3)
+				t4 = s4 + 2. * lame2 *strainInc(i,4)
+				t5 = s5 + 2. * lame2 *strainInc(i,5)
+				t6 = s6 + 2. * lame2 *strainInc(i,6)
 !
 !-----------------------------------------------------------------------
-!-----Unpack stresses
+!-----Unpack stresses (since it's only elastic for now, the trial
+!-----stress is accepted as the new stress)
 !-----------------------------------------------------------------------
 				stressNew(i,1) = t1
 				stressNew(i,2) = t2
@@ -107,6 +126,9 @@
 				stressNew(i,4) = t4
 				stressNew(i,5) = t5
 				stressNew(i,6) = t6
+            !if (i.eq.1.and)
+               !print *, "stressOld ",stressNew
+            print *,"i ",i, "stressNew ",stressNew
 !
 !-----------------------------------------------------------------------
 !-----Update specific internal energy [J/kg]. 

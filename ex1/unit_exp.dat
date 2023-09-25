@@ -1,6 +1,6 @@
 1
 
-   Abaqus 2022                                  Date 24-sep.-2023   Time 18:57:28
+   Abaqus 2022                                  Date 24-sep.-2023   Time 20:16:36
    For use by NTNU NORGES TEKNISK NATURVITENSKAPELIGE UNIVERSITET under license from Dassault Systemes or its subsidiary.
 
 
@@ -169,6 +169,6 @@
 
      JOB TIME SUMMARY
        USER TIME (SEC)      =  4.00000E-02
-       SYSTEM TIME (SEC)    =  1.00000E-02
-       TOTAL CPU TIME (SEC) =  5.00000E-02
+       SYSTEM TIME (SEC)    =  2.00000E-02
+       TOTAL CPU TIME (SEC) =  6.00000E-02
        WALLCLOCK TIME (SEC) =          0

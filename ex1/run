@@ -2,9 +2,13 @@
 clear
 init_abaqus_subroutine
 
-#ifort VUMAT_ex1.f -o VUMAT_ex1.o -DDEBUG 
-abaqus double job=unit_exp user=VUMAT_ex1.f int ask_delete=off
+job="unit_exp"
+job="unit_shear"
 
-#abaqus double job=unit_exp.inp int ask_delete=off
+flags="job=$job user=VUMAT_ex1.f double int ask_delete=off"
 
-rm -f *.com *.mdl *.pac *.res *.stt *.src *.sel *.mdl *.prt *.abq *.exception
+echo "Command: abaqus "$flags
+abaqus $flags
+
+rm -f *.com *.mdl *.pac *.res *.stt *.src *.sel *.mdl *.prt *.abq *.exception *.msg
+
