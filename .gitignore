@@ -38,4 +38,4 @@
 *.odb
 *.sta
 
-./test_performance/*
+/test_performance/
