@@ -13,7 +13,7 @@
      + STRETCHNEW, DEFGRADNEW, FIELDNEW,
      + STRESSNEW, STATENEW, ENERINTERNNEW, ENERINELASNEW)
 C
-         INCLUDE 'VABA_PARAM.INC'
+         INCLUDE 'vaba_param.inc'
 !-----------------------------------------------------------------------
 !-----Declaration ABAQUS variables
 !-----------------------------------------------------------------------

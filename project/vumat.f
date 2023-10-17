@@ -1,16 +1,10 @@
 !-----------------------------------------------------------------------
+!
+!
+!
+      include "./utils.f"
 !-----------------------------------------------------------------------
-		subroutine assertFunction(condition, message)
-  		logical, intent(in) :: condition
-  		character(*), intent(in) :: message
-  		if (.not. condition) then
-    		write(*,*) "Assertion failed: ", message
-    		stop
-		endif
-  		return
-		end subroutine assertFunction
-!-----------------------------------------------------------------------
-! Uncomment this to turn asserts off
+! Uncomment next line to turn asserts off
 #define DEBUG
 !----------------------------------------------------------------------- 
 #ifdef DEBUG
@@ -19,9 +13,8 @@
 #define assert(cond, msg)
 #endif
 !-----------------------------------------------------------------------
-!
-!
-!
+      include "./VUMAT_model.f"
+!-----------------------------------------------------------------------
       subroutine vumat(
 !----- Input variables
      +  nblock, ndir, nshr, nstatev, nfieldv, nprops, lanneal,
@@ -33,7 +26,6 @@
 !----- Output variables
      +  stressNew, stateNew, enerInternNew, enerInelasNew )
 !
-      implicit none
       include 'vaba_param.inc'
 !-----------------------------------------------------------------------
 !-----Declaration Abaqus variables
@@ -56,12 +48,13 @@
 !-----------------------------------------------------------------------
 !-----Declaration elastic parameters
 !-----------------------------------------------------------------------
-		real*8 E0, nu, lame1, lame2, dEpsilonV !lame1 = lambda, and lame2 = mu
+		real*8 E0, nu, lame1, lame2, depsV !lame1 = lambda, and lame2 = mu
 !-----------------------------------------------------------------------
 !-----Declare other variables
-		integer i
-      real*8 s1, s2, s3, s4, s5, s6 !Stress components 
-		real*8 t1, t2, t3, t4, t5, t6 !Trial stress components
+		integer i,k
+      real*8 sigma(ndir+nshr), deps(ndir+nshr), zeta(nstatev)
+      real*8 props(nprops) 
+      integer ntens, nzeta, nprops
 !
 !-----------------------------------------------------------------------
 !-----Initialization step (elastic)
@@ -76,10 +69,10 @@
 			lame2 = E0 / (2 * (1 + nu)) 
 
 			do i = 1,nblock
-				dEpsilonV = strainInc(i,1) + strainInc(i,2) + strainInc(i,3)
-				stressNew(i,1) = lame1*dEpsilonV + 2.* lame2*strainInc(i,1)
-				stressNew(i,2) = lame1*dEpsilonV + 2.* lame2*strainInc(i,2) 
-				stressNew(i,3) = lame1*dEpsilonV + 2.* lame2*strainInc(i,3)  
+				depsV = strainInc(i,1) + strainInc(i,2) + strainInc(i,3)
+				stressNew(i,1) = lame1*depsV + 2.* lame2*strainInc(i,1)
+				stressNew(i,2) = lame1*depsV + 2.* lame2*strainInc(i,2) 
+				stressNew(i,3) = lame1*depsV + 2.* lame2*strainInc(i,3)  
 				stressNew(i,4) = 2.* lame2*strainInc(i, 4)
 				stressNew(i,5) = 2.* lame2*strainInc(i, 5)
 				stressNew(i,6) = 2.* lame2*strainInc(i, 6)		
@@ -89,48 +82,35 @@
 !-----Ordinary increment
 !-----------------------------------------------------------------------
 		else
-         E0 = props(1)
-         nu = props(2)
-         lame1 = nu * E0 / ((1 + nu)*(1 - 2*nu))
-         lame2 = E0 / (2 * (1 + nu)) 
-         ! print *, "E0 ",E0,", nu ",nu,", lame1 ",lame1,", lame2 ",lame2
-				
+         ntens = ndir + nshr
+         nzeta = nstatev
+!-----------------------------------------------------------------------
 			do i = 1,nblock
 !-----------------------------------------------------------------------
-!-----Gather old stress components (only to decrease variable name size
-!-----at this stage)
+!-----Grab old stresses, strain increment and old state variables
 !-----------------------------------------------------------------------
-            s1 = stressOld(i,1)
-            s2 = stressOld(i,2)
-            s3 = stressOld(i,3)
-            s4 = stressOld(i,4)
-            s5 = stressOld(i,5)
-            s6 = stressOld(i,6)
+            do k=1,ntens
+               sigma(j) = stressOld(i,k)
+               deps(k) = strainInc(i,k)
+            enddo
+            do k=1,nzeta
+               zeta(k) = stateOld(i,k)
+            enddo
 !-----------------------------------------------------------------------
-!-----Trial stress
+!-----Call vumat model and obtain new stresses and state variables
 !-----------------------------------------------------------------------
-            dEpsilonV = strainInc(i,1) + strainInc(i,2) + strainInc(i,3)
-				t1 = s1 + lame1 * dEpsilonV + 2. * lame2 * strainInc(i,1)
-				t2 = s2 + lame1 * dEpsilonV + 2. * lame2 * strainInc(i,2)
-				t3 = s3 + lame1 * dEpsilonV + 2. * lame2 * strainInc(i,3)
-				t4 = s4 + 2. * lame2 *strainInc(i,4)
-				t5 = s5 + 2. * lame2 *strainInc(i,5)
-				t6 = s6 + 2. * lame2 *strainInc(i,6)
+            call vumat_model(sigma, deps, zeta, props, ntens, nzeta, nprops)
+
 !
 !-----------------------------------------------------------------------
-!-----Unpack stresses (since it's only elastic for now, the trial
-!-----stress is accepted as the new stress)
+!-----Update stresses and state variables
 !-----------------------------------------------------------------------
-				stressNew(i,1) = t1
-				stressNew(i,2) = t2
-				stressNew(i,3) = t3
-				stressNew(i,4) = t4
-				stressNew(i,5) = t5
-				stressNew(i,6) = t6
-            !if (i.eq.1.and)
-               !print *, "stressOld ",stressNew
-            print *,"i ",i, "stressNew ",stressNew
-!
+            do k=1,ntens
+               stressNew(i,k) = stress(k)
+            enddo
+            do k=1,nzeta
+               stateNew(i,k) = zeta(k)
+            enddo
 !-----------------------------------------------------------------------
 !-----Update specific internal energy [J/kg]. 
 !-----U_new = U_old + 
