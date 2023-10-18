@@ -1,30 +1,26 @@
 !-----------------------------------------------------------------------
 !-----VUMAT model implementation
 !-----------------------------------------------------------------------
-! Uncomment next line to turn asserts off
-#define DEBUG
-!----------------------------------------------------------------------- 
-#ifdef DEBUG
-#define assert(cond, msg) call assertFunction(cond, msg)
-#else
-#define assert(cond, msg)
-#endif
+!
 !-----------------------------------------------------------------------
-      subroutine vumat_model(sigma, zeta, props, ntens, nzeta, nprops)
+!
+!-----------------------------------------------------------------------
+      subroutine vumat_model(sigma, deps, zeta, props, ntens, nzeta, nprops)
       implicit none
 !-----------------------------------------------------------------------
 !-----Declaration variables
 !-----------------------------------------------------------------------
-      real*8 sigma(ntens), zeta(nzeta), props(nprops)
+      real*8 sigma(ntens), deps(ntens), zeta(nzeta), props(nprops)
       integer ntens, nzeta, nprops
 !-----------------------------------------------------------------------
 !-----Declaration internal variables
 !-----------------------------------------------------------------------
       integer i,j,iter_max
+      parameter(iter_max=1000)
 !-----Elasticity constants
       real*8 E, nu
 !-----Lamè parameters (lame1 = lambda, lame2 = mu = G)
-      lame1, lame2
+      real*8 lame1, lame2
 !-----Elasticiy matrix
       real*8 C(6,6)
 !-----Yield function
@@ -40,13 +36,13 @@
 !-----Power law constants
       real*8 B, n
 !-----Power law change rate and gradient of f with respect to R
-      real*8 hR dfdR
+      real*8 hR, dfdR
 !-----Old stress and old strain
       real*8 sold(6), de(6)
 !-----Trial stress, stress and internal variables
       real*8 t(6), s(6)
 !-----Plastic multiplier increment used in update scheme
-      real*8 dlambda 
+      real*8 ddlambda 
 !-----tolerance for update scheme
       real*8 tol
       parameter(tol=1e-8)
@@ -61,8 +57,8 @@
 !-----------------------------------------------------------------------
 !-----Read parameters and define constants
 !-----------------------------------------------------------------------
-      assert((nprops.eq.5),"nprops==5")
-      assert((nzeta.eq.1), "nzeta==1")
+      call assert((nprops.eq.5),"nprops==5")
+      call assert((nzeta.eq.1), "nzeta==1")
       E = props(1)
       nu = props(2)
       sigma0 = props(3)
@@ -85,18 +81,30 @@
       C(5,5) = 2*lame2
       C(6,6) = 2*lame2
 
-      iter_max = 1000
+      print*
+      print*,"E",E
+      print*,"nu",nu
+      print*,"sigma0",sigma0
+      print*,"B",B
+      print*,"n",n
+      print*,"pold",pold
+      print*,"sigma",sigma
+      print*
+      ! do i=1,6
+      ! write(*,*) (C(i,j), j=1,6)
+      ! end do
+
 !-----------------------------------------------------------------------
 !-----Unpack old stresses
 !-----------------------------------------------------------------------
       de = deps
-      if (ntens.le.6)
-         assert((ntens.eq.4),"ntens should be equal to 4 if shells are modelled")
+      if (ntens.lt.6) then
+         call assert((ntens.eq.4),"ntens should be equal to 4 if shells are modelled")
          sigma(5) = 0.0
          sigma(6) = 0.0
          de(5) = 0.0
          de(6) = 0.0
-      enddo
+      endif
       sold = sigma
 !-----------------------------------------------------------------------
 !-----Trial stress
@@ -107,7 +115,7 @@
          t(4) = sold(4) + C(4,4)*de(4)
          t(5) = sold(5) + C(5,5)*de(5)
          t(6) = sold(6) + C(6,6)*de(6)
-
+      
 !-----------------------------------------------------------------------
 !-----Computing yield function f
 !-----------------------------------------------------------------------
@@ -115,23 +123,26 @@
       phi = t(1)**2 + t(2)**2 + t(3)**2 -
      +      t(1)*t(2) - t(2)*t(3) - t(3)*t(1) + 
      +      3.0*(t(4)**2 + t(5)**2 + t(6)**2)
-      assert((phi.ge.0.0),"J2 should always be >= 0")
+      call assert((phi.ge.0.0),"J2 should always be >= 0")
       phi = sqrt(phi)
 !-----Power law hardening
       R = B*pold**n
 !-----Yield function
       f = phi - (sigma0 + R)
-      
-      if (f.le.0)
+      print*, "sigma eq = ",phi
+      print*,"f = ",f
+      if (f.le.0) then
 !-----------------------------------------------------------------------
 !-----f<=0: Elastic increment
 !-----------------------------------------------------------------------
+         print*, "Elastic increment"
          sigma = t
          p = pold
       else
 !-----------------------------------------------------------------------
 !-----f>0: Return mapping using cutting plane method
 !-----------------------------------------------------------------------
+         print*,"Plastic increment"
          s = t
          p = pold
          do i=1,iter_max 
@@ -160,37 +171,60 @@
 !-----Cumputing dfdzeta:h
 !-----------------------------------------------------------------------
             !extend to more general vectors when nzeta becomes larger
-            assert((nzeta.eq.1),"nzeta==1")
-            hR = B*n*p**(n-1)
-            dfdR = -1
+            call assert((nzeta.eq.1),"nzeta==1")
+            if (p.le.1e-5)then
+               hR = B*n*(1e-5)**(n-1.0)
+            else
+               hR = B*n*p**(n-1.0)
+            endif
+            dfdR = -1.0
+            print*,"hR",hR,"n",n,"B",B,"p",p
             dfdzeta_h = dfdR * hR
 !-----------------------------------------------------------------------
 !-----Computing dlambda increment
 !-----------------------------------------------------------------------
-            dlambda_inc = f/(dfds_C_dfds - dfdzeta_h)
+            call assert(abs(dfds_C_dfds - dfdzeta_h).ge.(1e-6))
+
+            print*, "f",f
+            print*,"dfds_C_df_ds",dfds_C_dfds 
+            print*, "dfdzeta_h",dfdzeta_h
+
+            ddlambda = f/(dfds_C_dfds - dfdzeta_h)
+            call assert(.not. isnan(ddlambda),"lambda is nan")
+            print*,"inner iter = ",i
+            print*,"ddlambda",ddlambda
 !-----------------------------------------------------------------------
 !-----Updating stresses and internal variables 
 !-----------------------------------------------------------------------
-            s = s - dlambda_inc * C_dfds 
-            p = p + dlambda_inc 
+            s = s - ddlambda * C_dfds 
+            p = p + ddlambda
+            print*,"p",p
 !-----------------------------------------------------------------------
 !-----Recompute yield function
 !-----------------------------------------------------------------------
             phi = s(1)**2 + s(2)**2 + s(3)**2 -
      +            s(1)*s(2) - s(2)*s(3) - s(3)*s(1) + 
      +            3.0*(s(4)**2 + s(5)**2 + s(6)**2)
-            assert((phi.ge.0.0),"J2 should always be >= 0")
+            call assert((phi.ge.0.0),"J2 should always be >= 0")
             phi = sqrt(phi)
-            R = B*p**n
+            print*,"n",n,"B",B,"p",p
+            if (p.ge.0) then
+               R = B*p**n
+            else
+               R=0
+            endif 
+            call assert(.not. isnan(R),"R is nan")
             f = phi - (sigma0 + R)
+            call assert(.not. isnan(f),"f is nan")
+            
+            print*,"f",f
 !-----------------------------------------------------------------------
 !-----Convergence check
 !-----------------------------------------------------------------------
-            if (f.le.tol)
+            if (abs(f).le.tol) then
                sigma = s
-
                exit
-            else if (i.eq.iter_max)
+            else if (i.eq.iter_max) then
                print*, "No convergence"
                stop
             endif
@@ -201,4 +235,5 @@
 !-----------------------------------------------------------------------
       zeta(1) = p
       return 
+
       end

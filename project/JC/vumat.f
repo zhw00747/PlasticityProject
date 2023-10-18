@@ -2,18 +2,25 @@
 !
 !
 !
-      include "./utils.f"
+!
 !-----------------------------------------------------------------------
-! Uncomment next line to turn asserts off
-#define DEBUG
-!----------------------------------------------------------------------- 
-#ifdef DEBUG
-#define assert(cond, msg) call assertFunction(cond, msg)
-#else
-#define assert(cond, msg)
-#endif
+		subroutine assert(condition, message)
+      logical DEBUG
+      parameter (DEBUG=.true.) !set this to false to turn assert off
+  		logical, intent(in) :: condition
+  		character(*), intent(in) :: message
+      if (.not. DEBUG) then
+         return
+  		else if (.not. condition) then
+    		write(*,*) "Assertion failed: ", message
+    		stop
+		endif
+  		return
+		end subroutine assert
+!
+!
 !-----------------------------------------------------------------------
-      include "./VUMAT_model.f"
+      include "./vumat_model.f"
 !-----------------------------------------------------------------------
       subroutine vumat(
 !----- Input variables
@@ -53,15 +60,16 @@
 !-----Declare other variables
 		integer i,k
       real*8 sigma(ndir+nshr), deps(ndir+nshr), zeta(nstatev)
-      real*8 props(nprops) 
-      integer ntens, nzeta, nprops
+      integer ntens, nzeta
 !
 !-----------------------------------------------------------------------
 !-----Initialization step (elastic)
 !-----Since the initial values of strain components are zero,  
 !-----strainInc and strain will be equal for this step
 !-----------------------------------------------------------------------
-		assert((nshr.eq.3),"nshr==3 (plates will be handled later)")
+		call assert((nshr.eq.3),"nshr==3 (plates will be handled later)")
+
+
       if ((totalTime.eq.zero).and.(stepTime.eq.zero)) then
 			E0 = props(1)
 			nu = props(2)
@@ -100,13 +108,14 @@
 !-----Call vumat model and obtain new stresses and state variables
 !-----------------------------------------------------------------------
             call vumat_model(sigma, deps, zeta, props, ntens, nzeta, nprops)
+            print*,"t=",totalTime," i=",i,", VUMAT MODEL COMPLETED"
 
 !
 !-----------------------------------------------------------------------
 !-----Update stresses and state variables
 !-----------------------------------------------------------------------
             do k=1,ntens
-               stressNew(i,k) = stress(k)
+               stressNew(i,k) = sigma(k)
             enddo
             do k=1,nzeta
                stateNew(i,k) = zeta(k)
@@ -127,7 +136,7 @@
      +          ) * 0.5 / density(i)
 
 	  		enddo
-!
+!        
 		endif
 !
 !-----------------------------------------------------------------------
