@@ -35,6 +35,8 @@
       real*8 p, pold
 !-----Voce hardening constants
       real*8 Q1, C1, Q2, C2, Q3, C3 
+!-----Hershey exponent
+      real*8 n
 !-----Power law change rate and gradient of f with respect to R
       real*8 hR, dfdR
 !-----Old stress and old strain
@@ -47,13 +49,27 @@
       real*8 tol
       parameter(tol=1e-8)
 !-----gradient of f with respect to sigma
-      real*8 dfds(6)
+      real*8 dfds(3)
 !-----Product of df_ds, C and df_ds
       real*8 dfds_C_dfds
 !-----Product of C and df_ds
-      real*8 C_dfds(6)
+      real*8 C_dfds(3)
 !-----Product of dfdzeta and h (h is the gradient internal variables)
       real*8 dfdzeta_h
+!-----Deviatoric stress
+      real*8 sD(6)
+!-----hydrostatic stress
+      real*8 sH
+!-----Lode angle
+      real*8 Lode
+!-----Invariants
+      real*8 J2, J3
+!-----Principal stresses
+      real*8 s1, s2, s3
+!-----Hershey exponent 
+      real*8 n
+!-----temporary real
+      real*8 tmp
 !-----------------------------------------------------------------------
 !-----Read parameters and define constants
 !-----------------------------------------------------------------------
@@ -68,6 +84,7 @@
       C2 = props(7)
       Q3 = props(8)
       C3 = props(9)
+      n = props(10)
       pold = zeta(1)
       lame1 = nu*E/((1+nu)*(1-2*nu))
       lame2 = E/(2*(1+nu))
@@ -95,6 +112,7 @@
       print*,"C2",C2
       print*,"Q3",Q3
       print*,"C3",C3
+      print*,"n",n
       print*,"pold",pold
       print*,"sigma",sigma
       print*
@@ -119,16 +137,38 @@
          t(4) = sold(4) + C(4,4)*de(4)
          t(5) = sold(5) + C(5,5)*de(5)
          t(6) = sold(6) + C(6,6)*de(6)
-      
+!-----------------------------------------------------------------------
+!-----Calculate principal values
+!-----------------------------------------------------------------------
+      !Deviatoric stress
+      sH = (t(1) + t(2) + t(3))/3
+      sD(1) = t(1) - sH
+      sD(2) = t(2) - sH
+      sD(3) = t(3) - sH
+      sD(4) = t(4)
+      sD(5) = t(5)
+      sD(6) = t(6)
+      !J2 invariant (1/2*sigma:sigma)
+      J2 = 0.5*(sD(1)**2 + sD(2)**2 + sD(3)**2 + 
+     +       2*(sD(4)**2 + sD(5)**2 + sD(6)**2))
+      !J3 invariant (determinant)
+      J3 = sD(1)*(sD(2)*sD(3) - sD(5)*sD(5)) + 
+     +     sD(4)*(sD(5)*sD(6) - sD(4)*sD(3)) +
+     +     sD(6)*(sD(4)*sD(5) - sD(6)*sD(2)) 
+      !Lode angle 
+      Lode = 1.0/3*acos(3*sqrt(3)/2*J3/J2**1.5)
+      call assert((Lode.ge.0.0).and.(Lode.le.(PI/3)), "0 <= Lode <= pi/3") 
+      !Principal stresses
+      s1 = sH + 2*sqrt(J2/3)*cos(Lode)
+      s2 = sH + 2*sqrt(J2/3)*cos(2*pi/3 - Lode)
+      s3 = sH + 2*sqrt(J2/3)*cos(2*pi/3 + Lode)
 !-----------------------------------------------------------------------
 !-----Computing yield function f
 !-----------------------------------------------------------------------
-!-----Equivalent stress, phi = sqrt(3*J2)
-      phi = t(1)**2 + t(2)**2 + t(3)**2 -
-     +      t(1)*t(2) - t(2)*t(3) - t(3)*t(1) + 
-     +      3.0*(t(4)**2 + t(5)**2 + t(6)**2)
-      call assert((phi.ge.0.0),"J2 should always be >= 0")
-      phi = sqrt(phi)
+!-----Equivalent stress, Hershey
+      phi = (0.5*(abs(s1-s2)**n + abs(s2-s3)**n + abs(s3-s1)**n))**(1/n)
+      call assert((phi.ge.0.0),"sigma equivalent should always be >= 0")
+
 !-----Power law hardening
       R = Q1*(1 - exp(-C1*pold)) + 
      +    Q2*(1 - exp(-C2*pold)) +
@@ -155,24 +195,25 @@
 !-----------------------------------------------------------------------
 !-----Computing dfds:C:dfds
 !-----------------------------------------------------------------------
-!-----Gradient of f with respect to sigma
-            dfds(1) = 1/(2*phi)*(2*s(1) - s(2) - s(3))
-            dfds(2) = 1/(2*phi)*(2*s(2) - s(1) - s(3))
-            dfds(3) = 1/(2*phi)*(2*s(3) - s(1) - s(2))
-            dfds(4) = 3/(2*phi)*s(4)
-            dfds(5) = 3/(2*phi)*s(5)
-            dfds(6) = 3/(2*phi)*s(6)
+!-----Gradient of f with respect to principal stresses
+            tmp = abs(s1-s2)**n + abs(s2-s3)**n + abs(s3-s1)**n
+            dfds(1) = 1/2**n*tmp**(1/n-1)*
+     +                 (sign(s1-s2)*abs(s1-s2)**(n-1)  
+     +                - sign(s3-s1)*abs(s3-s1)**(n-1))
+            dfds(2) = 1/2**n*tmp**(1/n-1)*
+     +                (-sign(s1-s2)*abs(s1-s2)**(n-1)  
+     +                 +sign(s2-s3)*abs(s2-s3)**(n-1))
+            dfds(3) = 1/2**n*tmp**(1/n-1)*
+     +                (-sign(s2-s3)*abs(s2-s3)**(n-1)  
+     +                 +sign(s3-s1)*abs(s3-s1)**(n-1))
+      
 !-----Temporary product
             C_dfds(1) = C(1,1)*dfds(1) + C(1,2)*dfds(2) + C(1,3)*dfds(3)
             C_dfds(2) = C(2,1)*dfds(1) + C(2,2)*dfds(2) + C(2,3)*dfds(3)
             C_dfds(3) = C(3,1)*dfds(1) + C(3,2)*dfds(2) + C(3,3)*dfds(3)
-            C_dfds(4) = C(4,4)*dfds(4)
-            C_dfds(5) = C(5,5)*dfds(5)
-            C_dfds(6) = C(6,6)*dfds(6)
 !-----dfds:(C:dfds)
             dfds_C_dfds = dfds(1)*C_dfds(1) + dfds(2)*C_dfds(2) + 
-     +                    dfds(3)*C_dfds(3) + dfds(4)*C_dfds(4) +
-     +                    dfds(5)*C_dfds(5) + dfds(6)*C_dfds(6)
+     +                    dfds(3)*C_dfds(3) 
 !-----------------------------------------------------------------------
 !-----Cumputing dfdzeta:h
 !-----------------------------------------------------------------------
@@ -204,12 +245,37 @@
 !-----------------------------------------------------------------------
 !-----Recompute yield function
 !-----------------------------------------------------------------------
-            phi = s(1)**2 + s(2)**2 + s(3)**2 -
-     +            s(1)*s(2) - s(2)*s(3) - s(3)*s(1) + 
-     +            3.0*(s(4)**2 + s(5)**2 + s(6)**2)
-            call assert((phi.ge.0.0),"J2 should always be >= 0")
-            phi = sqrt(phi)
-            
+            !Deviatoric stress
+            sH = (t(1) + t(2) + t(3))/3
+            sD(1) = t(1) - sH
+            sD(2) = t(2) - sH
+            sD(3) = t(3) - sH
+            sD(4) = t(4)
+            sD(5) = t(5)
+            sD(6) = t(6)
+            !J2 invariant (1/2*sigma:sigma)
+            J2 = 0.5*(sD(1)**2 + sD(2)**2 + sD(3)**2 + 
+     +             2*(sD(4)**2 + sD(5)**2 + sD(6)**2))
+            !J3 invariant (determinant)
+            J3 = sD(1)*(sD(2)*sD(3) - sD(5)*sD(5)) + 
+     +           sD(4)*(sD(5)*sD(6) - sD(4)*sD(3)) +
+     +           sD(6)*(sD(4)*sD(5) - sD(6)*sD(2)) 
+            !Lode angle 
+            Lode = 1.0/3*acos(3*sqrt(3)/2*J3/J2**1.5)
+            call assert((Lode.ge.0.0).and.(Lode.le.(PI/3)),
+     +                                 "0 <= Lode <= pi/3") 
+            !Principal stresses
+            s1 = sH + 2*sqrt(J2/3)*cos(Lode)
+            s2 = sH + 2*sqrt(J2/3)*cos(2*pi/3 - Lode)
+            s3 = sH + 2*sqrt(J2/3)*cos(2*pi/3 + Lode)
+!-----------------------------------------------------------------------
+!-----Computing yield function f
+!-----------------------------------------------------------------------
+!-----Equivalent stress, Hershey
+            phi = (0.5*(abs(s1-s2)**n + abs(s2-s3)**n + 
+     +                  abs(s3-s1)**n))**(1/n)
+            call assert((phi.ge.0.0),
+     +                  "sigma equivalent should always be >= 0")
 
             R = Q1*(1 - exp(-C1*p)) + 
      +          Q2*(1 - exp(-C2*p)) +

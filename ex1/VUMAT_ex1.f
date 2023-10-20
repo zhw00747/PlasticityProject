@@ -33,7 +33,6 @@
 !----- Output variables
      +  stressNew, stateNew, enerInternNew, enerInelasNew )
 !
-      implicit none
       include 'vaba_param.inc'
 !-----------------------------------------------------------------------
 !-----Declaration Abaqus variables
