@@ -85,6 +85,7 @@
       Q3 = props(8)
       C3 = props(9)
       n = props(10)
+      call assert((n.ge.1).and.(n.le.10), "1 <= n Hershey <= 10")
       pold = zeta(1)
       lame1 = nu*E/((1+nu)*(1-2*nu))
       lame2 = E/(2*(1+nu))
@@ -112,10 +113,11 @@
       print*,"C2",C2
       print*,"Q3",Q3
       print*,"C3",C3
-      print*,"n",n
+      print*,"n (Hershey)",n
       print*,"pold",pold
       print*,"sigma",sigma
       print*
+      stop
 !-----------------------------------------------------------------------
 !-----Unpack old stresses
 !-----------------------------------------------------------------------
@@ -225,7 +227,8 @@
 !-----------------------------------------------------------------------
 !-----Computing dlambda increment
 !-----------------------------------------------------------------------
-            call assert(abs(dfds_C_dfds - dfdzeta_h).ge.(1e-2))
+            call assert(abs(dfds_C_dfds - dfdzeta_h).ge.(1e-2), 
+     +      "not allowing the denominator in cutting plane to be small")
 
             print*, "f",f
             print*,"dfds_C_df_ds",dfds_C_dfds 
