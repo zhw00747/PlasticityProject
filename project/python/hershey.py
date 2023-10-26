@@ -33,15 +33,8 @@ def invJ2(s):
     s23 = s[4]
     s31 = s[5]
     J2 = (
-        s11**2 / 3
-        - s11 * s22 / 3
-        - s11 * s33 / 3
-        + s12**2
-        + s22**2 / 3
-        - s22 * s33 / 3
-        + s23**2
-        + s31**2
-        + s33**2 / 3
+        0.5 * (s11**2 + s22**2 + s33**2 + 2 * (s12**2 + s23**2 + s31**2))
+        - 1.0 / 6 * (s11 + s22 + s33) ** 2
     )
     assert J2 >= 0
     return J2
@@ -128,6 +121,10 @@ def herhsey(s1, s2, s3):
 
 def hershey_s(s):
     assert s.shape == (6,)
+
+    # J2 = invJ2(s)
+    # return np.sqrt(3 * J2)
+
     s1 = sp1(s)
     s2 = sp2(s)
     s3 = sp3(s)
@@ -138,16 +135,19 @@ def finite_diff(s, i):
     assert s.shape == (6,)
     assert i >= 0 and i < 6
     hfrac = 1e-5
-    sp = np.zeros_like(s)
-    sp[:] = s
-    h = sp[i] * hfrac
+    h = s[i] * hfrac
     import sys
 
     if h == 0:
-        h = 10 * sys.float_info.epsilon
-    sp[i] = sp[i] + h
-    # print("i", i, "sp", sp, "s", s, "h", h)
-    return (hershey_s(sp) - hershey_s(s)) / h
+        h = 100 * sys.float_info.epsilon
+
+    sp = np.zeros_like(s)
+    sp[:] = s[:]
+    sp[i] = s[i] + h
+    sm = np.zeros_like(s)
+    sm[:] = s[:]
+    sm[i] = s[i] - h
+    return (hershey_s(sp) - hershey_s(sm)) / (2 * h)
 
 
 def dphids_numerical(s):
@@ -221,9 +221,10 @@ def dherhseyds(s):
     sdev = s_dev(s)
     J3 = invJ3(s)
     dJ3ds = dinvJ3ds(s)
-    kronecker = np.array([1, 1, 1, 0, 0, 0])
+    kronecker = np.array([1, 1, 1, 0, 0, 0], dtype=float)
 
     if thetaL > tol and thetaL < np.pi / 3 - tol:
+        print("ORDINARY CASE")
         u = 0.5 * (A**m + B**m + C**m)
         dphids1 = 0.5 * u ** (1.0 / m - 1) * (A ** (m - 1) + C ** (m - 1))
         dphids2 = 0.5 * u ** (1.0 / m - 1) * (-(A ** (m - 1)) + B ** (m - 1))
@@ -249,22 +250,36 @@ def dherhseyds(s):
             + sdev / np.sqrt(3 * J2) * np.cos(2 * np.pi / 3 + thetaL)
             - 2 * np.sqrt(J2) / np.sqrt(3) * np.sin(2 * np.pi / 3 + thetaL) * dthetaLds
         )
-        print("A", A)
-        print("B", B)
-        print("C", C)
+        print("dlodeds", dthetaLds)
+        sum_angles = (
+            np.cos(thetaL)
+            + np.cos(2 * np.pi / 3 - thetaL)
+            + np.cos(2 * np.pi / 3 + thetaL)
+        )
+        sum_angles_weighted = (
+            np.cos(thetaL) * dphids1
+            + np.cos(2 * np.pi / 3 - thetaL) * dphids2
+            + np.cos(2 * np.pi / 3 + thetaL) * dphids3
+        )
+
+        print("sum angles = ", sum_angles)
+        print("sum angles weighted", sum_angles_weighted)
+        # print("A", A)
+        # print("B", B)
+        # print("C", C)
         print("dphids1", dphids1)
         print("dphids2", dphids2)
         print("dphids3", dphids3)
         return dphids1 * ds1ds + dphids2 * ds2ds + dphids3 * ds3ds
 
     else:
+        print("SINGULARITY")
         # Singularity: Must be handled in a special way
+        a = 3.0 / 2 * sdev / np.sqrt(3 * J2)
+        b = 3.0 / 2 * J3 * J2 ** (-2) * sdev - dJ3ds / J2
         if thetaL < tol:
-            a = 3.0 / 2 * sdev / np.sqrt(3 * J2)
-            b = 3.0 / 2 * J3 * J2 ** (-2) * sdev - dJ3ds / J2
-
             # seems that this expression (b) goes to 0 in this case
-            # not sure why
+            # not sure why:
             assert np.linalg.norm(b) < tol
             assert abs(A - C) < tol and abs(B) < tol
             return a - 1.0 / 3 * b
