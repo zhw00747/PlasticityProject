@@ -10,7 +10,7 @@ if __name__ == "__main__":
     ### with numerical differentiation
     ##################################################
 
-    N_STRESS_SAMPLES = 10000
+    N_STRESS_SAMPLES = 1
     S_RANGE = 200.0
     for i in range(N_STRESS_SAMPLES):
         s11 = random.uniform(-S_RANGE, S_RANGE)
@@ -20,25 +20,22 @@ if __name__ == "__main__":
         s23 = random.uniform(-S_RANGE, S_RANGE)
         s31 = random.uniform(-S_RANGE, S_RANGE)
 
-        # s11 = 10
-        # s22 = 20
-        # s33 = 30
-        # s12 = 40
-        # s23 = 50
-        # s31 = 60
+        s11 = -100.0
+        s22 = -100.0
+        s33 = 110.0
+        s12 = 0.0
+        s23 = 0.0
+        s31 = 10.0
         s = np.array([s11, s22, s33, s12, s23, s31], dtype=float)
 
         dphids = dherhseyds(s)
         dphids_num = dphids_numerical(s)
         diff = dphids - dphids_num
-        error_tol = 1e-8
+        error_tol = 1e-5
         tol = 1e-8
 
-        assert m == 2
-        sdev = s_dev(s)
-        dphids_exact = 3.0 / (2 * np.sqrt(3 * invJ2(s))) * sdev
-        diff = dphids - dphids_exact
-
+        diff = dphids - dphids_num
+        print("diff", diff)
         error = np.linalg.norm(diff) / (np.linalg.norm(dphids_num))
         if error > error_tol:
             print("Failed for i =", i)

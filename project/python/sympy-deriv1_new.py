@@ -3,9 +3,11 @@ import sympy as sp
 # Define symbols
 
 
-s11, s22, s33, s12, s23, s31 = sp.symbols("s11 s22 s33 s12 s23 s31", real=True)
+s11, s22, s33, s12, s21, s23, s32, s13, s31 = sp.symbols(
+    "s11 s22 s33 s12 s21 s23 s32 s13 s31", real=True
+)
 
-s = sp.Matrix([[s11, s12, s31], [s12, s22, s23], [s31, s23, s33]])
+s = sp.Matrix([[s11, s12, s13], [s21, s22, s23], [s31, s32, s33]])
 sH = (s11 + s22 + s33) / 3
 sHI = sp.Matrix([[sH, 0, 0], [0, sH, 0], [0, 0, sH]])
 sD = s - sHI
@@ -22,7 +24,7 @@ J2 = sp.simplify(J2)
 print("J2\n", J2, "\n")
 
 J3 = sp.det(sD)
-J3 = sp.simplify(J3)
+# J3 = sp.simplify(J3)
 
 print("J3\n", J3)
 

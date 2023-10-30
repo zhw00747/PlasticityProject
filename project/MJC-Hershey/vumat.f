@@ -8,7 +8,7 @@
 !
 !
 !-----------------------------------------------------------------------
-      include "./vumat_model.f"
+      include "./vumat_hershey.f"
 !-----------------------------------------------------------------------
       subroutine vumat(
 !----- Input variables
@@ -121,6 +121,7 @@
      +     2. * (stressOld(i,5) + stressNew(i,5)) * strainInc(i,5) +
      +     2. * (stressOld(i,6) + stressNew(i,6)) * strainInc(i,6)
      +          ) * 0.5 / density(i)
+
 
 	  		enddo
 !        
