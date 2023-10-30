@@ -8,7 +8,7 @@
 !
 !
 !-----------------------------------------------------------------------
-      include "./vumat_hershey.f"
+      include "./vumat_model.f"
 !-----------------------------------------------------------------------
       subroutine vumat(
 !----- Input variables
@@ -96,7 +96,7 @@
 !-----Call vumat model and obtain new stresses and state variables
 !-----------------------------------------------------------------------
             call vumat_model(sigma, deps, zeta, props, ntens, nzeta, nprops)
-            print*,"t=",totalTime," i=",i,", VUMAT MODEL COMPLETED"
+            !print*,"t=",totalTime," i=",i,", VUMAT MODEL COMPLETED"
 !
 !-----------------------------------------------------------------------
 !-----Update stresses and state variables

@@ -19,6 +19,8 @@
       integer i,j
 !-----Max number of iterations when plasticity occurs
       integer, parameter :: iter_max = 1000
+!-----tolerance for update scheme
+      real*8, parameter :: err_tol = 1e-8
 !-----Used for special case when finding dfds
       real*8, parameter :: sing_tol = 1e-5
 !-----PI
@@ -53,8 +55,6 @@
       real*8 sH
 !-----Plastic multiplier increment used in update scheme
       real*8 ddlambda 
-!-----tolerance for update scheme
-      real*8, parameter :: err_tol = 1e-8
 !-----gradient of yield function with respect to stresses
       real*8 dfds(6)
 !-----Product of df_ds, C and df_ds
@@ -99,7 +99,7 @@
       Q3 = props(8)
       C3 = props(9)
       n = props(10)
-      call assert((n.ge.1).and.(n.le.10), "1 <= n Hershey <= 10")
+      call assert((n.ge.1).and.(n.le.100), "1 <= n(Hershey) <= 100")
       pold = zeta(1)
       lame1 = nu*E/((1+nu)*(1-2*nu))
       lame2 = E/(2*(1+nu))
@@ -161,7 +161,7 @@
       s23 = t(5)
       s31 = t(6)
 !-----------------------------------------------------------------------
-!-----Start inner loop
+!-----Start inner loop (loop breaks at i=1 if the increment is elastic)
 !-----------------------------------------------------------------------
       do i=1,iter_max 
 !-----J2 
@@ -175,7 +175,6 @@
 !-----is slightly out of the allowed range for arccos (-1 to 1) 
 !-----------------------------------------------------------------------
          tmp1 = 3*sqrt(3.)/2*J3/J2**1.5
-         print*,"arccos arg",tmp1
          call assert((tmp1.ge.(-1.-1e-6)).and.(tmp1.le.(1.+1e-6)),
      +        "arccos must take args from -1 to 1")
          if (tmp1.le.(-1.)) then
@@ -184,7 +183,6 @@
             tmp1 = 1.
          endif
          Lode = 1.0/3*acos(tmp1)
-         print*,"Lode" , Lode
          call assert((Lode.ge.0.0).and.(Lode.le.(PI/3)), 
      +        "0 <= Lode <= pi/3") 
 !-----Principal stresses
@@ -238,6 +236,7 @@
                sigma(4) = s12
                sigma(5) = s23
                sigma(6) = s31
+               print*,"Rmap completed in",i,"iter, f=",f
                exit
             else if (i.eq.iter_max) then
                print*, "No convergence"
@@ -324,15 +323,16 @@
          call assert(abs(dfds_Ce_dfds - dfdzeta_h).ge.(1e-2), 
      +   "not allowing the denominator in cutting plane to be small")
 
-         print*, "f",f
-         print*, "dfds", dfds
-         print*,"dfds_C_df_ds",dfds_Ce_dfds 
-         print*, "dfdzeta_h",dfdzeta_h
+         !print*, "f",f
+         !print*, "dfds", dfds
+         !print*,"dfds_C_df_ds",dfds_Ce_dfds 
+         !print*, "dfdzeta_h",dfdzeta_h
 
          ddlambda = f/(dfds_Ce_dfds - dfdzeta_h)
          call assert(.not. isnan(ddlambda),"lambda is nan")
          !print*,"inner iter = ",i
-         print*,"ddlambda",ddlambda
+         !print*,"ddlambda",ddlambda
+
 !-----------------------------------------------------------------------
 !-----Updating stresses and internal variables 
 !-----------------------------------------------------------------------
@@ -343,7 +343,7 @@
          s23 = s23 - ddlambda * Ce_dfds(5)
          s31 = s31 - ddlambda * Ce_dfds(6) 
          p = p + ddlambda
-         call assert(p.ge.(-1e-5), "p should not be negative")
+         call assert(p.ge.(-1e-5), "p should be nonnegative")
          !print*,"p",p
 
       enddo

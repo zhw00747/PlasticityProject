@@ -65,9 +65,11 @@ if __name__ == "__main__":
 
     plt.figure()
     plt.contour(S1, S2, PHI, levels=[sY])
+    plt.contourf(S1, S2, PHI, levels=np.linspace(0.1, 400, 50))
     plt.xlabel("sigma1")
     plt.ylabel("sigma2")
     plt.grid(True)
+    plt.title("m=" + str(m))
     plt.savefig("hershey.png")
 
     ##################################################
