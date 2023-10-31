@@ -5,15 +5,14 @@
 !-----------------------------------------------------------------------
 !
 !-----------------------------------------------------------------------
-      subroutine vumat_model(sigma, deps, statev, props, ntens, nstatev, 
-     <                       nprops, rho, dt)
+      subroutine vumat_model(sigma, deps, zeta, props, ntens, nzeta, 
+     +                       nprops)
       implicit none
 !-----------------------------------------------------------------------
 !-----Declaration variables
 !-----------------------------------------------------------------------
-      real*8 sigma(ntens), deps(ntens), statev(nstatev), props(nprops), 
-     <       rho,dt
-      integer ntens, nstatev, nprops
+      real*8 sigma(ntens), deps(ntens), zeta(nzeta), props(nprops)
+      integer ntens, nzeta, nprops
 !-----------------------------------------------------------------------
 !-----Declaration internal variables
 !-----------------------------------------------------------------------
@@ -42,22 +41,16 @@
       real*8 R
 !-----Equivalent plastic strain
       real*8 p, pold
-!-----Temperature
-      real*8 T
 !-----Voce hardening constants
       real*8 Q1, C1, Q2, C2, Q3, C3 
 !-----Hershey exponent
       real*8 n
-!-----Thermal parameters
-      real*8 cp, betaTQ, T0, Tm, m
-!-----Viscoplastic parameters
-      real*8 pdot0, c_visc
 !-----Power law change rate and gradient of f with respect to R
       real*8 hR, dfdR
 !-----Old stress and old strain
       real*8 sold(6), de(6)
 !-----Trial stress, deviatoric stress and stress components 
-      real*8 tr(6), sdev(6), s11, s22, s33, s12, s23, s31
+      real*8 t(6), sdev(6), s11, s22, s33, s12, s23, s31
 !-----hydrostatic stress
       real*8 sH
 !-----Plastic multiplier increment used in update scheme
@@ -94,8 +87,8 @@
 !-----------------------------------------------------------------------
 !-----Read parameters and define constants
 !-----------------------------------------------------------------------
-      call assert((nprops.eq.17),"nprops==17")
-      call assert((nstatev.eq.2), "nzeta==2")
+      call assert((nprops.eq.10),"nprops==10")
+      call assert((nzeta.eq.1), "nzeta==1")
       E = props(1)
       nu = props(2)
       sigma0 = props(3)
@@ -106,16 +99,8 @@
       Q3 = props(8)
       C3 = props(9)
       n = props(10)
-      cp = props(11)
-      betaTQ = props(12)
-      T0 = props(13)
-      Tm = props(14)
-      m = props(15)
-      pdot0 = props(16)
-      c_visc = props(17)
-      !call assert((n.ge.1).and.(n.le.100), "1 <= n(Hershey) <= 100")
-      pold = statev(1)
-      T = statev(2)
+      call assert((n.ge.1).and.(n.le.100), "1 <= n(Hershey) <= 100")
+      pold = zeta(1)
       lame1 = nu*E/((1+nu)*(1-2*nu))
       lame2 = E/(2*(1+nu))
       Ce = 0.0
@@ -132,29 +117,20 @@
       Ce(5,5) = 2*lame2
       Ce(6,6) = 2*lame2
 
-      print*
-      print*,"E",E
-      print*,"nu",nu
-      print*,"sigma0",sigma0
-      print*,"Q1",Q1
-      print*,"C1",C1
-      print*,"Q2",Q2
-      print*,"C2",C2
-      print*,"Q3",Q3
-      print*,"C3",C3
-      print*,"n (Hershey)",n
-      print*,"cp",cp
-      print*,"betaTQ",betaTQ
-      print*,"T0",T0
-      print*,"Tm",Tm
-      print*,"m (thermal)",m
-      print*,"pdot0",pdot0
-      print*,"c",c_visc
-      print*,"------------"
-      print*,"pold",pold
-      print*,"T",T
-      print*
-      stop
+      !print*
+      !print*,"E",E
+      !print*,"nu",nu
+      !print*,"sigma0",sigma0
+      !print*,"Q1",Q1
+      !print*,"C1",C1
+      !print*,"Q2",Q2
+      !print*,"C2",C2
+      !print*,"Q3",Q3
+      !print*,"C3",C3
+      !print*,"n (Hershey)",n
+      !print*,"pold",pold
+      !print*,"sigma",sigma
+      !print*
 !-----------------------------------------------------------------------
 !-----Unpack old stresses
 !-----------------------------------------------------------------------
@@ -170,28 +146,28 @@
 !-----------------------------------------------------------------------
 !-----Trial stress
 !-----------------------------------------------------------------------
-      tr(1) = sold(1) + Ce(1,1)*de(1) + Ce(1,2)*de(2) + Ce(1,3)*de(3)
-      tr(2) = sold(2) + Ce(2,1)*de(1) + Ce(2,2)*de(2) + Ce(2,3)*de(3)
-      tr(3) = sold(3) + Ce(3,1)*de(1) + Ce(3,2)*de(2) + Ce(3,3)*de(3)
-      tr(4) = sold(4) + Ce(4,4)*de(4)
-      tr(5) = sold(5) + Ce(5,5)*de(5)
-      tr(6) = sold(6) + Ce(6,6)*de(6)
+      t(1) = sold(1) + Ce(1,1)*de(1) + Ce(1,2)*de(2) + Ce(1,3)*de(3)
+      t(2) = sold(2) + Ce(2,1)*de(1) + Ce(2,2)*de(2) + Ce(2,3)*de(3)
+      t(3) = sold(3) + Ce(3,1)*de(1) + Ce(3,2)*de(2) + Ce(3,3)*de(3)
+      t(4) = sold(4) + Ce(4,4)*de(4)
+      t(5) = sold(5) + Ce(5,5)*de(5)
+      t(6) = sold(6) + Ce(6,6)*de(6)
 !-----------------------------------------------------------------------
       !Gather stress components
-      s11 = tr(1) 
-      s22 = tr(2) 
-      s33 = tr(3) 
-      s12 = tr(4)
-      s23 = tr(5)
-      s31 = tr(6)
+      s11 = t(1) 
+      s22 = t(2) 
+      s33 = t(3) 
+      s12 = t(4)
+      s23 = t(5)
+      s31 = t(6)
 !-----------------------------------------------------------------------
 !-----Start inner loop (loop breaks at i=1 if the increment is elastic)
 !-----------------------------------------------------------------------
       do i=1,iter_max 
 !-----J2 
          J2 = 0.5 * (s11**2 + s22**2 + s33**2 + 
-     <        2 * (s12**2 + s23**2 + s31**2)) -
-     <        1.0 / 6 * (s11 + s22 + s33) ** 2
+     +        2 * (s12**2 + s23**2 + s31**2)) -
+     +        1.0 / 6 * (s11 + s22 + s33) ** 2
 !-----J3  
          call invariantJ3(s11,s22,s33,s12,s23,s31,J3)
 !-----------------------------------------------------------------------
@@ -200,7 +176,7 @@
 !-----------------------------------------------------------------------
          tmp1 = 3*sqrt(3.)/2*J3/J2**1.5
          call assert((tmp1.ge.(-1.-1e-6)).and.(tmp1.le.(1.+1e-6)),
-     <        "arccos must take args from -1 to 1")
+     +        "arccos must take args from -1 to 1")
          if (tmp1.le.(-1.)) then
             tmp1 = -1.
          elseif (tmp1.ge.(1.)) then
@@ -208,7 +184,7 @@
          endif
          Lode = 1.0/3*acos(tmp1)
          call assert((Lode.ge.0.0).and.(Lode.le.(PI/3)), 
-     <        "0 <= Lode <= pi/3") 
+     +        "0 <= Lode <= pi/3") 
 !-----Principal stresses
          sH = (s11 + s22 + s33)/3
          s1 = sH + 2/sqrt(3.)*sqrt(J2)*cos(Lode)
@@ -218,19 +194,19 @@
          B = s2 - s3
          C = s1 - s3
          call assert((abs(A).ge.0.).and.(abs(B).ge.0.).
-     <                and.(abs(C).ge.0.),
-     <       "principal stresses must be ordered as s1>=s2>=s3") 
+     +                and.(abs(C).ge.0.),
+     +       "principal stresses must be ordered as s1>=s2>=s3") 
 !-----------------------------------------------------------------------
 !-----Computing yield function f
 !-----------------------------------------------------------------------
 !-----Equivalent stress, Hershey
          phi = (0.5*(A**n + B**n + C**n))**(1/n)
          call assert((phi.ge.0.0),
-     <        "sigma equivalent should always be >= 0")
+     +        "sigma equivalent should always be >= 0")
 !-----Power law hardening
          R = Q1*(1 - exp(-C1*pold)) + 
-     <       Q2*(1 - exp(-C2*pold)) +
-     <       Q3*(1 - exp(-Q3*pold)) 
+     +       Q2*(1 - exp(-C2*pold)) +
+     +       Q3*(1 - exp(-Q3*pold)) 
 !-----Yield function
          f = phi - (sigma0 + R)
 !-----------------------------------------------------------------------
@@ -242,7 +218,7 @@
 !-----------------------------------------------------------------------
 !-----f<=0: Elastic increment
 !-----------------------------------------------------------------------
-               sigma = tr
+               sigma = t
                exit
             else
 !-----------------------------------------------------------------------
@@ -290,16 +266,16 @@
             dfds3 = 0.5*tmp1 ** (1./n-1.) * (-(B**(n-1)) - C**(n-1))
 !-----------------------------------------------------------------------
             dLodeds = sqrt(3.)/(2*sin(3*Lode))*(3./2*J3*J2**(-5./2)*sdev 
-     <                - dJ3ds*J2**(-3./2))
+     +                - dJ3ds*J2**(-3./2))
             ds1ds = kronecker/3. + 
-     <              sdev/sqrt(3 * J2)*cos(Lode) -
-     <              2*sqrt(J2)/sqrt(3.)*sin(Lode)*dLodeds
+     +              sdev/sqrt(3 * J2)*cos(Lode) -
+     +              2*sqrt(J2)/sqrt(3.)*sin(Lode)*dLodeds
             ds2ds = kronecker/3. + 
-     <              sdev/sqrt(3 * J2)*cos(2.*PI/3-Lode) +
-     <              2*sqrt(J2)/sqrt(3.)*sin(2.*PI/3 - Lode)*dLodeds
+     +              sdev/sqrt(3 * J2)*cos(2.*PI/3-Lode) +
+     +              2*sqrt(J2)/sqrt(3.)*sin(2.*PI/3 - Lode)*dLodeds
             ds3ds = kronecker/3. + 
-     <              sdev/sqrt(3 * J2)*cos(2.*PI/3 + Lode) -
-     <              2*sqrt(J2)/sqrt(3.)*sin(2.*PI/3 + Lode)*dLodeds
+     +              sdev/sqrt(3 * J2)*cos(2.*PI/3 + Lode) -
+     +              2*sqrt(J2)/sqrt(3.)*sin(2.*PI/3 + Lode)*dLodeds
             dfds = dfds1*ds1ds + dfds2*ds2ds + dfds3*ds3ds
          else
 !-----------------------------------------------------------------------
@@ -308,10 +284,10 @@
             !I might very well not need the last terms here.
             if (Lode.le.sing_tol) then
                dfds = 3.0/2*sdev/sqrt(3*J2) - 
-     <                1./3* (3./2*J3*J2**(-2.)*sdev - dJ3ds/J2)
+     +                1./3* (3./2*J3*J2**(-2.)*sdev - dJ3ds/J2)
             elseif (Lode.ge.(PI/3 - sing_tol)) then
                dfds = 3.0/2*sdev/sqrt(3*J2) - 
-     <                (3./2*J3*J2**(-2.)*sdev - dJ3ds/J2)
+     +                (3./2*J3*J2**(-2.)*sdev - dJ3ds/J2)
             else  
                call assert(0,"Illegal state reached")
             endif
@@ -329,12 +305,14 @@
          Ce_dfds(6) = Ce(6,6)*dfds(6)
 !-----dfds:(C:dfds)
          dfds_Ce_dfds = dfds(1)*Ce_dfds(1) + dfds(2)*Ce_dfds(2) + 
-     <                  dfds(3)*Ce_dfds(3) + dfds(4)*Ce_dfds(4) +
-     <                  dfds(5)*Ce_dfds(5) + dfds(6)*Ce_dfds(6)
+     +                  dfds(3)*Ce_dfds(3) + dfds(4)*Ce_dfds(4) +
+     +                  dfds(5)*Ce_dfds(5) + dfds(6)*Ce_dfds(6)
 
 !-----------------------------------------------------------------------
 !-----Cumputing dfdzeta:h
 !-----------------------------------------------------------------------
+         !extend to more general vectors when nzeta becomes larger
+         call assert((nzeta.eq.1),"nzeta==1")
          hR = Q1*C1*exp(-C1*p) + Q2*C2*exp(-C2*p) + C3*Q3*exp(-C3*p)
          dfdR = -1.0
          dfdzeta_h = dfdR * hR
@@ -343,7 +321,7 @@
 
 !-----------------------------------------------------------------------
          call assert(abs(dfds_Ce_dfds - dfdzeta_h).ge.(1e-2), 
-     <   "not allowing the denominator in cutting plane to be small")
+     +   "not allowing the denominator in cutting plane to be small")
 
          !print*, "f",f
          !print*, "dfds", dfds
@@ -373,8 +351,7 @@
 !-----------------------------------------------------------------------
 !-----Pack internal variables
 !-----------------------------------------------------------------------
-      statev(1) = p
-      statev(2) = T
+      zeta(1) = p
       return 
 
       end
