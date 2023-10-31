@@ -11,8 +11,8 @@
 !-----------------------------------------------------------------------
 !-----Declaration variables
 !-----------------------------------------------------------------------
-      real*8 sigma(ntens), deps(ntens), statev(nstatev), props(nprops), 
-     <       rho,dt
+      real*8 sigma(ntens), deps(ntens), statev(nstatev), props(nprops)
+      real*8 rho,dt
       integer ntens, nstatev, nprops
 !-----------------------------------------------------------------------
 !-----Declaration internal variables
@@ -95,7 +95,7 @@
 !-----Read parameters and define constants
 !-----------------------------------------------------------------------
       call assert((nprops.eq.17),"nprops==17")
-      call assert((nstatev.eq.2), "nzeta==2")
+      call assert((nstatev.eq.2), "statev==2")
       E = props(1)
       nu = props(2)
       sigma0 = props(3)
@@ -113,7 +113,7 @@
       m = props(15)
       pdot0 = props(16)
       c_visc = props(17)
-      !call assert((n.ge.1).and.(n.le.100), "1 <= n(Hershey) <= 100")
+      call assert((n.ge.1).and.(n.le.100), "1 <= n(Hershey) <= 100")
       pold = statev(1)
       T = statev(2)
       lame1 = nu*E/((1+nu)*(1-2*nu))
@@ -131,30 +131,30 @@
       Ce(4,4) = 2*lame2
       Ce(5,5) = 2*lame2
       Ce(6,6) = 2*lame2
+!
+      !print*
+      !print*,"E",E
+      !print*,"nu",nu
+      !print*,"sigma0",sigma0
+      !print*,"Q1",Q1
+      !print*,"C1",C1
+      !print*,"Q2",Q2
+      !print*,"C2",C2
+      !print*,"Q3",Q3
+      !print*,"C3",C3
+      !print*,"n (Hershey)",n
+      !print*,"cp",cp
+      !print*,"betaTQ",betaTQ
+      !print*,"T0",T0
+      !print*,"Tm",Tm
+      !print*,"m (thermal)",m
+      !print*,"pdot0",pdot0
+      !print*,"c",c_visc
+      !print*,"------------"
+      !print*,"pold",pold
+      !print*,"T",T
+      !print*
 
-      print*
-      print*,"E",E
-      print*,"nu",nu
-      print*,"sigma0",sigma0
-      print*,"Q1",Q1
-      print*,"C1",C1
-      print*,"Q2",Q2
-      print*,"C2",C2
-      print*,"Q3",Q3
-      print*,"C3",C3
-      print*,"n (Hershey)",n
-      print*,"cp",cp
-      print*,"betaTQ",betaTQ
-      print*,"T0",T0
-      print*,"Tm",Tm
-      print*,"m (thermal)",m
-      print*,"pdot0",pdot0
-      print*,"c",c_visc
-      print*,"------------"
-      print*,"pold",pold
-      print*,"T",T
-      print*
-      stop
 !-----------------------------------------------------------------------
 !-----Unpack old stresses
 !-----------------------------------------------------------------------
@@ -260,6 +260,7 @@
                sigma(4) = s12
                sigma(5) = s23
                sigma(6) = s31
+
                print*,"Rmap completed in",i,"iter, f=",f
                exit
             else if (i.eq.iter_max) then
@@ -366,13 +367,26 @@
          s31 = s31 - ddlambda * Ce_dfds(6) 
          p = p + ddlambda
          call assert(p.ge.(-1e-5), "p should be nonnegative")
-         !print*,"p",p
 
+         
+         !print*,"ddlambda",ddlambda
+         !print*,"dlambda",p-pold
+         !print*,"pold",pold
+         !print*,"p",p
+         !print*, "phi",phi
+         !print*,"R",R
       enddo
       
 !-----------------------------------------------------------------------
 !-----Pack internal variables
 !-----------------------------------------------------------------------
+
+      if (p.lt.pold) then
+         print*,"negative plastic strain"
+         print*, "aborting"
+         stop
+      endif
+
       statev(1) = p
       statev(2) = T
       return 

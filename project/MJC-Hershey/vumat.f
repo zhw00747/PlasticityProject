@@ -109,7 +109,7 @@
             do k=1,ntens
                stressNew(i,k) = sigma(k)
             enddo
-            do k=1,nzeta
+            do k=1,nstatev
                stateNew(i,k) = statev(k)
             enddo
 !-----------------------------------------------------------------------
