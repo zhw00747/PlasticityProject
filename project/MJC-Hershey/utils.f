@@ -4,19 +4,18 @@
 !-----------------------------------------------------------------------
 !-----------------------------------------------------------------------
 !
-		subroutine assert(condition, message)
-      logical DEBUG
-      parameter (DEBUG=.true.) !set this to false to turn assert off
-  		logical, intent(in) :: condition
-  		character(*), intent(in) :: message
+      subroutine assert(condition, message)
+      logical, parameter :: DEBUG=.true. 
+      logical, intent(in) :: condition
+      character(*), intent(in) :: message
       if (.not. DEBUG) then
          return
-  		else if (.not. condition) then
-    		write(*,*) "Assertion failed: ", message
-    		stop
-		endif
-  		return
-		end subroutine assert
+      else if (.not. condition) then
+      	write(*,*) "Assertion failed: ", message
+      	stop
+      endif
+      return
+      end subroutine assert
 
 !-----------------------------------------------------------------------
       subroutine invariantJ3(s11, s22, s33, s12, s23, s31, J3)

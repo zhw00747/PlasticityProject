@@ -4,7 +4,7 @@
 !-----------------------------------------------------------------------
 !-----------------------------------------------------------------------
 !
-		subroutine assert(condition, message)
+	   subroutine assert(condition, message)
       logical DEBUG
       parameter (DEBUG=.true.) !set this to false to turn assert off
   		logical, intent(in) :: condition

@@ -39,6 +39,7 @@
      <  fieldNew(nblock,nfieldv),
      <  stressNew(nblock,ndir+nshr), stateNew(nblock,nstatev),
      <  enerInternNew(nblock), enerInelasNew(nblock)
+
 !
 !-----------------------------------------------------------------------
 !-----Elastic parameters
@@ -51,6 +52,8 @@
 		integer i,k
       real*8 sigma(ndir+nshr), deps(ndir+nshr), statev(nstatev)
       integer ntens
+
+
 !
 !-----------------------------------------------------------------------
 !-----Initialization step (elastic)
@@ -75,7 +78,7 @@
 				stressNew(i,5) = 2.* lame2*strainInc(i, 5)
 				stressNew(i,6) = 2.* lame2*strainInc(i, 6)		
 !-----Initializing temperature
-            stateOld(i,2) = T0
+            !stateOld(i,2) = T0
             stateNew(i,2) = T0
 			enddo
 !
@@ -100,9 +103,9 @@
 !-----Call vumat model and obtain new stresses and state variables
 !-----------------------------------------------------------------------
             call vumat_model(sigma, deps, statev, props, ntens, nstatev, 
-     <           nprops, density(i), dt)
+     <           nprops, density(i), dt, totalTime)
             !print*,"t=",totalTime," i=",i,", VUMAT MODEL COMPLETED"
-!
+!        
 !-----------------------------------------------------------------------
 !-----Update stresses and state variables
 !-----------------------------------------------------------------------
@@ -136,6 +139,6 @@
 !-----End of subroutine
 !-----------------------------------------------------------------------
 		return
-      end
+      end subroutine vumat
 
 

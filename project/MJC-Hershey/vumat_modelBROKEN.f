@@ -6,13 +6,13 @@
 !
 !-----------------------------------------------------------------------
       subroutine vumat_model(sigma, deps, statev, props, ntens, nstatev, 
-     <                       nprops, rho, dt)
+     <                       nprops, rho, dt)!, time)
       implicit none
 !-----------------------------------------------------------------------
 !-----Declaration variables
 !-----------------------------------------------------------------------
       real*8 sigma(ntens), deps(ntens), statev(nstatev), props(nprops)
-      real*8 rho,dt
+      real*8 rho,dt!, time
       integer ntens, nstatev, nprops
 !-----------------------------------------------------------------------
 !-----Declaration internal variables
@@ -40,10 +40,10 @@
       real*8 sigma0
 !-----Hardening
       real*8 R
-!-----Equivalent plastic strain
+!-----Equivalent plastic strain 
       real*8 p, pold
 !-----Temperature
-      real*8 T
+      real*8 T, Told
 !-----Voce hardening constants
       real*8 Q1, C1, Q2, C2, Q3, C3 
 !-----Hershey exponent
@@ -52,24 +52,34 @@
       real*8 cp, betaTQ, T0, Tm, m
 !-----Viscoplastic parameters
       real*8 pdot0, c_visc
-!-----Power law change rate and gradient of f with respect to R
-      real*8 hR, dfdR
 !-----Old stress and old strain
       real*8 sold(6), de(6)
 !-----Trial stress, deviatoric stress and stress components 
       real*8 tr(6), sdev(6), s11, s22, s33, s12, s23, s31
 !-----hydrostatic stress
       real*8 sH
-!-----Plastic multiplier increment used in update scheme
-      real*8 ddlambda 
+!-----Plastic multiplier increments
+      real*8 ddlambda, dlambda
 !-----gradient of yield function with respect to stresses
       real*8 dfds(6)
 !-----Product of df_ds, C and df_ds
       real*8 dfds_Ce_dfds
 !-----Product of C and dfds
       real*8 Ce_dfds(6)
-!-----Product of dfdzeta and h (h is the gradient internal variables)
+!----- dzeta:h contribution from inner variables in cutting plane method
       real*8 dfdzeta_h
+!-----Yield stress (sigma0 - R)
+      real*8 sigmaY
+!-----Gamma (temperature softening term)
+      real*8 Gamma
+!-----vp - Plastic strain rate term: (1+pdot)^c
+      real*8 vp
+!-----Hardening law change rate (dR/dp)
+      real*8 hR
+!-----Temperature softening rate (dGamma/dp)
+      real*8 hGamma
+!-----dvp/dp
+      real*8 hv
 !-----Lode angle
       real*8 Lode
 !-----Invariants
@@ -115,7 +125,10 @@
       c_visc = props(17)
       call assert((n.ge.1).and.(n.le.100), "1 <= n(Hershey) <= 100")
       pold = statev(1)
-      T = statev(2)
+      Told = statev(2)
+      p = pold
+      T = Told
+      dlambda = 0.
       lame1 = nu*E/((1+nu)*(1-2*nu))
       lame2 = E/(2*(1+nu))
       Ce = 0.0
@@ -132,6 +145,10 @@
       Ce(5,5) = 2*lame2
       Ce(6,6) = 2*lame2
 !
+      !print*,"remember to remove the below"
+      !c_visc=0
+      !m=1000.0
+
       !print*
       !print*,"E",E
       !print*,"nu",nu
@@ -154,6 +171,7 @@
       !print*,"pold",pold
       !print*,"T",T
       !print*
+      !print*,"vumat_model called"
 
 !-----------------------------------------------------------------------
 !-----Unpack old stresses
@@ -188,6 +206,7 @@
 !-----Start inner loop (loop breaks at i=1 if the increment is elastic)
 !-----------------------------------------------------------------------
       do i=1,iter_max 
+         !print*, "i",i
 !-----J2 
          J2 = 0.5 * (s11**2 + s22**2 + s33**2 + 
      <        2 * (s12**2 + s23**2 + s31**2)) -
@@ -231,25 +250,28 @@
          R = Q1*(1 - exp(-C1*pold)) + 
      <       Q2*(1 - exp(-C2*pold)) +
      <       Q3*(1 - exp(-Q3*pold)) 
+!-----Yield stress
+         sigmaY = sigma0 + R
+!-----Temperature softening
+         Gamma = 1 - ((T - T0)/(Tm - T0))**m
 !-----Yield function
-         f = phi - (sigma0 + R)
+         f = phi - sigmaY*Gamma
 !-----------------------------------------------------------------------
 !-----CHECK IF YIELDING OCCURS
 !-----------------------------------------------------------------------
          if (i.eq.1) then
-            p = pold
             if (f.le.0) then
 !-----------------------------------------------------------------------
 !-----f<=0: Elastic increment
 !-----------------------------------------------------------------------
                sigma = tr
-               exit
-            else
+               exit        
+            endif
+         else 
 !-----------------------------------------------------------------------
 !-----f>0: Plastic increment
 !-----------------------------------------------------------------------
-            endif
-         else 
+!
 !-----------------------------------------------------------------------
 !-----Convergence check
 !-----------------------------------------------------------------------
@@ -260,8 +282,7 @@
                sigma(4) = s12
                sigma(5) = s23
                sigma(6) = s31
-
-               print*,"Rmap completed in",i,"iter, f=",f
+               print*,"Rmap completed in",i,"iter,f=",f !,",t=",time
                exit
             else if (i.eq.iter_max) then
                print*, "No convergence"
@@ -286,7 +307,7 @@
 !-----Ordinary case (no singularity)
 !-----------------------------------------------------------------------
             tmp1 = 0.5 * (A**n + B**n + C**n)
-            dfds1 = 0.5*tmp1 **(1./n-1.) * (A**(n-1) + C**(n-1))
+            dfds1 = 0.5*tmp1 ** (1./n-1.) * (A**(n-1) + C**(n-1))
             dfds2 = 0.5*tmp1 ** (1./n-1.) * (-(A**(n-1)) + B**(n-1))
             dfds3 = 0.5*tmp1 ** (1./n-1.) * (-(B**(n-1)) - C**(n-1))
 !-----------------------------------------------------------------------
@@ -334,28 +355,49 @@
      <                  dfds(5)*Ce_dfds(5) + dfds(6)*Ce_dfds(6)
 
 !-----------------------------------------------------------------------
-!-----Cumputing dfdzeta:h
+!-----Cumputing various contributions from inner variables
 !-----------------------------------------------------------------------
          hR = Q1*C1*exp(-C1*p) + Q2*C2*exp(-C2*p) + C3*Q3*exp(-C3*p)
-         dfdR = -1.0
-         dfdzeta_h = dfdR * hR
+         vp = (1 + dlambda/(pdot0*dt))**c_visc
+         hGamma = -m*((T-T0)/(Tm-T0))**(m-1)*betaTQ*phi/(rho*cp)
+         hv = c_visc/(pdot0*dt)*(1+dlambda/(pdot0*dt))**(c_visc-1)
+!-----Adding all inner variable contributions
+         dfdzeta_h = -hR*Gamma*vp - sigmaY*hGamma*vp - sigmaY*Gamma*hv
+
 !-----------------------------------------------------------------------
 !-----Computing dlambda increment
-
 !-----------------------------------------------------------------------
-         call assert(abs(dfds_Ce_dfds - dfdzeta_h).ge.(1e-2), 
-     <   "not allowing the denominator in cutting plane to be small")
-
-         !print*, "f",f
-         !print*, "dfds", dfds
-         !print*,"dfds_C_df_ds",dfds_Ce_dfds 
-         !print*, "dfdzeta_h",dfdzeta_h
-
+         !print*,"dt",dt
+         !print*,"phi",phi
+         !print*,"rho",rho
+         !print*,"cp",cp
+         !print*,"dfds_Ce_dfds",dfds_Ce_dfds
+         !print*,"dfdzeta_h",dfdzeta_h
+         !print*,"sigmaY",sigmaY
+         !print*,"hR",hR
+         !print*,"vp",vp
+         !print*,"Gamma",Gamma
+         !print*,"hGamma",hGamma
+         !print*,"hv",hv
+         !print*,"pdot*",dlambda/(pdot0*dt)
+         !print*,"f",f
+         !print*
+         
+!-----------------------------------------------------------------------
+         !print*,"arg",abs(dfds_Ce_dfds - dfdzeta_h)
+         call assert(abs(dfds_Ce_dfds - dfdzeta_h).ge.(1e-3),
+     <        "denominator of update scheme must be > zero")
          ddlambda = f/(dfds_Ce_dfds - dfdzeta_h)
-         call assert(.not. isnan(ddlambda),"lambda is nan")
-         !print*,"inner iter = ",i
-         !print*,"ddlambda",ddlambda
-
+         
+         !if (isnan(ddlambda))then
+         !print*,"ddlambda",ddlambda!,"time",time
+         !   stop
+         !endif
+         !call assert(.not.isnan(ddlambda),"lambda is nan")
+         !print*,"i",i
+         
+         
+         
 !-----------------------------------------------------------------------
 !-----Updating stresses and internal variables 
 !-----------------------------------------------------------------------
@@ -366,8 +408,9 @@
          s23 = s23 - ddlambda * Ce_dfds(5)
          s31 = s31 - ddlambda * Ce_dfds(6) 
          p = p + ddlambda
-         call assert(p.ge.(-1e-5), "p should be nonnegative")
-
+         dlambda = p-pold
+         T = Told + (betaTQ*phi)/(rho*cp)*dlambda
+         !call assert(dlambda.ge.0.0," dlambda should be nonnegative")
          
          !print*,"ddlambda",ddlambda
          !print*,"dlambda",p-pold
@@ -380,15 +423,15 @@
 !-----------------------------------------------------------------------
 !-----Pack internal variables
 !-----------------------------------------------------------------------
-
       if (p.lt.pold) then
          print*,"negative plastic strain"
          print*, "aborting"
          stop
       endif
-
+      print*,"p",p
+      print*,"T",T
       statev(1) = p
       statev(2) = T
       return 
 
-      end
+      end subroutine vumat_model

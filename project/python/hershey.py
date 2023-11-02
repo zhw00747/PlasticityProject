@@ -10,7 +10,7 @@ import random
 ### Verification of Hershey and its gradient
 ##################################################
 
-m = 1
+m = 10
 TOL = 1e-6
 
 

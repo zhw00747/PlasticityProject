@@ -6,18 +6,18 @@
 !
 !-----------------------------------------------------------------------
       subroutine vumat_model(sigma, deps, statev, props, ntens, nstatev, 
-     <                       nprops, rho, dt)
+     <                       nprops, rho, dt, time)
       implicit none
 !-----------------------------------------------------------------------
 !-----Declaration variables
 !-----------------------------------------------------------------------
       real*8 sigma(ntens), deps(ntens), statev(nstatev), props(nprops)
-      real*8 rho,dt
+      real*8 rho,dt,time
       integer ntens, nstatev, nprops
 !-----------------------------------------------------------------------
 !-----Declaration internal variables
 !-----------------------------------------------------------------------
-      integer i,j
+      integer i
 !-----Max number of iterations when plasticity occurs
       integer, parameter :: iter_max = 1000
 !-----tolerance for update scheme
@@ -40,10 +40,10 @@
       real*8 sigma0
 !-----Hardening
       real*8 R
-!-----Equivalent plastic strain
+!-----Equivalent plastic strain 
       real*8 p, pold
 !-----Temperature
-      real*8 T
+      real*8 T, Told
 !-----Voce hardening constants
       real*8 Q1, C1, Q2, C2, Q3, C3 
 !-----Hershey exponent
@@ -52,30 +52,40 @@
       real*8 cp, betaTQ, T0, Tm, m
 !-----Viscoplastic parameters
       real*8 pdot0, c_visc
-!-----Power law change rate and gradient of f with respect to R
-      real*8 hR, dfdR
 !-----Old stress and old strain
       real*8 sold(6), de(6)
 !-----Trial stress, deviatoric stress and stress components 
       real*8 tr(6), sdev(6), s11, s22, s33, s12, s23, s31
 !-----hydrostatic stress
       real*8 sH
-!-----Plastic multiplier increment used in update scheme
-      real*8 ddlambda 
+!-----Plastic multiplier increments
+      real*8 ddlambda, dlambda
 !-----gradient of yield function with respect to stresses
       real*8 dfds(6)
 !-----Product of df_ds, C and df_ds
       real*8 dfds_Ce_dfds
 !-----Product of C and dfds
       real*8 Ce_dfds(6)
-!-----Product of dfdzeta and h (h is the gradient internal variables)
+!----- dzeta:h contribution from inner variables in cutting plane method
       real*8 dfdzeta_h
+!-----Yield stress (sigma0 - R)
+      real*8 sigmaY
+!-----Gamma (temperature softening term)
+      real*8 Gamma
+!-----vp - Plastic strain rate term: (1+pdot)^c
+      real*8 vp
+!-----Hardening law change rate (dR/dp)
+      real*8 hR
+!-----Temperature softening rate (dGamma/dp)
+      real*8 hGamma
+!-----dvp/dp
+      real*8 hv
 !-----Lode angle
       real*8 Lode
 !-----Invariants
       real*8 J2, J3
 !-----Invariant gradients with respect to stress components
-      real*8 dJ2ds, dJ3ds
+      real*8 dJ3ds(6)
 !-----Principal stresses
       real*8 s1, s2, s3
 !-----A = (s1-s2), B = (s2-s3), C=(s1-s3)
@@ -90,7 +100,8 @@
       real*8 kronecker(6)
       data kronecker / 1., 1., 1., 0., 0., 0. /
 !-----temporary real
-      real*8 tmp1, tmp2
+      real*8 tmp1
+
 !-----------------------------------------------------------------------
 !-----Read parameters and define constants
 !-----------------------------------------------------------------------
@@ -115,7 +126,10 @@
       c_visc = props(17)
       call assert((n.ge.1).and.(n.le.100), "1 <= n(Hershey) <= 100")
       pold = statev(1)
-      T = statev(2)
+      Told = statev(2)
+      p = pold
+      T = Told
+      dlambda = 0.0
       lame1 = nu*E/((1+nu)*(1-2*nu))
       lame2 = E/(2*(1+nu))
       Ce = 0.0
@@ -131,7 +145,7 @@
       Ce(4,4) = 2*lame2
       Ce(5,5) = 2*lame2
       Ce(6,6) = 2*lame2
-!
+
       !print*
       !print*,"E",E
       !print*,"nu",nu
@@ -153,14 +167,16 @@
       !print*,"------------"
       !print*,"pold",pold
       !print*,"T",T
+      !print*,"Ce",Ce
       !print*
-
+      
 !-----------------------------------------------------------------------
 !-----Unpack old stresses
 !-----------------------------------------------------------------------
       de = deps
       if (ntens.lt.6) then
-         call assert((ntens.eq.4),"ntens should be equal to 4 if shells are modelled")
+         call assert((ntens.eq.4),
+     <   "ntens should be equal to 4 if shells are modelled")
          sigma(5) = 0.0
          sigma(6) = 0.0
          de(5) = 0.0
@@ -176,6 +192,7 @@
       tr(4) = sold(4) + Ce(4,4)*de(4)
       tr(5) = sold(5) + Ce(5,5)*de(5)
       tr(6) = sold(6) + Ce(6,6)*de(6)
+
 !-----------------------------------------------------------------------
       !Gather stress components
       s11 = tr(1) 
@@ -231,25 +248,32 @@
          R = Q1*(1 - exp(-C1*pold)) + 
      <       Q2*(1 - exp(-C2*pold)) +
      <       Q3*(1 - exp(-Q3*pold)) 
+!-----Yield stress
+         sigmaY = sigma0 + R
+!-----Temperature softening
+         Gamma = 1. - ((T - T0)/(Tm - T0))**m
 !-----Yield function
-         f = phi - (sigma0 + R)
+         f = phi - sigmaY*Gamma
 !-----------------------------------------------------------------------
 !-----CHECK IF YIELDING OCCURS
 !-----------------------------------------------------------------------
          if (i.eq.1) then
-            p = pold
             if (f.le.0) then
 !-----------------------------------------------------------------------
 !-----f<=0: Elastic increment
 !-----------------------------------------------------------------------
                sigma = tr
                exit
-            else
 !-----------------------------------------------------------------------
-!-----f>0: Plastic increment
+!-----ELSE: f>0 - Plastic increment
 !-----------------------------------------------------------------------
             endif
          else 
+            !print*,"sig",sigma
+            !print*,"deps",deps
+            !print*,"dt",dt
+            !print*,"rho",rho
+            !stop
 !-----------------------------------------------------------------------
 !-----Convergence check
 !-----------------------------------------------------------------------
@@ -261,7 +285,8 @@
                sigma(5) = s23
                sigma(6) = s31
 
-               print*,"Rmap completed in",i,"iter, f=",f
+               print*,"Rmap completed in",i,"iter, f=",f,"t=",time
+               stop
                exit
             else if (i.eq.iter_max) then
                print*, "No convergence"
@@ -278,8 +303,10 @@
          sdev(4) = s12
          sdev(5) = s23
          sdev(6) = s31
+         
 !-----Gradient of J3 with respect to stress components
          call dInvariantJ3_dSigma(s11, s22, s33, s12, s23, s31, dJ3ds)
+         !print*,"dJ3ds",dJ3ds
 !-----------------------------------------------------------------------
          if ((Lode.ge.1e-5).and.(Lode.le.(PI/3-1e-5))) then
 !-----------------------------------------------------------------------
@@ -290,8 +317,8 @@
             dfds2 = 0.5*tmp1 ** (1./n-1.) * (-(A**(n-1)) + B**(n-1))
             dfds3 = 0.5*tmp1 ** (1./n-1.) * (-(B**(n-1)) - C**(n-1))
 !-----------------------------------------------------------------------
-            dLodeds = sqrt(3.)/(2*sin(3*Lode))*(3./2*J3*J2**(-5./2)*sdev 
-     <                - dJ3ds*J2**(-3./2))
+            dLodeds = sqrt(3.)/(2*sin(3*Lode))*(
+     <              3./2*J3*J2**(-5./2)*sdev - dJ3ds*J2**(-3./2))
             ds1ds = kronecker/3. + 
      <              sdev/sqrt(3 * J2)*cos(Lode) -
      <              2*sqrt(J2)/sqrt(3.)*sin(Lode)*dLodeds
@@ -314,7 +341,7 @@
                dfds = 3.0/2*sdev/sqrt(3*J2) - 
      <                (3./2*J3*J2**(-2.)*sdev - dJ3ds/J2)
             else  
-               call assert(0,"Illegal state reached")
+               call assert(.false.,"Illegal state reached")
             endif
          endif
 !-----------------------------------------------------------------------
@@ -322,34 +349,45 @@
 !-----------------------------------------------------------------------
 !
 !-----Temporary product
-         Ce_dfds(1) = Ce(1,1)*dfds(1) + Ce(1,2)*dfds(2) + Ce(1,3)*dfds(3)
-         Ce_dfds(2) = Ce(2,1)*dfds(1) + Ce(2,2)*dfds(2) + Ce(2,3)*dfds(3)
-         Ce_dfds(3) = Ce(3,1)*dfds(1) + Ce(3,2)*dfds(2) + Ce(3,3)*dfds(3)
+         Ce_dfds(1) = Ce(1,1)*dfds(1)+ Ce(1,2)*dfds(2)+ Ce(1,3)*dfds(3)
+         Ce_dfds(2) = Ce(2,1)*dfds(1)+ Ce(2,2)*dfds(2)+ Ce(2,3)*dfds(3)
+         Ce_dfds(3) = Ce(3,1)*dfds(1)+ Ce(3,2)*dfds(2)+ Ce(3,3)*dfds(3)
          Ce_dfds(4) = Ce(4,4)*dfds(4)
          Ce_dfds(5) = Ce(5,5)*dfds(5)
          Ce_dfds(6) = Ce(6,6)*dfds(6)
 !-----dfds:(C:dfds)
-         dfds_Ce_dfds = dfds(1)*Ce_dfds(1) + dfds(2)*Ce_dfds(2) + 
-     <                  dfds(3)*Ce_dfds(3) + dfds(4)*Ce_dfds(4) +
-     <                  dfds(5)*Ce_dfds(5) + dfds(6)*Ce_dfds(6)
+         dfds_Ce_dfds = dfds(1)*Ce_dfds(1)+ dfds(2)*Ce_dfds(2)+ 
+     <                  dfds(3)*Ce_dfds(3)+ dfds(4)*Ce_dfds(4)+
+     <                  dfds(5)*Ce_dfds(5)+ dfds(6)*Ce_dfds(6)
+
+!-----------------------------------------------------------------------
+!-----Cumputing various contributions from inner variables
+!-----------------------------------------------------------------------
+         hR = Q1*C1*exp(-C1*p) + Q2*C2*exp(-C2*p) + C3*Q3*exp(-C3*p)
+         vp = (1.0 + dlambda/(pdot0*dt))**c_visc
+         hGamma = -m*((T-T0)/(Tm-T0))**(m-1.0)*betaTQ*phi/(rho*cp)
+         hv = c_visc/(pdot0*dt)*(1.0+dlambda/(pdot0*dt))**(c_visc-1.0)
+!-----Adding all inner variable contributions
+         dfdzeta_h = -hR*Gamma*vp - sigmaY*hGamma*vp - sigmaY*Gamma*hv
+         !print*,"i",i,"REMOVING THIS BREAKS THE PROGRAM!???"
+         !dfdzeta_h = -hR*Gamma*vp - sigmaY*Gamma*hv
 
 !-----------------------------------------------------------------------
 !-----Cumputing dfdzeta:h
 !-----------------------------------------------------------------------
-         hR = Q1*C1*exp(-C1*p) + Q2*C2*exp(-C2*p) + C3*Q3*exp(-C3*p)
-         dfdR = -1.0
-         dfdzeta_h = dfdR * hR
+         !hR = Q1*C1*exp(-C1*p) + Q2*C2*exp(-C2*p) + C3*Q3*exp(-C3*p)
+         !dfdzeta_h = -hR
 !-----------------------------------------------------------------------
 !-----Computing dlambda increment
 
 !-----------------------------------------------------------------------
-         call assert(abs(dfds_Ce_dfds - dfdzeta_h).ge.(1e-2), 
-     <   "not allowing the denominator in cutting plane to be small")
-
          !print*, "f",f
          !print*, "dfds", dfds
          !print*,"dfds_C_df_ds",dfds_Ce_dfds 
          !print*, "dfdzeta_h",dfdzeta_h
+
+         call assert(abs(dfds_Ce_dfds - dfdzeta_h).ge.(1e-2), 
+     <   "not allowing the denominator in cutting plane to be small")
 
          ddlambda = f/(dfds_Ce_dfds - dfdzeta_h)
          call assert(.not. isnan(ddlambda),"lambda is nan")
@@ -366,7 +404,9 @@
          s23 = s23 - ddlambda * Ce_dfds(5)
          s31 = s31 - ddlambda * Ce_dfds(6) 
          p = p + ddlambda
-         call assert(p.ge.(-1e-5), "p should be nonnegative")
+         dlambda = p-pold
+         T = Told + (betaTQ*phi)/(rho*cp)*dlambda
+         !call assert(p.ge.(-1e-5), "p should be nonnegative")
 
          
          !print*,"ddlambda",ddlambda
@@ -386,7 +426,7 @@
          print*, "aborting"
          stop
       endif
-
+      
       statev(1) = p
       statev(2) = T
       return 
