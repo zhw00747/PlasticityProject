@@ -15,12 +15,12 @@
       props(1) = 210000.0 ! Youngs Modulus (E)
       props(2) = 0.33      ! Poissons Ratio (nu)
       props(3) = 370.0    ! Initial Stress (sigma0)
-      props(4) = 236.4    ! Material Parameter Q1 (Q1)
-      props(5) = 39.3     ! Material Parameter C1 (C1)
-      props(6) = 408.1    ! Material Parameter Q2 (Q2)
-      props(7) = 4.5      ! Material Parameter C2 (C2)
-      props(8) = 0.0    ! Material Parameter Q3 (Q3)
-      props(9) = 0.0      ! Material Parameter C3 (C3)
+      props(4) = 236.4    ! Material 
+      props(5) = 39.3     ! Material 
+      props(6) = 408.1    ! Material 
+      props(7) = 4.5      ! Material 
+      props(8) = 0.0    ! Material Parameter 
+      props(9) = 0.0      ! Material 
       props(10) = 10      ! Integer Property (n)
       props(11) = 452e6     ! Specific Heat (cp)
       props(12) = 0.9   ! Coefficient (betaTQ)
@@ -40,21 +40,21 @@
       statev(1) = 0.0      ! Initial Pressure (pold)
       statev(2) = 293.0    ! Initial Temperature (T)
 
+      sigma(1) = -2.833093563662269E-002 
+      sigma(2)=  369.819665019179
+      sigma(3)=      -2.833093563662276E-002
+      sigma(4)=1.359336507980214E-018  
+      sigma(5)=9.379106771702361E-017  
+      sigma(6)=0.000000000000000E+000
+  
+      deps(1)= -8.145571943181830E-007 
+      deps(2)= 2.468200698446931E-006
+      deps(3)= -8.145571943181818E-007
+      deps(4)=-2.829481682011195E-029 
+      deps(5)= 1.503252892125976E-022
+      deps(6)= -5.109490227698063E-023
 
-      !sigma = (/350., 0.0, 0.0, 0.0, 0.0, 0.0/)
-      !deps = (/0.0001, 0.0, 0.0, 0.0, 0.0, 0.0/)
-      sigma(1) = -3.142876803773045E-002  
-      sigma(2) = 441.604359277701 
-      sigma(3) = -3.142876803773081E-002
-      sigma(4) = -9.657592299344892E-017 
-      sigma(4) = 9.195864922075129E-017  
-      sigma(5) = 0.000000000000000E+000
-      deps(1) = -8.997370093618229E-007 
-      deps(2) = 2.726323263584914E-006 
-      deps(3) = -8.997370093618239E-007
-      deps(4) = -3.630586278502658E-023 
-      deps(5) = 8.029974878255568E-023 
-      deps(6) = -4.764438330989222E-024
+
 
       call vumat_model(sigma, deps, statev, props, ntens, nstatev, 
      <                       nprops, rho, dt, time)

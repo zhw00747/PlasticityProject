@@ -4,6 +4,7 @@
 !
 !-----------------------------------------------------------------------
 !
+
 !-----------------------------------------------------------------------
       subroutine vumat_model(sigma, deps, statev, props, ntens, nstatev, 
      <                       nprops, rho, dt, time)
@@ -43,7 +44,7 @@
 !-----Equivalent plastic strain 
       real*8 p, pold
 !-----Temperature
-      real*8 T, Told
+      real*8 T
 !-----Voce hardening constants
       real*8 Q1, C1, Q2, C2, Q3, C3 
 !-----Hershey exponent
@@ -100,7 +101,7 @@
       real*8 kronecker(6)
       data kronecker / 1., 1., 1., 0., 0., 0. /
 !-----temporary real
-      real*8 tmp1
+      real*8 tmp
 
 !-----------------------------------------------------------------------
 !-----Read parameters and define constants
@@ -126,9 +127,8 @@
       c_visc = props(17)
       call assert((n.ge.1).and.(n.le.100), "1 <= n(Hershey) <= 100")
       pold = statev(1)
-      Told = statev(2)
+      T = statev(2)
       p = pold
-      T = Told
       dlambda = 0.0
       lame1 = nu*E/((1+nu)*(1-2*nu))
       lame2 = E/(2*(1+nu))
@@ -146,6 +146,8 @@
       Ce(5,5) = 2*lame2
       Ce(6,6) = 2*lame2
 
+      !m = 1000.0
+      !c_visc = 0.0
       !print*
       !print*,"E",E
       !print*,"nu",nu
@@ -183,6 +185,9 @@
          de(6) = 0.0
       endif
       sold = sigma
+
+      !print*,"sold",sold
+      !print*,"de",de
 !-----------------------------------------------------------------------
 !-----Trial stress
 !-----------------------------------------------------------------------
@@ -201,6 +206,7 @@
       s12 = tr(4)
       s23 = tr(5)
       s31 = tr(6)
+
 !-----------------------------------------------------------------------
 !-----Start inner loop (loop breaks at i=1 if the increment is elastic)
 !-----------------------------------------------------------------------
@@ -215,15 +221,15 @@
 !-----Calulating Lode angle: (This includes a fix in case the argument 
 !-----is slightly out of the allowed range for arccos (-1 to 1) 
 !-----------------------------------------------------------------------
-         tmp1 = 3*sqrt(3.)/2*J3/J2**1.5
-         call assert((tmp1.ge.(-1.-1e-6)).and.(tmp1.le.(1.+1e-6)),
+         tmp = 3*sqrt(3.)/2*J3/J2**1.5
+         call assert((tmp.ge.(-1.-1e-6)).and.(tmp.le.(1.+1e-6)),
      <        "arccos must take args from -1 to 1")
-         if (tmp1.le.(-1.)) then
-            tmp1 = -1.
-         elseif (tmp1.ge.(1.)) then
-            tmp1 = 1.
+         if (tmp.le.(-1.)) then
+            tmp = -1.
+         elseif (tmp.ge.(1.)) then
+            tmp = 1.
          endif
-         Lode = 1.0/3*acos(tmp1)
+         Lode = 1.0/3*acos(tmp)
          call assert((Lode.ge.0.0).and.(Lode.le.(PI/3)), 
      <        "0 <= Lode <= pi/3") 
 !-----Principal stresses
@@ -241,28 +247,35 @@
 !-----Computing yield function f
 !-----------------------------------------------------------------------
 !-----Equivalent stress, Hershey
+
+         !call phi_mises(s11,s22,s33,s12,s23,s31,phi)
+         !print*, "phi mises",phi
          phi = (0.5*(A**n + B**n + C**n))**(1/n)
+         !print*,"PHI",phi
+
          call assert((phi.ge.0.0),
      <        "sigma equivalent should always be >= 0")
+         if (i.eq.1)then
 !-----Power law hardening
-         R = Q1*(1 - exp(-C1*pold)) + 
-     <       Q2*(1 - exp(-C2*pold)) +
-     <       Q3*(1 - exp(-Q3*pold)) 
+            R = Q1*(1 - exp(-C1*p)) + 
+     <          Q2*(1 - exp(-C2*p)) +
+     <          Q3*(1 - exp(-Q3*p)) 
+!-----Temperature softening
+            Gamma = 1. - ((T - T0)/(Tm - T0))**m
+         endif
 !-----Yield stress
          sigmaY = sigma0 + R
-!-----Temperature softening
-         Gamma = 1. - ((T - T0)/(Tm - T0))**m
-!-----Yield function
-         f = phi - sigmaY*Gamma
 !-----------------------------------------------------------------------
 !-----CHECK IF YIELDING OCCURS
 !-----------------------------------------------------------------------
          if (i.eq.1) then
+!-----Yield function
+            f = phi - sigmaY*Gamma
             if (f.le.0) then
 !-----------------------------------------------------------------------
 !-----f<=0: Elastic increment
 !-----------------------------------------------------------------------
-               sigma = tr
+               !sigma = tr
                exit
 !-----------------------------------------------------------------------
 !-----ELSE: f>0 - Plastic increment
@@ -277,22 +290,19 @@
 !-----------------------------------------------------------------------
 !-----Convergence check
 !-----------------------------------------------------------------------
+            
             if (abs(f).le.err_tol) then
-               sigma(1) = s11
-               sigma(2) = s22
-               sigma(3) = s33
-               sigma(4) = s12
-               sigma(5) = s23
-               sigma(6) = s31
+
 
                print*,"Rmap completed in",i,"iter, f=",f,"t=",time
-               stop
+               !stop
                exit
             else if (i.eq.iter_max) then
                print*, "No convergence"
                stop
             endif
-         endif         
+         endif   
+    
 !-----------------------------------------------------------------------
 !-----Gradient of f with respect to stress components
 !-----------------------------------------------------------------------
@@ -312,10 +322,10 @@
 !-----------------------------------------------------------------------
 !-----Ordinary case (no singularity)
 !-----------------------------------------------------------------------
-            tmp1 = 0.5 * (A**n + B**n + C**n)
-            dfds1 = 0.5*tmp1 **(1./n-1.) * (A**(n-1) + C**(n-1))
-            dfds2 = 0.5*tmp1 ** (1./n-1.) * (-(A**(n-1)) + B**(n-1))
-            dfds3 = 0.5*tmp1 ** (1./n-1.) * (-(B**(n-1)) - C**(n-1))
+            tmp = 0.5 * (A**n + B**n + C**n)
+            dfds1 = 0.5*tmp **(1./n-1.) * (A**(n-1) + C**(n-1))
+            dfds2 = 0.5*tmp ** (1./n-1.) * (-(A**(n-1)) + B**(n-1))
+            dfds3 = 0.5*tmp ** (1./n-1.) * (-(B**(n-1)) - C**(n-1))
 !-----------------------------------------------------------------------
             dLodeds = sqrt(3.)/(2*sin(3*Lode))*(
      <              3./2*J3*J2**(-5./2)*sdev - dJ3ds*J2**(-3./2))
@@ -344,6 +354,9 @@
                call assert(.false.,"Illegal state reached")
             endif
          endif
+         !print*,"DFDS",dfds
+         !call dphi_mises_ds(s11,s22,s33,s12,s23,s31,dfds)
+         !print*,"dfds mises",dfds
 !-----------------------------------------------------------------------
 !-----Computing dfds:C:dfds
 !-----------------------------------------------------------------------
@@ -359,19 +372,45 @@
          dfds_Ce_dfds = dfds(1)*Ce_dfds(1)+ dfds(2)*Ce_dfds(2)+ 
      <                  dfds(3)*Ce_dfds(3)+ dfds(4)*Ce_dfds(4)+
      <                  dfds(5)*Ce_dfds(5)+ dfds(6)*Ce_dfds(6)
-
 !-----------------------------------------------------------------------
 !-----Cumputing various contributions from inner variables
 !-----------------------------------------------------------------------
          hR = Q1*C1*exp(-C1*p) + Q2*C2*exp(-C2*p) + C3*Q3*exp(-C3*p)
          vp = (1.0 + dlambda/(pdot0*dt))**c_visc
-         hGamma = -m*((T-T0)/(Tm-T0))**(m-1.0)*betaTQ*phi/(rho*cp)
-         hv = c_visc/(pdot0*dt)*(1.0+dlambda/(pdot0*dt))**(c_visc-1.0)
+         !hGamma = -m*((T-T0)/(Tm-T0))**(m-1.0)*betaTQ*phi/(rho*cp)
+         hv = c_visc/(pdot0*dt)*(1.0 + dlambda/(pdot0*dt))**(c_visc-1.0)
 !-----Adding all inner variable contributions
-         dfdzeta_h = -hR*Gamma*vp - sigmaY*hGamma*vp - sigmaY*Gamma*hv
+         !print*,"hv",hv
+         !tmp = ((phi/(sigmaY*Gamma))**(1./c_visc)-1.)
+         
+         !print*,"hv_alt", c_visc/(pdot0*dt)*(1. + tmp)**(c_visc-1.)
+         !if (i.eq.10)then
+         !stop
+         !endif
+         !dfdzeta_h = -hR*Gamma*vp - sigmaY*hGamma*vp - sigmaY*Gamma*hv
+         dfdzeta_h = -hR*Gamma*vp - sigmaY*Gamma*hv
+         
+         !print*,"hR",hR
+         !print*,"vp",vp
+         !print*,"hGamma",hGamma
+         !print*,"---"
+         !print*,"phi",phi
+         !print*,"m",m
+         !print*,"T0",T0
+         !print*,"Tm",Tm
+         !print*,"betaTQ",betaTQ
+         !print*,"rho",rho
+         !print*,"cp",cp
+         !print*,"---"
+         !print*,"hv",hv
+         !print*,"sigmaY",sigmaY
+         !print*,"Gamma",Gamma
+         !print*,"T",T
+         !print*,"dfdzeta_h",dfdzeta_h
+         !print*
          !print*,"i",i,"REMOVING THIS BREAKS THE PROGRAM!???"
          !dfdzeta_h = -hR*Gamma*vp - sigmaY*Gamma*hv
-
+         !stop
 !-----------------------------------------------------------------------
 !-----Cumputing dfdzeta:h
 !-----------------------------------------------------------------------
@@ -389,6 +428,7 @@
          call assert(abs(dfds_Ce_dfds - dfdzeta_h).ge.(1e-2), 
      <   "not allowing the denominator in cutting plane to be small")
 
+         f = phi - sigmaY*Gamma*vp
          ddlambda = f/(dfds_Ce_dfds - dfdzeta_h)
          call assert(.not. isnan(ddlambda),"lambda is nan")
          !print*,"inner iter = ",i
@@ -404,8 +444,10 @@
          s23 = s23 - ddlambda * Ce_dfds(5)
          s31 = s31 - ddlambda * Ce_dfds(6) 
          p = p + ddlambda
-         dlambda = p-pold
-         T = Told + (betaTQ*phi)/(rho*cp)*dlambda
+         !dlambda = p-pold
+         dlambda = dlambda + ddlambda
+         R = R + hR*ddlambda
+         !T = T + (betaTQ*phi)/(rho*cp)*ddlambda
          !call assert(p.ge.(-1e-5), "p should be nonnegative")
 
          
@@ -415,6 +457,7 @@
          !print*,"p",p
          !print*, "phi",phi
          !print*,"R",R
+         
       enddo
       
 !-----------------------------------------------------------------------
@@ -426,9 +469,16 @@
          print*, "aborting"
          stop
       endif
-      
+      sigma(1) = s11
+      sigma(2) = s22
+      sigma(3) = s33
+      sigma(4) = s12
+      sigma(5) = s23
+      sigma(6) = s31
+      T = T + (betaTQ*phi)/(rho*cp)*dlambda
       statev(1) = p
       statev(2) = T
+      !print*,"T",T
       return 
 
       end

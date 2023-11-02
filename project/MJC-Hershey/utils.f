@@ -87,3 +87,51 @@
       
       return
       end subroutine dInvariantJ3_dSigma
+
+
+
+		subroutine phi_mises(s11, s22, s33, s12, s23, s31, phi)
+		implicit none
+      real*8 s11, s22, s33, s12, s23, s31, phi
+		real*8 J2
+		real*8 sd11, sd22, sd33, sd12, sd23, sd31
+		real*8 sH
+
+		sH = (s11 + s22 + s33)/3.
+
+		sd11 = s11 - sH
+		sd22 = s22 - sH
+		sd33 = s33 - sH
+		sd12 = s12
+		sd23 = s23
+		sd31 = s31
+
+      J2 = 0.5*(sd11**2 + sd22**2 + sd33**2)
+     <        + sd12**2 + sd23**2 + sd31**2
+	  	phi = sqrt(3*J2) 
+		return
+		end subroutine phi_mises
+
+		subroutine dphi_mises_ds(s11, s22, s33, s12, s23, s31, dphids)
+		implicit none
+      real*8 s11, s22, s33, s12, s23, s31, phi
+		real*8 dphids(6)
+		real*8 J2
+		real*8 sd(6)
+		real*8 sH
+
+		sH = (s11 + s22 + s33)/3.
+
+		sd(1) = s11 - sH
+		sd(2) = s22 - sH
+		sd(3) = s33 - sH
+		sd(4) = s12
+		sd(5) = s23
+		sd(6) = s31
+
+      J2 = 0.5*(sd(1)**2 + sd(2)**2 + sd(3)**2)
+     <        + sd(4)**2 + sd(5)**2 + sd(6)**2
+	  	
+		dphids = 3.0/(2.0*sqrt(3*J2))*sd
+		return
+		end subroutine dphi_mises_ds

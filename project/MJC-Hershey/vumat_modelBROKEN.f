@@ -100,7 +100,7 @@
       real*8 kronecker(6)
       data kronecker / 1., 1., 1., 0., 0., 0. /
 !-----temporary real
-      real*8 tmp1, tmp2
+      real*8 tmp, tmp2
 !-----------------------------------------------------------------------
 !-----Read parameters and define constants
 !-----------------------------------------------------------------------
@@ -217,15 +217,15 @@
 !-----Calulating Lode angle: (This includes a fix in case the argument 
 !-----is slightly out of the allowed range for arccos (-1 to 1) 
 !-----------------------------------------------------------------------
-         tmp1 = 3*sqrt(3.)/2*J3/J2**1.5
-         call assert((tmp1.ge.(-1.-1e-6)).and.(tmp1.le.(1.+1e-6)),
+         tmp = 3*sqrt(3.)/2*J3/J2**1.5
+         call assert((tmp.ge.(-1.-1e-6)).and.(tmp.le.(1.+1e-6)),
      <        "arccos must take args from -1 to 1")
-         if (tmp1.le.(-1.)) then
-            tmp1 = -1.
-         elseif (tmp1.ge.(1.)) then
-            tmp1 = 1.
+         if (tmp.le.(-1.)) then
+            tmp = -1.
+         elseif (tmp.ge.(1.)) then
+            tmp = 1.
          endif
-         Lode = 1.0/3*acos(tmp1)
+         Lode = 1.0/3*acos(tmp)
          call assert((Lode.ge.0.0).and.(Lode.le.(PI/3)), 
      <        "0 <= Lode <= pi/3") 
 !-----Principal stresses
@@ -306,10 +306,10 @@
 !-----------------------------------------------------------------------
 !-----Ordinary case (no singularity)
 !-----------------------------------------------------------------------
-            tmp1 = 0.5 * (A**n + B**n + C**n)
-            dfds1 = 0.5*tmp1 ** (1./n-1.) * (A**(n-1) + C**(n-1))
-            dfds2 = 0.5*tmp1 ** (1./n-1.) * (-(A**(n-1)) + B**(n-1))
-            dfds3 = 0.5*tmp1 ** (1./n-1.) * (-(B**(n-1)) - C**(n-1))
+            tmp = 0.5 * (A**n + B**n + C**n)
+            dfds1 = 0.5*tmp ** (1./n-1.) * (A**(n-1) + C**(n-1))
+            dfds2 = 0.5*tmp ** (1./n-1.) * (-(A**(n-1)) + B**(n-1))
+            dfds3 = 0.5*tmp ** (1./n-1.) * (-(B**(n-1)) - C**(n-1))
 !-----------------------------------------------------------------------
             dLodeds = sqrt(3.)/(2*sin(3*Lode))*(3./2*J3*J2**(-5./2)*sdev 
      <                - dJ3ds*J2**(-3./2))

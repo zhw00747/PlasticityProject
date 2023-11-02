@@ -78,7 +78,7 @@
 				stressNew(i,5) = 2.* lame2*strainInc(i, 5)
 				stressNew(i,6) = 2.* lame2*strainInc(i, 6)		
 !-----Initializing temperature
-            !stateOld(i,2) = T0
+            stateOld(i,2) = T0
             stateNew(i,2) = T0
 			enddo
 !
