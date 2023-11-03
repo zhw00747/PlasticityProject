@@ -224,12 +224,7 @@
          tmp = 3*sqrt(3.)/2*J3/J2**1.5
          call assert((tmp.ge.(-1.-1e-6)).and.(tmp.le.(1.+1e-6)),
      <        "arccos must take args from -1 to 1")
-         if (tmp.le.(-1.)) then
-            tmp = -1.
-         elseif (tmp.ge.(1.)) then
-            tmp = 1.
-         endif
-         Lode = 1.0/3*acos(tmp)
+         Lode = 1.0/3*acos(max(-1.0,min(tmp,1.0)))
          call assert((Lode.ge.0.0).and.(Lode.le.(PI/3)), 
      <        "0 <= Lode <= pi/3") 
 !-----Principal stresses
