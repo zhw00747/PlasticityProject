@@ -210,7 +210,7 @@
 !-----------------------------------------------------------------------
 !-----Start inner loop (loop breaks at i=1 if the increment is elastic)
 !-----------------------------------------------------------------------
-      do i=1,iter_max 
+      do i=0,iter_max 
 !-----J2 
          J2 = 0.5 * (s11**2 + s22**2 + s33**2 + 
      <        2 * (s12**2 + s23**2 + s31**2)) -
@@ -255,11 +255,11 @@
 
          call assert((phi.ge.0.0),
      <        "sigma equivalent should always be >= 0")
-         if (i.eq.1)then
+         if (i.eq.0)then
 !-----Power law hardening
-            R = Q1*(1 - exp(-C1*p)) + 
-     <          Q2*(1 - exp(-C2*p)) +
-     <          Q3*(1 - exp(-Q3*p)) 
+            R = Q1*(1. - exp(-C1*p)) + 
+     <          Q2*(1. - exp(-C2*p)) +
+     <          Q3*(1. - exp(-Q3*p)) 
 !-----Temperature softening
             Gamma = 1. - ((T - T0)/(Tm - T0))**m
          endif
@@ -268,7 +268,7 @@
 !-----------------------------------------------------------------------
 !-----CHECK IF YIELDING OCCURS
 !-----------------------------------------------------------------------
-         if (i.eq.1) then
+         if (i.eq.0) then
 !-----Yield function
             f = phi - sigmaY*Gamma
             if (f.le.0) then
@@ -281,17 +281,16 @@
 !-----ELSE: f>0 - Plastic increment
 !-----------------------------------------------------------------------
             endif
+            !print*, "phi",phi,"sigmay",sigmaY,"Gamma",Gamma
+            !print*,"f",f
          else 
-            !print*,"sig",sigma
-            !print*,"deps",deps
-            !print*,"dt",dt
-            !print*,"rho",rho
+            
             !stop
 !-----------------------------------------------------------------------
 !-----Convergence check
 !-----------------------------------------------------------------------
             
-            if (abs(f).le.err_tol) then
+            if (abs(f/sigmaY).le.err_tol) then
 
 
                print*,"Rmap completed in",i,"iter, f=",f,"t=",time
@@ -339,6 +338,18 @@
      <              sdev/sqrt(3 * J2)*cos(2.*PI/3 + Lode) -
      <              2*sqrt(J2)/sqrt(3.)*sin(2.*PI/3 + Lode)*dLodeds
             dfds = dfds1*ds1ds + dfds2*ds2ds + dfds3*ds3ds
+   !         dfds(1) = dfds1*ds1ds(1) + dfds2*ds2ds(1) + dfds3*ds3ds(1)
+   !         dfds(2) = dfds1*ds1ds(2) + dfds2*ds2ds(2) + dfds3*ds3ds(2)
+   !         dfds(3) = dfds1*ds1ds(3) + dfds2*ds2ds(3) + dfds3*ds3ds(3)
+   !         dfds(4) = 2.*(dfds1*ds1ds(4) + 
+   !  <                    dfds2*ds2ds(4) + 
+   !  <                    dfds3*ds3ds(4))
+   !         dfds(5) = 2.*(dfds1*ds1ds(5) + 
+   !  <                    dfds2*ds2ds(5) + 
+   !  <                    dfds3*ds3ds(5))
+   !         dfds(6) = 2.*(dfds1*ds1ds(6) + 
+   !  <                    dfds2*ds2ds(6) + 
+   !  <                    dfds3*ds3ds(6))
          else
 !-----------------------------------------------------------------------
 !-----Special case: Singularity
@@ -369,9 +380,12 @@
          Ce_dfds(5) = Ce(5,5)*dfds(5)
          Ce_dfds(6) = Ce(6,6)*dfds(6)
 !-----dfds:(C:dfds)
-         dfds_Ce_dfds = dfds(1)*Ce_dfds(1)+ dfds(2)*Ce_dfds(2)+ 
-     <                  dfds(3)*Ce_dfds(3)+ dfds(4)*Ce_dfds(4)+
-     <                  dfds(5)*Ce_dfds(5)+ dfds(6)*Ce_dfds(6)
+         dfds_Ce_dfds = dfds(1)*Ce_dfds(1)+ 
+     <                  dfds(2)*Ce_dfds(2)+ 
+     <                  dfds(3)*Ce_dfds(3)+ 
+     <              2.*(dfds(4)*Ce_dfds(4)+
+     <                  dfds(5)*Ce_dfds(5)+ 
+     <                  dfds(6)*Ce_dfds(6))
 !-----------------------------------------------------------------------
 !-----Cumputing various contributions from inner variables
 !-----------------------------------------------------------------------
@@ -430,6 +444,12 @@
 
          f = phi - sigmaY*Gamma*vp
          ddlambda = f/(dfds_Ce_dfds - dfdzeta_h)
+         !print*,"f",f
+         !print*,"dfds_Ce_dfds",dfds_Ce_dfds
+         !print*,"dfds",dfds
+         !print*,"hR",hR
+         !print*,"ddlambda",ddlambda
+         !stop
          call assert(.not. isnan(ddlambda),"lambda is nan")
          !print*,"inner iter = ",i
          !print*,"ddlambda",ddlambda
@@ -444,6 +464,8 @@
          s23 = s23 - ddlambda * Ce_dfds(5)
          s31 = s31 - ddlambda * Ce_dfds(6) 
          p = p + ddlambda
+         !print*,"ddlambda",ddlambda
+         !print*,"p",p
          !dlambda = p-pold
          dlambda = dlambda + ddlambda
          R = R + hR*ddlambda
