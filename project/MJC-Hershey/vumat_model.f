@@ -400,7 +400,7 @@
          dfdzeta_h = -hR*Gamma*vp - sigmaY*Gamma*hv
          
          !print*,"hR",hR
-         !print*,"vp",vp
+         print*,"vp",vp
          !print*,"hGamma",hGamma
          !print*,"---"
          !print*,"phi",phi
@@ -411,7 +411,7 @@
          !print*,"rho",rho
          !print*,"cp",cp
          !print*,"---"
-         !print*,"hv",hv
+         print*,"hv",hv
          !print*,"sigmaY",sigmaY
          !print*,"Gamma",Gamma
          !print*,"T",T
@@ -443,8 +443,8 @@
          !print*,"dfds_Ce_dfds",dfds_Ce_dfds
          !print*,"dfds",dfds
          !print*,"hR",hR
-         !print*,"ddlambda",ddlambda
-         !stop
+         print*,"ddlambda",ddlambda
+         stop
          call assert(.not. isnan(ddlambda),"lambda is nan")
          !print*,"inner iter = ",i
          !print*,"ddlambda",ddlambda

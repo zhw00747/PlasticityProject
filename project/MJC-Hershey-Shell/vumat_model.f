@@ -55,7 +55,7 @@
       real*8 cp, betaTQ, T0, Tm, m
 !-----Viscoplastic parameters
       real*8 pdot0, c_visc
-!-----Old stress and old strain
+!-----Old stress and strain increment
       real*8 sold(6), de(6)
 !-----Trial stress, deviatoric stress and stress components 
       real*8 tr(6), sdev(6), s11, s22, s33, s12, s23, s31
@@ -134,6 +134,7 @@
       dlambda = 0.0
       lame1 = nu*E/((1+nu)*(1-2*nu))
       lame2 = E/(2*(1+nu))
+
       !Ce = 0.0
       !Ce(1,1) = lame1 + 2*lame2
       !Ce(1,2) = lame1
@@ -148,9 +149,9 @@
       !Ce(5,5) = 2*lame2
       !Ce(6,6) = 2*lame2
       if (ntens.eq.6) then
-         C11 = lame1 + 2*lame2
+         C11 = lame1 + 2.*lame2
          C12 = lame1 
-         C44 = 2 * lame1
+         C44 = 2.*lame1
       else
 !-----Plane stress
          C11 = E/(1.-nu**2)
@@ -158,12 +159,13 @@
          C44 = E/(1.+nu)
       endif
 
-      print*,"ntens",ntens
-      print*,"sigma",sigma
-      print*,"deps",deps
-      stop
+      !print*,"ntens",ntens
+      !print*,"sigma",sigma
+      !print*,"deps",deps
+      !stop
       !m = 1000.0
       !c_visc = 0.0
+
       !print*
       !print*,"E",E
       !print*,"nu",nu
@@ -185,13 +187,16 @@
       !print*,"------------"
       !print*,"pold",pold
       !print*,"T",T
-      !print*,"Ce",Ce
+      !print*,"C11",C11
+      !print*,"C12",C12
+      !print*,"C44",C44
       !print*
+      !stop
       
 !-----------------------------------------------------------------------
 !-----Unpack old stresses
 !-----------------------------------------------------------------------
-      if (tens.eq.6) then
+      if (ntens.eq.6) then
          de = deps
          sold = sigma
       else
@@ -213,6 +218,13 @@
 
       !print*,"sold",sold
       !print*,"de",de
+      !de(1) = 1e-6
+      !de(2) = 2e-6
+      !de(3) = 3e-6
+      !de(4) = 4e-6
+      !de(5) = 5e-6
+      !de(6) = 6e-6
+      !deps=de
 !-----------------------------------------------------------------------
 !-----Trial stress
 !----------------------------------------------------------------------- 
@@ -224,14 +236,21 @@
          tr(5) = sold(5) + C44*de(5)
          tr(6) = sold(6) + C44*de(6)
       else
-         tr(1) = sold(1) + C11*de(1) + C12*de(2) + C12*de(3)
-         tr(2) = sold(2) + C12*de(1) + C11*de(2) + C12*de(3)
+         tr(1) = sold(1) + C11*de(1) + C12*de(2) 
+         tr(2) = sold(2) + C12*de(1) + C11*de(2) 
          tr(3) = 0.0
          tr(4) = sold(4) + C44*de(4)
          tr(5) = 0.0
          tr(6) = 0.0
       endif
+!-----Setting the viscoplastic parameter to 1.0 initally, which means 
+!-----no rate dependence in the trial step
+      vp = 1.0
 
+      !print*,"sold",sold
+      !print*,"de",de
+      !print*,"tr",tr
+      !stop
 !-----------------------------------------------------------------------
       !Gather stress components
       s11 = tr(1) 
@@ -240,7 +259,8 @@
       s12 = tr(4)
       s23 = tr(5)
       s31 = tr(6)
-
+      !print*,"tr plane",tr(1),tr(2),tr(3),tr(4)
+      !print*,"deps",deps
 !-----------------------------------------------------------------------
 !-----Start inner loop (loop breaks at i=1 if the increment is elastic)
 !-----------------------------------------------------------------------
@@ -285,6 +305,7 @@
          call assert((phi.ge.0.0),
      <        "sigma equivalent should always be >= 0")
 !-----Power law hardening
+            !print*,"p_prior",p,"i",i
             R = Q1*(1. - exp(-C1*p)) + 
      <          Q2*(1. - exp(-C2*p)) +
      <          Q3*(1. - exp(-Q3*p)) 
@@ -297,30 +318,38 @@
 !-----------------------------------------------------------------------
 !-----CHECK IF YIELDING OCCURS
 !-----------------------------------------------------------------------
+         !f = phi - sigmaY*Gamma
+         f = phi - sigmaY*Gamma*vp
          if (i.eq.0) then
 !-----Yield function
-            f = phi - sigmaY*Gamma
             if (f.le.0) then
 !-----------------------------------------------------------------------
 !-----f<=0: Elastic increment
 !-----------------------------------------------------------------------
                !sigma = tr
                exit
+            endif
 !-----------------------------------------------------------------------
 !-----ELSE: f>0 - Plastic increment
 !-----------------------------------------------------------------------
-            endif
+            !print*,"first plastic inc"
+            !print*,"tr",tr
+            !print*,"phi",phi
+            !print*,"sigmaY",sigmaY
+            !print*,"R",R
+            !print*,"p",p
+            !print*,"Gamma",Gamma
+            !stop
             !print*, "phi",phi,"sigmay",sigmaY,"Gamma",Gamma
             !print*,"f",f
          else 
-            
-            !stop
+
 !-----------------------------------------------------------------------
 !-----Convergence check
 !-----------------------------------------------------------------------
             
+            !print*,"resnor",abs(f/sigmaY),"i",i
             if (abs(f/sigmaY).le.err_tol) then
-
 
                print*,"Rmap completed in",i,"iter, f=",f,"t=",time
                !stop
@@ -394,18 +423,34 @@
                call assert(.false.,"Illegal state reached")
             endif
          endif
+!-----------------------------------------------------------------------
+!-----For plane stress the inactive components of the yield surface
+!-----dfds33, dfds23 and dfds31 are et to zero (very unoptimized).
+!-----A more optimized approach would be to derive the derivatives of
+!-----the yield function for the plane stress case instead of using
+!-----the general 3D expression like here.
+!-----------------------------------------------------------------------
+         if (ntens.ne.6)then
+            dfds(3) = 0.0
+            dfds(5) = 0.0
+            dfds(6) = 0.0
+         endif
          !print*,"DFDS",dfds
+         !stop
          !call dphi_mises_ds(s11,s22,s33,s12,s23,s31,dfds)
          !print*,"dfds mises",dfds
 !-----------------------------------------------------------------------
 !-----Computing dfds:C:dfds
 !-----------------------------------------------------------------------
+
             C_dfds(1) = C11*dfds(1)+ C12*dfds(2)+ C12*dfds(3)
             C_dfds(2) = C12*dfds(1)+ C11*dfds(2)+ C12*dfds(3)
             C_dfds(3) = C12*dfds(1)+ C12*dfds(2)+ C11*dfds(3)
             C_dfds(4) = C44*dfds(4)
             C_dfds(5) = C44*dfds(5)
             C_dfds(6) = C44*dfds(6)
+
+            !print*,"C_dfds",C_dfds
 !
             dfds_C_dfds = dfds(1)*C_dfds(1)+ 
      <                    dfds(2)*C_dfds(2)+ 
@@ -413,6 +458,8 @@
      <                2.*(dfds(4)*C_dfds(4)+
      <                    dfds(5)*C_dfds(5)+ 
      <                    dfds(6)*C_dfds(6))     
+         !print*,"dfds_C_dfds",dfds_C_dfds
+         !stop
 !-----------------------------------------------------------------------
 !-----Cumputing various contributions from inner variables
 !-----------------------------------------------------------------------
@@ -420,6 +467,7 @@
          vp = (1.0 + dlambda/(pdot0*dt))**c_visc
          !hGamma = -m*((T-T0)/(Tm-T0))**(m-1.0)*betaTQ*phi/(rho*cp)
          hv = c_visc/(pdot0*dt)*(1.0 + dlambda/(pdot0*dt))**(c_visc-1.0)
+         
 !-----Adding all inner variable contributions
          !print*,"hv",hv
          !tmp = ((phi/(sigmaY*Gamma))**(1./c_visc)-1.)
@@ -430,9 +478,11 @@
          !endif
          !dfdzeta_h = -hR*Gamma*vp - sigmaY*hGamma*vp - sigmaY*Gamma*hv
          dfdzeta_h = -hR*Gamma*vp - sigmaY*Gamma*hv
-         
+         !print*
          !print*,"hR",hR
          !print*,"vp",vp
+         !print*,"c_visc",c_visc
+         !print*,"dt",dt
          !print*,"hGamma",hGamma
          !print*,"---"
          !print*,"phi",phi
@@ -443,6 +493,7 @@
          !print*,"rho",rho
          !print*,"cp",cp
          !print*,"---"
+         !print*,"dlambda",dlambda
          !print*,"hv",hv
          !print*,"sigmaY",sigmaY
          !print*,"Gamma",Gamma
@@ -464,15 +515,16 @@
          !print*, "f",f
          !print*, "dfds", dfds
          !print*,"dfds_C_df_ds",dfds_Ce_dfds 
-         !print*, "dfdzeta_h",dfdzeta_h
 
-         call assert(abs(dfds_Ce_dfds - dfdzeta_h).ge.(1e-2), 
+         call assert(abs(dfds_C_dfds - dfdzeta_h).ge.(1e-2), 
      <   "not allowing the denominator in cutting plane to be small")
 
          f = phi - sigmaY*Gamma*vp
-         ddlambda = f/(dfds_Ce_dfds - dfdzeta_h)
+         ddlambda = f/(dfds_C_dfds - dfdzeta_h)
+
          !print*,"f",f
-         !print*,"dfds_Ce_dfds",dfds_Ce_dfds
+         !print*,"dfds_C_dfds",dfds_C_dfds
+         !print*, "dfdzeta_h",dfdzeta_h
          !print*,"dfds",dfds
          !print*,"hR",hR
          !print*,"ddlambda",ddlambda
@@ -485,17 +537,17 @@
 !-----Updating stresses and internal variables 
 !-----------------------------------------------------------------------
          if (ntens.eq.6) then
-            s11 = s11 - ddlambda * Ce_dfds(1)
-            s22 = s22 - ddlambda * Ce_dfds(2)
-            s33 = s33 - ddlambda * Ce_dfds(3)
-            s12 = s12 - ddlambda * Ce_dfds(4)
-            s23 = s23 - ddlambda * Ce_dfds(5)
-            s31 = s31 - ddlambda * Ce_dfds(6) 
+            s11 = s11 - ddlambda * C_dfds(1)
+            s22 = s22 - ddlambda * C_dfds(2)
+            s33 = s33 - ddlambda * C_dfds(3)
+            s12 = s12 - ddlambda * C_dfds(4)
+            s23 = s23 - ddlambda * C_dfds(5)
+            s31 = s31 - ddlambda * C_dfds(6) 
          else
-            s11 = s11 - ddlambda * Ce_dfds(1)
-            s22 = s22 - ddlambda * Ce_dfds(2)
+            s11 = s11 - ddlambda * C_dfds(1)
+            s22 = s22 - ddlambda * C_dfds(2)
             s33 = 0.0
-            s12 = s12 - ddlambda * Ce_dfds(4)
+            s12 = s12 - ddlambda * C_dfds(4)
             s23 = 0.0
             s31 = 0.0 
          endif
@@ -542,8 +594,14 @@
 !-----preserving plasticity and deps = deps_e + deps_p)
 !-----------------------------------------------------------------------
       if (ntens.ne.6) then
-         deps(3) = (1-2*nu)/E*(sigma(1)-sold(1)+sigma(2)-sold(2)) - 
+         !print*,"----e33 corr:"
+         !print*,"sigma",sigma
+         !print*,"sold",sold
+         !print*,"deps",deps
+         deps(3) = (1-2.0*nu)/E*(sigma(1)-sold(1)+sigma(2)-sold(2)) - 
      <              (deps(1) + deps(2)) 
+         !print*,"deps(3)",deps(3)
+         !stop
       endif 
       return 
 

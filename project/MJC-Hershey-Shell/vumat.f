@@ -79,12 +79,21 @@
                stressNew(i,5) = 2.* lame2*strainInc(i, 5)
                stressNew(i,6) = 2.* lame2*strainInc(i, 6)
             else 
-!-----Plane stress: sigma33 = 0
-               stressNew(i,1) = lame1*depsV + 2.* lame2*strainInc(i,1)
-				   stressNew(i,2) = lame1*depsV + 2.* lame2*strainInc(i,2) 
-				   stressNew(i,3) = 0.0
-               stressNew(i,4) = 2.* lame2*strainInc(i, 4)
+!-----Plane stress: sigma33, sigma13, sigma31 = 0
+            stressNew(i,1) = E/(1-nu**2)*(strainInc(i,1) + 
+     <                               nu * strainInc(i,2))
+            stressNew(i,2) = E/(1-nu**2)*(nu * strainInc(i,1) + 
+     <                                         strainInc(i,2))
+            stressNew(i,3) = 0.0
+            stressNew(i,4) = E/(1+nu)*strainInc(i,4)
+!-----------------------------------------------------------------------             
+            strainInc(i,3) = (1-2.0*nu)/E*(
+     <          stressNew(i,1)-0.0 + stressNew(i,2)-0.0) - 
+     <          (strainInc(i,1) + strainInc(i,2)) 
             endif		
+!-----Initializing equivalent plastic strain p
+            stateOld(i,1) = 0.0
+            stateNew(i,1) = 0.0
 !-----Initializing temperature
             stateOld(i,2) = T0
             stateNew(i,2) = T0
@@ -101,7 +110,7 @@
 !-----Grab old stresses, strain increment and old state variables
 !-----------------------------------------------------------------------
             do k=1,ntens
-               sigma(j) = stressOld(i,k)
+               sigma(k) = stressOld(i,k)
                deps(k) = strainInc(i,k)
             enddo
             do k=1,nstatev
@@ -128,6 +137,7 @@
 !-----------------------------------------------------------------------
             if (nshr.eq.1)then
                strainInc(i,3) = deps(3)
+               !print*,"deps33",strainInc(i,3)
             endif
 !-----------------------------------------------------------------------
 !-----Update specific internal energy (elastic + plastic work) [J/kg]. 
@@ -144,7 +154,7 @@
      <        2. * (stressOld(i,6) + stressNew(i,6)) * strainInc(i,6)
      <             ) * 0.5 / density(i)
             else 
-               call (assert(stressNew(i,3).eq.0.0),"s33=0 for plates 
+               call assert(stressNew(i,3).eq.0.0,"s33=0 for plates 
      <          remove if plane strain is used")
 !-----------------------------------------------------------------------
 !-----Internal energy update for plane stress (sigma33 = 0)
