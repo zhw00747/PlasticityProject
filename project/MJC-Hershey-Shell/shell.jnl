@@ -1,0 +1,93 @@
+# -*- coding: mbcs -*-
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].ConstrainedSketch(name='__profile__', sheetSize=10.0)
+mdb.models['Model-1'].sketches['__profile__'].rectangle(point1=(0.0, 0.0), 
+    point2=(5.0, 5.0))
+mdb.models['Model-1'].Part(dimensionality=THREE_D, name='Part-1', type=
+    DEFORMABLE_BODY)
+mdb.models['Model-1'].parts['Part-1'].BaseShell(sketch=
+    mdb.models['Model-1'].sketches['__profile__'])
+del mdb.models['Model-1'].sketches['__profile__']
+mdb.models['Model-1'].Material(name='Material-1')
+mdb.models['Model-1'].HomogeneousShellSection(idealization=NO_IDEALIZATION, 
+    integrationRule=SIMPSON, material='Material-1', name='Section-1', 
+    nodalThicknessField='', numIntPts=5, poissonDefinition=DEFAULT, 
+    preIntegrate=OFF, temperature=GRADIENT, thickness=0.1, thicknessField='', 
+    thicknessModulus=None, thicknessType=UNIFORM, useDensity=OFF)
+mdb.models['Model-1'].parts['Part-1'].Set(faces=
+    mdb.models['Model-1'].parts['Part-1'].faces.getSequenceFromMask(('[#1 ]', 
+    ), ), name='Set-1')
+mdb.models['Model-1'].parts['Part-1'].SectionAssignment(offset=0.0, 
+    offsetField='', offsetType=MIDDLE_SURFACE, region=
+    mdb.models['Model-1'].parts['Part-1'].sets['Set-1'], sectionName=
+    'Section-1', thicknessAssignment=FROM_SECTION)
+mdb.models['Model-1'].parts['Part-1'].Set(edges=
+    mdb.models['Model-1'].parts['Part-1'].edges.getSequenceFromMask(('[#1 ]', 
+    ), ), name='encas')
+mdb.models['Model-1'].parts['Part-1'].Set(edges=
+    mdb.models['Model-1'].parts['Part-1'].edges.getSequenceFromMask(('[#4 ]', 
+    ), ), name='load')
+mdb.models['Model-1'].parts['Part-1'].seedPart(deviationFactor=0.1, 
+    minSizeFactor=0.1, size=0.5)
+mdb.models['Model-1'].parts['Part-1'].generateMesh()
+mdb.models['Model-1'].parts['Part-1'].deleteMesh()
+mdb.models['Model-1'].parts['Part-1'].seedPart(deviationFactor=0.1, 
+    minSizeFactor=0.1, size=5.0)
+mdb.models['Model-1'].parts['Part-1'].generateMesh()
+mdb.models['Model-1'].parts['Part-1'].setElementType(elemTypes=(ElemType(
+    elemCode=S4R, elemLibrary=EXPLICIT, secondOrderAccuracy=OFF, 
+    hourglassControl=DEFAULT), ElemType(elemCode=S3R, elemLibrary=EXPLICIT)), 
+    regions=(mdb.models['Model-1'].parts['Part-1'].faces.getSequenceFromMask((
+    '[#1 ]', ), ), ))
+mdb.models['Model-1'].parts['Part-1'].generateMesh()
+mdb.Job(activateLoadBalancing=False, atTime=None, contactPrint=OFF, 
+    description='', echoPrint=OFF, explicitPrecision=SINGLE, 
+    getMemoryFromAnalysis=True, historyPrint=OFF, memory=90, memoryUnits=
+    PERCENTAGE, model='Model-1', modelPrint=OFF, multiprocessingMode=DEFAULT, 
+    name='Job-1', nodalOutputPrecision=SINGLE, numCpus=1, numDomains=1, 
+    numGPUs=0, numThreadsPerMpiProcess=1, parallelizationMethodExplicit=DOMAIN, 
+    queue=None, resultsFormat=ODB, scratch='', type=ANALYSIS, userSubroutine=''
+    , waitHours=0, waitMinutes=0)
+mdb.models['Model-1'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='Part-1-1', 
+    part=mdb.models['Model-1'].parts['Part-1'])
+mdb.jobs.changeKey(fromName='Job-1', toName='unit_shell_exp')
+mdb.models['Model-1'].ZsymmBC(createStepName='Initial', localCsys=None, name=
+    'bc', region=
+    mdb.models['Model-1'].rootAssembly.instances['Part-1-1'].sets['encas'])
+mdb.models['Model-1'].parts['Part-1'].Set(edges=
+    mdb.models['Model-1'].parts['Part-1'].edges.getSequenceFromMask(('[#8 ]', 
+    ), ), name='x0_face')
+mdb.models['Model-1'].rootAssembly.regenerate()
+mdb.models['Model-1'].XsymmBC(createStepName='Initial', localCsys=None, name=
+    'bc_x0', region=
+    mdb.models['Model-1'].rootAssembly.instances['Part-1-1'].sets['x0_face'])
+del mdb.models['Model-1'].boundaryConditions['bc_x0']
+mdb.models['Model-1'].DisplacementBC(amplitude=UNSET, createStepName='Initial', 
+    distributionType=UNIFORM, fieldName='', localCsys=None, name='x0_face_bc', 
+    region=
+    mdb.models['Model-1'].rootAssembly.instances['Part-1-1'].sets['x0_face'], 
+    u1=SET, u2=UNSET, u3=UNSET, ur1=UNSET, ur2=UNSET, ur3=UNSET)
+mdb.models['Model-1'].ExplicitDynamicsStep(improvedDtMethod=ON, name='load', 
+    previous='Initial', timePeriod=0.1)
+mdb.models['Model-1'].SmoothStepAmplitude(data=((0.0, 0.0), (0.001, 1.0), (
+    10.0, 1.0)), name='Amp-1', timeSpan=TOTAL)
+mdb.models['Model-1'].VelocityBC(amplitude='Amp-1', createStepName='load', 
+    distributionType=UNIFORM, fieldName='', localCsys=None, name='bc_vel', 
+    region=
+    mdb.models['Model-1'].rootAssembly.instances['Part-1-1'].sets['load'], v1=
+    UNSET, v2=100.0, v3=UNSET, vr1=UNSET, vr2=UNSET, vr3=UNSET)
+# Save by anders on 2023_11_06-13.08.09; build 2022 2021_09_15-19.57.30 176069
+# Save by anders on 2023_11_06-16.00.14; build 2022 2021_09_15-19.57.30 176069

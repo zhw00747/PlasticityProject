@@ -6,8 +6,8 @@
 !
 
 !-----------------------------------------------------------------------
-      subroutine vumat_model(sigma, deps, statev, props, ntens, nstatev, 
-     <                       nprops, rho, dt, time)
+      subroutine vumat_model(sigma, deps, statev, props, ntens,
+     <                        nstatev, nprops, rho, dt, time)
       implicit none
 !-----------------------------------------------------------------------
 !-----Declaration variables
@@ -32,7 +32,9 @@
 !-----Lamè parameters (lame1 = lambda, lame2 = mu = G)
       real*8 lame1, lame2
 !-----Elasticiy matrix
-      real*8 Ce(6,6)
+      !real*8 Ce(6,6)
+!-----Unique components isotropic elasticity matrix
+      real*8 C11, C12, C44
 !-----Yield function
       real*8 f
 !-----Sigma equivalent
@@ -64,9 +66,9 @@
 !-----gradient of yield function with respect to stresses
       real*8 dfds(6)
 !-----Product of df_ds, C and df_ds
-      real*8 dfds_Ce_dfds
+      real*8 dfds_C_dfds
 !-----Product of C and dfds
-      real*8 Ce_dfds(6)
+      real*8 C_dfds(6)
 !----- dzeta:h contribution from inner variables in cutting plane method
       real*8 dfdzeta_h
 !-----Yield stress (sigma0 - R)
@@ -145,7 +147,21 @@
       Ce(4,4) = 2*lame2
       Ce(5,5) = 2*lame2
       Ce(6,6) = 2*lame2
+      if (ntens.eq.6) then
+         C11 = lame1 + 2*lame2
+         C12 = lame1 
+         C44 = 2 * lame1
+      else
+!-----Plane stress
+         C11 = E/(1.-nu**2)
+         C12 = nu*E/(1.-nu**2)
+         C44 = E/(1.+nu)
+      endif
 
+      print*,"ntens",ntens
+      print*,"sigma",sigma
+      print*,"deps",deps
+      stop
       !m = 1000.0
       !c_visc = 0.0
       !print*
@@ -175,28 +191,46 @@
 !-----------------------------------------------------------------------
 !-----Unpack old stresses
 !-----------------------------------------------------------------------
-      de = deps
-      if (ntens.lt.6) then
+      if (tens.eq.6) then
+         de = deps
+         sold = sigma
+      else
+!-----Plane stress formulation
          call assert((ntens.eq.4),
      <   "ntens should be equal to 4 if shells are modelled")
-         sigma(5) = 0.0
-         sigma(6) = 0.0
+         de(1) = deps(1)
+         de(2) = deps(2)
+         de(4) = deps(4)
          de(5) = 0.0
          de(6) = 0.0
+         sold(1) = sigma(1)
+         sold(2) = sigma(2)
+         sold(3) = 0.0
+         sold(4) = sigma(4)
+         sold(5) = 0.0
+         sold(6) = 0.0
       endif
-      sold = sigma
 
       !print*,"sold",sold
       !print*,"de",de
 !-----------------------------------------------------------------------
 !-----Trial stress
-!-----------------------------------------------------------------------
-      tr(1) = sold(1) + Ce(1,1)*de(1) + Ce(1,2)*de(2) + Ce(1,3)*de(3)
-      tr(2) = sold(2) + Ce(2,1)*de(1) + Ce(2,2)*de(2) + Ce(2,3)*de(3)
-      tr(3) = sold(3) + Ce(3,1)*de(1) + Ce(3,2)*de(2) + Ce(3,3)*de(3)
-      tr(4) = sold(4) + Ce(4,4)*de(4)
-      tr(5) = sold(5) + Ce(5,5)*de(5)
-      tr(6) = sold(6) + Ce(6,6)*de(6)
+!----------------------------------------------------------------------- 
+      if (ntens.eq.6) then
+         tr(1) = sold(1) + C11*de(1) + C12*de(2) + C12*de(3)
+         tr(2) = sold(2) + C12*de(1) + C11*de(2) + C12*de(3)
+         tr(3) = sold(3) + C12*de(1) + C12*de(2) + C11*de(3)
+         tr(4) = sold(4) + C44*de(4)
+         tr(5) = sold(5) + C44*de(5)
+         tr(6) = sold(6) + C44*de(6)
+      else
+         tr(1) = sold(1) + C11*de(1) + C12*de(2) + C12*de(3)
+         tr(2) = sold(2) + C12*de(1) + C11*de(2) + C12*de(3)
+         tr(3) = 0.0
+         tr(4) = sold(4) + C44*de(4)
+         tr(5) = 0.0
+         tr(6) = 0.0
+      endif
 
 !-----------------------------------------------------------------------
       !Gather stress components
@@ -366,21 +400,19 @@
 !-----------------------------------------------------------------------
 !-----Computing dfds:C:dfds
 !-----------------------------------------------------------------------
+            C_dfds(1) = C11*dfds(1)+ C12*dfds(2)+ C12*dfds(3)
+            C_dfds(2) = C12*dfds(1)+ C11*dfds(2)+ C12*dfds(3)
+            C_dfds(3) = C12*dfds(1)+ C12*dfds(2)+ C11*dfds(3)
+            C_dfds(4) = C44*dfds(4)
+            C_dfds(5) = C44*dfds(5)
+            C_dfds(6) = C44*dfds(6)
 !
-!-----Temporary product
-         Ce_dfds(1) = Ce(1,1)*dfds(1)+ Ce(1,2)*dfds(2)+ Ce(1,3)*dfds(3)
-         Ce_dfds(2) = Ce(2,1)*dfds(1)+ Ce(2,2)*dfds(2)+ Ce(2,3)*dfds(3)
-         Ce_dfds(3) = Ce(3,1)*dfds(1)+ Ce(3,2)*dfds(2)+ Ce(3,3)*dfds(3)
-         Ce_dfds(4) = Ce(4,4)*dfds(4)
-         Ce_dfds(5) = Ce(5,5)*dfds(5)
-         Ce_dfds(6) = Ce(6,6)*dfds(6)
-!-----dfds:(C:dfds)
-         dfds_Ce_dfds = dfds(1)*Ce_dfds(1)+ 
-     <                  dfds(2)*Ce_dfds(2)+ 
-     <                  dfds(3)*Ce_dfds(3)+ 
-     <              2.*(dfds(4)*Ce_dfds(4)+
-     <                  dfds(5)*Ce_dfds(5)+ 
-     <                  dfds(6)*Ce_dfds(6))
+            dfds_C_dfds = dfds(1)*C_dfds(1)+ 
+     <                    dfds(2)*C_dfds(2)+ 
+     <                    dfds(3)*C_dfds(3)+ 
+     <                2.*(dfds(4)*C_dfds(4)+
+     <                    dfds(5)*C_dfds(5)+ 
+     <                    dfds(6)*C_dfds(6))     
 !-----------------------------------------------------------------------
 !-----Cumputing various contributions from inner variables
 !-----------------------------------------------------------------------
@@ -452,12 +484,21 @@
 !-----------------------------------------------------------------------
 !-----Updating stresses and internal variables 
 !-----------------------------------------------------------------------
-         s11 = s11 - ddlambda * Ce_dfds(1)
-         s22 = s22 - ddlambda * Ce_dfds(2)
-         s33 = s33 - ddlambda * Ce_dfds(3)
-         s12 = s12 - ddlambda * Ce_dfds(4)
-         s23 = s23 - ddlambda * Ce_dfds(5)
-         s31 = s31 - ddlambda * Ce_dfds(6) 
+         if (ntens.eq.6) then
+            s11 = s11 - ddlambda * Ce_dfds(1)
+            s22 = s22 - ddlambda * Ce_dfds(2)
+            s33 = s33 - ddlambda * Ce_dfds(3)
+            s12 = s12 - ddlambda * Ce_dfds(4)
+            s23 = s23 - ddlambda * Ce_dfds(5)
+            s31 = s31 - ddlambda * Ce_dfds(6) 
+         else
+            s11 = s11 - ddlambda * Ce_dfds(1)
+            s22 = s22 - ddlambda * Ce_dfds(2)
+            s33 = 0.0
+            s12 = s12 - ddlambda * Ce_dfds(4)
+            s23 = 0.0
+            s31 = 0.0 
+         endif
          p = p + ddlambda
          !print*,"ddlambda",ddlambda
          !print*,"p",p
@@ -496,6 +537,14 @@
       statev(1) = p
       statev(2) = T
       !print*,"T",T
+!-----------------------------------------------------------------------
+!-----For plane stress, epsilon33 must be updated (assuming volume
+!-----preserving plasticity and deps = deps_e + deps_p)
+!-----------------------------------------------------------------------
+      if (ntens.ne.6) then
+         deps(3) = (1-2*nu)/E*(sigma(1)-sold(1)+sigma(2)-sold(2)) - 
+     <              (deps(1) + deps(2)) 
+      endif 
       return 
 
       end

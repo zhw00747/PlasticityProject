@@ -689,7 +689,7 @@
      .           1.0/SQRT(3.0)/SQRT(J2)*DEVSTRESS(1)*COS(2.0*PI/3.0-LA)+
      .           2.0/SQRT(3.0)*SQRT(J2)*SIN(2.0*PI/3.0-LA)*DLADS(1)
                 DPS2DS(2) = 1.0/3.0 +
-     .           1.0/SQRT(3.0)/SQRT(J2)*DEVSTRESS(2)*COS(2.0*PI/3.0-LA)+
+     .           1.0/SQRT(3.0)/SQRT(J2)*DEVSTRESS(2)*COS(2.0*PI*,/3.0-LA)+
      .           2.0/SQRT(3.0)*SQRT(J2)*SIN(2.0*PI/3.0-LA)*DLADS(2)
                 DPS2DS(3) = 1.0/3.0 +
      .           1.0/SQRT(3.0)/SQRT(J2)*DEVSTRESS(3)*COS(2.0*PI/3.0-LA)+
@@ -727,7 +727,7 @@
      .                      (-B*(ABS(B))**(M-2.0) + C*(ABS(C))**(M-2.0))
 !-----------------------------------------------------------------------
        !             DFDS
-                DFDS(1) = DPHIDSP(1)*DPS1DS(1) 
+                DFDS(1) = DPHIDSP(1)*DPS1DS(1) *,
      .                  + DPHIDSP(2)*DPS2DS(1)
      .                  + DPHIDSP(3)*DPS3DS(1)
                 DFDS(2) = DPHIDSP(1)*DPS1DS(2) 
