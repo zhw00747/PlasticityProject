@@ -1,0 +1,302 @@
+# -*- coding: mbcs -*-
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].ConstrainedSketch(name='__profile__', sheetSize=30.0)
+mdb.models['Model-1'].sketches['__profile__'].rectangle(point1=(0.0, 0.0), 
+    point2=(10.0, 10.0))
+mdb.models['Model-1'].Part(dimensionality=THREE_D, name='solid-single', type=
+    DEFORMABLE_BODY)
+mdb.models['Model-1'].parts['solid-single'].BaseSolidExtrude(depth=10.0, 
+    sketch=mdb.models['Model-1'].sketches['__profile__'])
+del mdb.models['Model-1'].sketches['__profile__']
+# Save by anders on 2023_12_04-14.18.10; build 2022 2021_09_15-19.57.30 176069
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].Material(name='elastic-plastic')
+mdb.models['Model-1'].materials['elastic-plastic'].Density(table=((7e-09, ), ))
+mdb.models['Model-1'].materials['elastic-plastic'].Elastic(table=((210000.0, 
+    0.3), ))
+mdb.models['Model-1'].materials['elastic-plastic'].Plastic(scaleStress=None, 
+    table=((290.7, 0.0), (417.823605744229, 0.0101010101010101), (
+    456.329975287288, 0.0202020202020202), (477.126340495284, 
+    0.0303030303030303), (493.287652356567, 0.0404040404040404), (
+    507.339404059617, 0.0505050505050505), (519.870967360417, 
+    0.0606060606060606), (531.105853631708, 0.0707070707070707), (
+    541.189059988528, 0.0808080808080808), (550.240618734234, 
+    0.0909090909090909), (558.366440998646, 0.101010101010101), (
+    565.661270801933, 0.111111111111111), (572.210102057556, 
+    0.121212121212121), (578.089225741759, 0.131313131313131), (
+    583.367129009875, 0.141414141414141), (588.105294904613, 
+    0.151515151515152), (592.358918924397, 0.161616161616162), (
+    596.177552065358, 0.171717171717172), (599.605678058458, 
+    0.181818181818182), (602.683231568067, 0.191919191919192), (
+    605.44606339619, 0.202020202020202), (607.926358112973, 0.212121212121212), 
+    (610.153008978756, 0.222222222222222), (612.151954525245, 
+    0.232323232323232), (613.946480716678, 0.242424242424242), (
+    615.557492210912, 0.252525252525252), (617.003755880367, 
+    0.262626262626263), (618.302119429646, 0.272727272727273), (
+    619.467707656537, 0.282828282828283), (620.514098642654, 
+    0.292929292929293), (621.453481926188, 0.303030303030303), (
+    622.296800499352, 0.313131313131313), (623.053878284649, 
+    0.323232323232323), (623.733534574964, 0.333333333333333), (
+    624.343686770598, 0.343434343434343), (624.891442610045, 
+    0.353535353535354), (625.383182968919, 0.363636363636364), (
+    625.824636191561, 0.373737373737374), (626.220944821236, 
+    0.383838383838384), (626.576725506254, 0.393939393939394), (
+    626.896122779878, 0.404040404040404), (627.182857340505, 
+    0.414141414141414), (627.440269394545, 0.424242424242424), (
+    627.671357566895, 0.434343434343434), (627.878813832295, 
+    0.444444444444444), (628.065054874474, 0.454545454545455), (
+    628.232250238398, 0.464646464646465), (628.382347603569, 
+    0.474747474747475), (628.517095472784, 0.484848484848485), (
+    628.638063540658, 0.494949494949495), (628.746660979197, 
+    0.505050505050505), (628.844152853412, 0.515151515151515), (
+    628.931674858221, 0.525252525252525), (629.010246548295, 
+    0.535353535353535), (629.080783214985, 0.545454545454546), (
+    629.144106548657, 0.555555555555556), (629.200954210667, 
+    0.565656565656566), (629.25198842647, 0.575757575757576), (
+    629.297803699967, 0.585858585858586), (629.338933738953, 
+    0.595959595959596), (629.375857672347, 0.606060606060606), (
+    629.40900563162, 0.616161616161616), (629.438763761457, 0.626262626262626), 
+    (629.465478717997, 0.636363636363636), (629.489461707077, 
+    0.646464646464646), (629.510992109508, 0.656565656565657), (
+    629.530320735614, 0.666666666666667), (629.547672746955, 
+    0.676767676767677), (629.563250279259, 0.686868686868687), (
+    629.57723479713, 0.696969696969697), (629.589789207948, 0.707070707070707), 
+    (629.6010597596, 0.717171717171717), (629.611177744138, 0.727272727272727), 
+    (629.620261027217, 0.737373737373737), (629.628415421126, 
+    0.747474747474748), (629.63573591741, 0.757575757575758), (
+    629.642307793437, 0.767676767676768), (629.648207605805, 
+    0.777777777777778), (629.653504082158, 0.787878787878788), (
+    629.658258921806, 0.797979797979798), (629.662527514464, 
+    0.808080808080808), (629.666359585497, 0.818181818181818), (
+    629.669799775175, 0.828282828282828), (629.672888158694, 
+    0.838383838383838), (629.675660713016, 0.848484848484848), (
+    629.678149735969, 0.858585858585859), (629.680384222491, 
+    0.868686868686869), (629.682390202391, 0.878787878787879), (
+    629.684191043578, 0.888888888888889), (629.685807724273, 
+    0.898989898989899), (629.687259077391, 0.909090909090909), (
+    629.688562009923, 0.919191919191919), (629.689731699892, 
+    0.929292929292929), (629.690781773162, 0.939393939393939), (
+    629.691724462165, 0.94949494949495), (629.692570748403, 0.95959595959596), 
+    (629.693330490369, 0.96969696969697), (629.694012538392, 0.97979797979798), 
+    (629.694624837733, 0.98989898989899), (629.695174521143, 1.0)))
+# Save by anders on 2023_12_04-14.19.16; build 2022 2021_09_15-19.57.30 176069
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].HomogeneousSolidSection(material='elastic-plastic', name=
+    'solid', thickness=None)
+mdb.models['Model-1'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['Model-1'].rootAssembly.Instance(dependent=OFF, name=
+    'solid-single-1', part=mdb.models['Model-1'].parts['solid-single'])
+del mdb.models['Model-1'].rootAssembly.features['solid-single-1']
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='solid-single-1'
+    , part=mdb.models['Model-1'].parts['solid-single'])
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='solid-single-1'
+    , toName='solid-single-vumat')
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='solid-single-1'
+    , part=mdb.models['Model-1'].parts['solid-single'])
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='solid-single-1'
+    , toName='solid-single-compare')
+mdb.models['Model-1'].rootAssembly.translate(instanceList=(
+    'solid-single-compare', ), vector=(20.0, 0.0, 0.0))
+mdb.models['Model-1'].parts['solid-single'].seedEdgeByNumber(constraint=FINER, 
+    edges=
+    mdb.models['Model-1'].parts['solid-single'].edges.getSequenceFromMask((
+    '[#400 ]', ), ), number=1)
+mdb.models['Model-1'].parts['solid-single'].seedEdgeByNumber(constraint=FINER, 
+    edges=
+    mdb.models['Model-1'].parts['solid-single'].edges.getSequenceFromMask((
+    '[#101 ]', ), ), number=1)
+mdb.models['Model-1'].parts['solid-single'].setElementType(elemTypes=(ElemType(
+    elemCode=C3D8R, elemLibrary=EXPLICIT, secondOrderAccuracy=OFF, 
+    kinematicSplit=AVERAGE_STRAIN, hourglassControl=DEFAULT, 
+    distortionControl=DEFAULT), ElemType(elemCode=C3D6, elemLibrary=EXPLICIT), 
+    ElemType(elemCode=C3D4, elemLibrary=EXPLICIT)), regions=(
+    mdb.models['Model-1'].parts['solid-single'].cells.getSequenceFromMask((
+    '[#1 ]', ), ), ))
+mdb.models['Model-1'].parts['solid-single'].generateMesh()
+# Save by anders on 2023_12_04-14.26.54; build 2022 2021_09_15-19.57.30 176069
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].rootAssembly.regenerate()
+mdb.models['Model-1'].rootAssembly.regenerate()
+mdb.models['Model-1'].sections.changeKey(fromName='solid', toName=
+    'solid-compare')
+mdb.models['Model-1'].sections.changeKey(fromName='solid-compare', toName=
+    'compare')
+mdb.models['Model-1'].Material(name='VUMAT')
+mdb.models['Model-1'].HomogeneousSolidSection(material='VUMAT', name='vumat', 
+    thickness=None)
+mdb.models['Model-1'].parts.changeKey(fromName='solid-single', toName=
+    'solid-compare')
+mdb.models['Model-1'].Part(name='solid-vumat', objectToCopy=
+    mdb.models['Model-1'].parts['solid-compare'])
+mdb.models['Model-1'].parts['solid-vumat'].Set(cells=
+    mdb.models['Model-1'].parts['solid-vumat'].cells.getSequenceFromMask((
+    '[#1 ]', ), ), name='Set-4')
+mdb.models['Model-1'].parts['solid-vumat'].SectionAssignment(offset=0.0, 
+    offsetField='', offsetType=MIDDLE_SURFACE, region=
+    mdb.models['Model-1'].parts['solid-vumat'].sets['Set-4'], sectionName=
+    'vumat', thicknessAssignment=FROM_SECTION)
+mdb.models['Model-1'].parts['solid-compare'].Set(cells=
+    mdb.models['Model-1'].parts['solid-compare'].cells.getSequenceFromMask((
+    '[#1 ]', ), ), name='Set-4')
+mdb.models['Model-1'].parts['solid-compare'].SectionAssignment(offset=0.0, 
+    offsetField='', offsetType=MIDDLE_SURFACE, region=
+    mdb.models['Model-1'].parts['solid-compare'].sets['Set-4'], sectionName=
+    'compare', thicknessAssignment=FROM_SECTION)
+mdb.models['Model-1'].rootAssembly.regenerate()
+mdb.models['Model-1'].rootAssembly.Set(faces=
+    mdb.models['Model-1'].rootAssembly.instances['solid-single-vumat'].faces.getSequenceFromMask(
+    mask=('[#8 ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['solid-single-compare'].faces.getSequenceFromMask(
+    mask=('[#8 ]', ), ), name='Set-1')
+mdb.models['Model-1'].YsymmBC(createStepName='Initial', localCsys=None, name=
+    'symmetry-bottom', region=mdb.models['Model-1'].rootAssembly.sets['Set-1'])
+mdb.models['Model-1'].TabularAmplitude(data=((0.0, 0.0), (0.001, 1.0), (10.0, 
+    1.0)), name='Amp-1', smooth=SOLVER_DEFAULT, timeSpan=TOTAL)
+mdb.models['Model-1'].ExplicitDynamicsStep(adiabatic=ON, improvedDtMethod=ON, 
+    name='load', previous='Initial', timePeriod=0.005)
+mdb.models['Model-1'].rootAssembly.Set(faces=
+    mdb.models['Model-1'].rootAssembly.instances['solid-single-vumat'].faces.getSequenceFromMask(
+    mask=('[#2 ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['solid-single-compare'].faces.getSequenceFromMask(
+    mask=('[#2 ]', ), ), name='Set-2')
+mdb.models['Model-1'].VelocityBC(amplitude='Amp-1', createStepName='load', 
+    distributionType=UNIFORM, fieldName='', localCsys=None, name='velocity', 
+    region=mdb.models['Model-1'].rootAssembly.sets['Set-2'], v1=UNSET, v2=100.0
+    , v3=UNSET, vr1=UNSET, vr2=UNSET, vr3=UNSET)
+# Save by anders on 2023_12_04-14.41.26; build 2022 2021_09_15-19.57.30 176069
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.Job(activateLoadBalancing=False, atTime=None, contactPrint=OFF, 
+    description='', echoPrint=OFF, explicitPrecision=SINGLE, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='Model-1', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='solid-uni-tens', nodalOutputPrecision=
+    SINGLE, numCpus=1, numDomains=1, numThreadsPerMpiProcess=1, 
+    parallelizationMethodExplicit=DOMAIN, queue=None, resultsFormat=ODB, 
+    scratch='', type=ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+del mdb.models['Model-1'].materials['elastic-plastic'].plastic
+mdb.models['Model-1'].materials['elastic-plastic'].Plastic(scaleStress=None, 
+    table=((290.7, 0.0), (421.510781506789, 0.0101010101010101), (
+    463.674466796805, 0.0202020202020202), (488.098529552815, 
+    0.0303030303030303), (507.858160621519, 0.0404040404040404), (
+    525.479091107285, 0.0505050505050505), (541.550928755265, 
+    0.0606060606060606), (556.297419016244, 0.0707070707070707), (
+    569.863791187663, 0.0808080808080808), (582.370307874984, 
+    0.0909090909090909), (593.923108645074, 0.101010101010101), (
+    604.617164105182, 0.111111111111111), (614.537692920868, 
+    0.121212121212121), (623.761209000359, 0.131313131313131), (
+    632.35642062559, 0.141414141414141), (640.385030175111, 0.151515151515152), 
+    (647.902450706934, 0.161616161616162), (654.958449014901, 
+    0.171717171717172), (661.597722880084, 0.181818181818182), (
+    667.860419283512, 0.191919191919192), (673.782599624434, 
+    0.202020202020202), (679.396657364752, 0.212121212121212), (
+    684.731692964885, 0.222222222222222), (689.813850478639, 
+    0.232323232323232), (694.666619727968, 0.242424242424242), (
+    699.311107577529, 0.252525252525252), (703.766281469006, 
+    0.262626262626263), (708.049188051987, 0.272727272727273), (
+    712.17514945812, 0.282828282828283), (716.157939504798, 0.292929292929293), 
+    (720.009941880861, 0.303030303030303), (723.742292156869, 
+    0.313131313131313), (727.365005274107, 0.323232323232323), (
+    730.887089997308, 0.333333333333333), (734.316651664209, 
+    0.343434343434343), (737.660984428763, 0.353535353535354), (
+    740.926654072382, 0.363636363636364), (744.119572347777, 
+    0.373737373737374), (747.24506372128, 0.383838383838384), (750.30792529099, 
+    0.393939393939394), (753.312480578614, 0.404040404040404), (
+    756.262627821488, 0.414141414141414), (759.161883327185, 
+    0.424242424242424), (762.013420395638, 0.434343434343434), (
+    764.820104262046, 0.444444444444444), (767.584523467474, 
+    0.454545454545455), (770.309018022464, 0.464646464646465), (
+    772.995704691604, 0.474747474747475), (775.646499693469, 
+    0.484848484848485), (778.263139080235, 0.494949494949495), (
+    780.847197034243, 0.505050505050505), (783.40010229453, 0.515151515151515), 
+    (785.923152904554, 0.525252525252525), (788.417529452772, 
+    0.535353535353535), (790.88430696021, 0.545454545454546), (
+    793.324465553367, 0.555555555555556), (795.738900046659, 
+    0.565656565656566), (798.128428545925, 0.575757575757576), (
+    800.493800173073, 0.585858585858586), (802.83570200176, 0.595959595959596), 
+    (805.154765284752, 0.606060606060606), (807.451571045422, 
+    0.616161616161616), (809.726655098377, 0.626262626262626), (
+    811.980512557603, 0.636363636363636), (814.21360188452, 0.646464646464646), 
+    (816.426348522997, 0.656565656565657), (818.619148163545, 
+    0.666666666666667), (820.792369674623, 0.676767676767677), (
+    822.94635773507, 0.686868686868687), (825.081435198238, 0.696969696969697), 
+    (827.197905215241, 0.707070707070707), (829.296053141957, 
+    0.717171717171717), (831.376148251883, 0.727272727272727), (
+    833.438445274702, 0.737373737373737), (835.483185778357, 
+    0.747474747474748), (837.51059941065, 0.757575757575758), (
+    839.520905014716, 0.767676767676768), (841.514311631254, 
+    0.777777777777778), (843.491019399114, 0.787878787878788), (
+    845.451220364592, 0.797979797979798), (847.3950992088, 0.808080808080808), 
+    (849.32283390145, 0.818181818181818), (851.234596288595, 
+    0.828282828282828), (853.130552621055, 0.838383838383838), (
+    855.010864029604, 0.848484848484848), (856.875686952344, 
+    0.858585858585859), (858.725173519156, 0.868686868686869), (
+    860.559471897602, 0.878787878787879), (862.378726604232, 
+    0.888888888888889), (864.183078784804, 0.898989898989899), (
+    865.972666466612, 0.909090909090909), (867.74762478575, 0.919191919191919), 
+    (869.508086191881, 0.929292929292929), (871.254180632806, 
+    0.939393939393939), (872.98603572088, 0.94949494949495), (874.703776883138, 
+    0.95959595959596), (876.407527496788, 0.96969696969697), (878.097409011562, 
+    0.97979797979798), (879.773541060255, 0.98989898989899), (881.436041558668, 
+    1.0)))
+# Save by anders on 2023_12_04-14.51.12; build 2022 2021_09_15-19.57.30 176069
+# Save by anders on 2023_12_04-14.55.41; build 2022 2021_09_15-19.57.30 176069
+# Save by anders on 2023_12_04-15.01.01; build 2022 2021_09_15-19.57.30 176069

@@ -1,0 +1,225 @@
+# -*- coding: mbcs -*-
+#
+# Abaqus/CAE Release 2022 replay file
+# Internal Version: 2021_09_15-19.57.30 176069
+# Run by anders on Thu Dec  7 14:57:20 2023
+#
+
+# from driverUtils import executeOnCaeGraphicsStartup
+# executeOnCaeGraphicsStartup()
+#: Executing "onCaeGraphicsStartup()" in the site directory ...
+from abaqus import *
+from abaqusConstants import *
+session.Viewport(name='Viewport: 1', origin=(0.0, 0.0), width=369.748809814453, 
+    height=179.916656494141)
+session.viewports['Viewport: 1'].makeCurrent()
+session.viewports['Viewport: 1'].maximize()
+from caeModules import *
+from driverUtils import executeOnCaeStartup
+executeOnCaeStartup()
+openMdb('Model.cae')
+#: The model database "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae" has been opened.
+session.viewports['Viewport: 1'].setValues(displayedObject=None)
+session.viewports['Viewport: 1'].partDisplay.geometryOptions.setValues(
+    referenceRepresentation=ON)
+p = mdb.models['SolidSingle-UniTens'].parts['solid-compare']
+session.viewports['Viewport: 1'].setValues(displayedObject=p)
+a = mdb.models['SolidSingle-UniTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(
+    optimizationTasks=OFF, geometricRestrictions=OFF, stopConditions=OFF)
+mdb.jobs['SolidSingle-UniTens'].writeInput(consistencyChecking=OFF)
+#: The job input file has been written to "SolidSingle-UniTens.inp".
+execfile(
+    '/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/runscript.py', 
+    __main__.__dict__)
+#: The model database "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae" has been opened.
+session.viewports['Viewport: 1'].setValues(displayedObject=None)
+mdb.Model(name='SolidSingle-BiTens', 
+    objectToCopy=mdb.models['SolidSingle-UniTens'])
+#: The model "SolidSingle-BiTens" has been created.
+a = mdb.models['SolidSingle-BiTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+a = mdb.models['SolidSingle-UniTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(loads=ON, bcs=ON, 
+    predefinedFields=ON, connectors=ON)
+mdb.models['SolidSingle-UniTens'].boundaryConditions.delete(('symmetry-bottom', 
+    'velocity', ))
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(step='load')
+a = mdb.models['SolidSingle-UniTens'].rootAssembly
+f1 = a.instances['solid-vumat'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#4 ]', ), )
+f2 = a.instances['solid-compare'].faces
+faces2 = f2.getSequenceFromMask(mask=('[#4 ]', ), )
+region = a.Set(faces=faces1+faces2, name='Set-5')
+mdb.models['SolidSingle-UniTens'].VelocityBC(name='velXpos', 
+    createStepName='load', region=region, v1=150.0, v2=UNSET, v3=UNSET, 
+    vr1=UNSET, vr2=UNSET, vr3=UNSET, amplitude='Amp-1', localCsys=None, 
+    distributionType=UNIFORM, fieldName='')
+session.viewports['Viewport: 1'].view.setValues(nearPlane=41.4522, 
+    farPlane=67.5111, width=38.2416, height=16.6072, cameraPosition=(15.3769, 
+    20.2122, 57.0991), cameraUpVector=(0.144072, 0.785383, -0.60201), 
+    cameraTarget=(11.3162, 4.20889, 4.97489))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=36.9324, 
+    farPlane=71.0153, width=34.0719, height=14.7964, cameraPosition=(-17.9656, 
+    18.3744, 48.8749), cameraUpVector=(0.270554, 0.822865, -0.499693), 
+    cameraTarget=(11.4355, 4.21546, 5.00431))
+a = mdb.models['SolidSingle-UniTens'].rootAssembly
+f1 = a.instances['solid-compare'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#1 ]', ), )
+f2 = a.instances['solid-vumat'].faces
+faces2 = f2.getSequenceFromMask(mask=('[#1 ]', ), )
+region = a.Set(faces=faces1+faces2, name='Set-6')
+mdb.models['SolidSingle-UniTens'].VelocityBC(name='velNegx', 
+    createStepName='load', region=region, v1=-150.0, v2=UNSET, v3=UNSET, 
+    vr1=UNSET, vr2=UNSET, vr3=UNSET, amplitude='Amp-1', localCsys=None, 
+    distributionType=UNIFORM, fieldName='')
+a = mdb.models['SolidSingle-UniTens'].rootAssembly
+f1 = a.instances['solid-vumat'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#2 ]', ), )
+f2 = a.instances['solid-compare'].faces
+faces2 = f2.getSequenceFromMask(mask=('[#2 ]', ), )
+region = a.Set(faces=faces1+faces2, name='Set-7')
+mdb.models['SolidSingle-UniTens'].VelocityBC(name='velPosY', 
+    createStepName='load', region=region, v1=UNSET, v2=150.0, v3=UNSET, 
+    vr1=UNSET, vr2=UNSET, vr3=UNSET, amplitude='Amp-1', localCsys=None, 
+    distributionType=UNIFORM, fieldName='')
+session.viewports['Viewport: 1'].view.setValues(nearPlane=41.3173, 
+    farPlane=68.0948, width=38.1172, height=16.5532, cameraPosition=(5.57962, 
+    -22.364, 52.1191), cameraUpVector=(0.367518, 0.912199, 0.181173), 
+    cameraTarget=(11.1289, 4.74588, 4.96207))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=41.0712, 
+    farPlane=68.5764, width=37.8902, height=16.4546, cameraPosition=(6.18711, 
+    -42.4013, 32.2142), cameraUpVector=(-0.0969224, 0.765041, 0.636646), 
+    cameraTarget=(11.1292, 4.73509, 4.95135))
+a = mdb.models['SolidSingle-UniTens'].rootAssembly
+f1 = a.instances['solid-vumat'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#8 ]', ), )
+f2 = a.instances['solid-compare'].faces
+faces2 = f2.getSequenceFromMask(mask=('[#8 ]', ), )
+region = a.Set(faces=faces1+faces2, name='Set-8')
+mdb.models['SolidSingle-UniTens'].VelocityBC(name='velNegY', 
+    createStepName='load', region=region, v1=UNSET, v2=-150.0, v3=UNSET, 
+    vr1=UNSET, vr2=UNSET, vr3=UNSET, amplitude='Amp-1', localCsys=None, 
+    distributionType=UNIFORM, fieldName='')
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(loads=OFF, bcs=OFF, 
+    predefinedFields=OFF, connectors=OFF)
+mdb.Job(name='SolidSingle-BiTens', model='SolidSingle-BiTens', description='', 
+    type=ANALYSIS, atTime=None, waitMinutes=0, waitHours=0, queue=None, 
+    memory=90, memoryUnits=PERCENTAGE, explicitPrecision=SINGLE, 
+    nodalOutputPrecision=SINGLE, echoPrint=OFF, modelPrint=OFF, 
+    contactPrint=OFF, historyPrint=OFF, userSubroutine='', scratch='', 
+    resultsFormat=ODB, parallelizationMethodExplicit=DOMAIN, numDomains=1, 
+    activateLoadBalancing=False, numThreadsPerMpiProcess=1, 
+    multiprocessingMode=DEFAULT, numCpus=1)
+mdb.Model(name='SolidSingle-SimpleShear', 
+    objectToCopy=mdb.models['SolidSingle-UniTens'])
+#: The model "SolidSingle-SimpleShear" has been created.
+a = mdb.models['SolidSingle-SimpleShear'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+del mdb.jobs['SolidSingle-BiTens']
+del mdb.jobs['SolidSingle-UniTens']
+a = mdb.models['SolidSingle-BiTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(step='Initial')
+mdb.models.changeKey(fromName='SolidSingle-BiTens', 
+    toName='SolidSingle-UniTenss')
+a = mdb.models['SolidSingle-UniTenss'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+a = mdb.models['SolidSingle-UniTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+mdb.models.changeKey(fromName='SolidSingle-UniTens', 
+    toName='SolidSingle-BiTens')
+a = mdb.models['SolidSingle-BiTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+a = mdb.models['SolidSingle-UniTenss'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+mdb.models.changeKey(fromName='SolidSingle-UniTenss', 
+    toName='SolidSingle-UniTens')
+a = mdb.models['SolidSingle-UniTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+a = mdb.models['SolidSingle-SimpleShear'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(step='load')
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(loads=ON, bcs=ON, 
+    predefinedFields=ON, connectors=ON)
+mdb.models['SolidSingle-SimpleShear'].boundaryConditions.delete(('velNegY', 
+    'velNegx', 'velPosY', 'velXpos', ))
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(step='Initial')
+session.viewports['Viewport: 1'].view.setValues(nearPlane=38.5096, 
+    farPlane=72.4116, width=35.527, height=15.4283, cameraPosition=(35.3907, 
+    -26.3608, 43.3863), cameraUpVector=(-0.134402, 0.927766, 0.348117), 
+    cameraTarget=(11.3162, 4.20889, 4.97489))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=38.5213, 
+    farPlane=72.3056, width=35.5378, height=15.433, cameraPosition=(51.8004, 
+    5.30652, 41.9528), cameraUpVector=(-0.463302, 0.886191, -0.00412479), 
+    cameraTarget=(11.5482, 4.65658, 4.95463))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=37.3291, 
+    farPlane=73.2362, width=34.4379, height=14.9554, cameraPosition=(48.6294, 
+    29.4528, 36.7023), cameraUpVector=(-0.668976, 0.674893, -0.311433), 
+    cameraTarget=(11.506, 4.97768, 4.88481))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=37.5391, 
+    farPlane=73.8394, width=34.6317, height=15.0395, cameraPosition=(54.8373, 
+    -20.0164, 27.5868), cameraUpVector=(-0.0290801, 0.958472, 0.2837), 
+    cameraTarget=(11.5741, 4.43539, 4.78489))
+a = mdb.models['SolidSingle-SimpleShear'].rootAssembly
+f1 = a.instances['solid-vumat'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#8 ]', ), )
+f2 = a.instances['solid-compare'].faces
+faces2 = f2.getSequenceFromMask(mask=('[#8 ]', ), )
+region = a.Set(faces=faces1+faces2, name='Set-9')
+mdb.models['SolidSingle-SimpleShear'].DisplacementBC(name='fixedZ', 
+    createStepName='Initial', region=region, u1=UNSET, u2=UNSET, u3=SET, 
+    ur1=UNSET, ur2=UNSET, ur3=UNSET, amplitude=UNSET, distributionType=UNIFORM, 
+    fieldName='', localCsys=None)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=37.618, 
+    farPlane=73.8007, width=34.7044, height=15.0711, cameraPosition=(59.497, 
+    -10.9008, 26.2246), cameraUpVector=(-0.134659, 0.978288, 0.157546), 
+    cameraTarget=(11.6588, 4.60115, 4.76012))
+mdb.models['SolidSingle-SimpleShear'].boundaryConditions.changeKey(
+    fromName='fixedZ', toName='fixed')
+mdb.models['SolidSingle-SimpleShear'].boundaryConditions['fixed'].setValues(
+    u2=SET)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=38.0232, 
+    farPlane=72.7877, width=35.0782, height=15.2335, cameraPosition=(43.1823, 
+    34.6303, 38.5273), cameraUpVector=(-0.499821, 0.617973, -0.606868), 
+    cameraTarget=(11.3563, 5.44524, 4.9882))
+a = mdb.models['SolidSingle-SimpleShear'].rootAssembly
+f1 = a.instances['solid-compare'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#2 ]', ), )
+f2 = a.instances['solid-vumat'].faces
+faces2 = f2.getSequenceFromMask(mask=('[#2 ]', ), )
+region = a.Set(faces=faces1+faces2, name='Set-10')
+mdb.models['SolidSingle-SimpleShear'].DisplacementBC(name='fixedYtop', 
+    createStepName='Initial', region=region, u1=UNSET, u2=SET, u3=UNSET, 
+    ur1=UNSET, ur2=UNSET, ur3=UNSET, amplitude=UNSET, distributionType=UNIFORM, 
+    fieldName='', localCsys=None)
+a = mdb.models['SolidSingle-SimpleShear'].rootAssembly
+f1 = a.instances['solid-vumat'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#2 ]', ), )
+f2 = a.instances['solid-compare'].faces
+faces2 = f2.getSequenceFromMask(mask=('[#2 ]', ), )
+region = a.Set(faces=faces1+faces2, name='Set-11')
+mdb.models['SolidSingle-SimpleShear'].VelocityBC(name='velZ', 
+    createStepName='Initial', region=region, v1=UNSET, v2=UNSET, v3=0.0, 
+    vr1=UNSET, vr2=UNSET, vr3=UNSET, amplitude=UNSET, localCsys=None, 
+    distributionType=UNIFORM, fieldName='')
+del mdb.models['SolidSingle-SimpleShear'].boundaryConditions['velZ']
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(step='load')
+a = mdb.models['SolidSingle-SimpleShear'].rootAssembly
+f1 = a.instances['solid-compare'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#2 ]', ), )
+f2 = a.instances['solid-vumat'].faces
+faces2 = f2.getSequenceFromMask(mask=('[#2 ]', ), )
+region = a.Set(faces=faces1+faces2, name='Set-12')
+mdb.models['SolidSingle-SimpleShear'].VelocityBC(name='velTop', 
+    createStepName='load', region=region, v1=UNSET, v2=UNSET, v3=300.0, 
+    vr1=UNSET, vr2=UNSET, vr3=UNSET, amplitude='Amp-1', localCsys=None, 
+    distributionType=UNIFORM, fieldName='')
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".

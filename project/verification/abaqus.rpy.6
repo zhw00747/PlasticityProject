@@ -1,0 +1,165 @@
+# -*- coding: mbcs -*-
+#
+# Abaqus/CAE Release 2022 replay file
+# Internal Version: 2021_09_15-19.57.30 176069
+# Run by anders on Thu Dec  7 16:14:43 2023
+#
+
+# from driverUtils import executeOnCaeGraphicsStartup
+# executeOnCaeGraphicsStartup()
+#: Executing "onCaeGraphicsStartup()" in the site directory ...
+from abaqus import *
+from abaqusConstants import *
+session.Viewport(name='Viewport: 1', origin=(0.0, 0.0), width=254.169250488281, 
+    height=90.4874954223633)
+session.viewports['Viewport: 1'].makeCurrent()
+session.viewports['Viewport: 1'].maximize()
+from caeModules import *
+from driverUtils import executeOnCaeStartup
+executeOnCaeStartup()
+openMdb('Model.cae')
+#: The model database "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae" has been opened.
+session.viewports['Viewport: 1'].setValues(displayedObject=None)
+session.viewports['Viewport: 1'].partDisplay.geometryOptions.setValues(
+    referenceRepresentation=ON)
+p = mdb.models['SolidSingle-BiTens'].parts['solid-compare']
+session.viewports['Viewport: 1'].setValues(displayedObject=p)
+session.viewports['Viewport: 1'].setValues(displayedObject=None)
+o1 = session.openOdb(
+    name='/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-UniTens-m_1.odb')
+session.viewports['Viewport: 1'].setValues(displayedObject=o1)
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+odb = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-UniTens-m_1.odb']
+xyList = xyPlot.xyDataListFromField(odb=odb, outputPosition=INTEGRATION_POINT, 
+    variable=(('LE', INTEGRATION_POINT, ((COMPONENT, 'LE11'), (COMPONENT, 
+    'LE22'), (COMPONENT, 'LE33'), (COMPONENT, 'LE23'), )), ('S', 
+    INTEGRATION_POINT, ((COMPONENT, 'S11'), (COMPONENT, 'S22'), (COMPONENT, 
+    'S33'), (COMPONENT, 'S23'), )), ), elementPick=(('SOLID-COMPARE', 1, (
+    '[#1 ]', )), ('SOLID-VUMAT', 1, ('[#1 ]', )), ), )
+xyp = session.XYPlot('XYPlot-1')
+chartName = xyp.charts.keys()[0]
+chart = xyp.charts[chartName]
+curveList = session.curveSet(xyData=xyList)
+chart.setValues(curvesToPlot=curveList)
+session.charts[chartName].autoColor(lines=True, symbols=True)
+session.viewports['Viewport: 1'].setValues(displayedObject=xyp)
+session.xyDataObjects['_LE:LE11 PI: SOLID-COMPARE E: 1 IP: 1'].save()
+import sys
+sys.path.insert(6, 
+    r'/opt/abaqus/2022/linux_a64/code/python2.7/lib/abaqus_plugins/stlExport')
+import stlExport_kernel
+stlExport_kernel.STLExport(moduleName='Visualization', 
+    stlFileName='/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-UniTens-m_1.stl', 
+    stlFileType='ASCII')
+#: The model "tempModel-stlExport" has been created.
+#: STL Export successful
+sys.path.insert(7, 
+    r'/opt/abaqus/2022/linux_a64/code/python2.7/lib/abaqus_plugins/reportGenerator')
+from abaqus import *
+from abaqusConstants import *
+import form
+import reportGenerator
+report=reportGenerator.ReportGenerator()
+x0 = session.xyDataObjects['_LE:LE22 PI: SOLID-COMPARE E: 1 IP: 1']
+session.writeXYReport(fileName='abaqus.xlsx', appendMode=OFF, xyData=(x0, ))
+cliCommand("""m""")
+#* NameError: name 'm' is not defined
+cliCommand("""print(1)""")
+#: 1
+cliCommand("""odb""")
+#* NameError: name 'odb' is not defined
+p1 = mdb.models['SolidSingle-UniTens'].parts['solid-compare']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+mdb.models['SolidSingle-UniTens'].parts.changeKey(fromName='solid-compare', 
+    toName='compare')
+#: Warning: One or more instances of this part exists in the
+#: assembly. They have been modified to refer to the renamed part.
+#: Any assembly features and attributes that depend on the original
+#: instance may become invalid due to this operation. You may need
+#: to edit assembly attributes, sets, surfaces, and reference points.
+p1 = mdb.models['SolidSingle-UniTens'].parts['solid-vumat']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+mdb.models['SolidSingle-UniTens'].parts.changeKey(fromName='solid-vumat', 
+    toName='vumat')
+#: Warning: One or more instances of this part exists in the
+#: assembly. They have been modified to refer to the renamed part.
+#: Any assembly features and attributes that depend on the original
+#: instance may become invalid due to this operation. You may need
+#: to edit assembly attributes, sets, surfaces, and reference points.
+a = mdb.models['SolidSingle-UniTens'].rootAssembly
+a.regenerate()
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+#: Warning: Instance 'solid-vumat' has been modified to refer to renamed part 'vumat'.
+#: Warning: Instance 'solid-compare' has been modified to refer to renamed part 'compare'.
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(
+    optimizationTasks=OFF, geometricRestrictions=OFF, stopConditions=OFF)
+a = mdb.models['SolidSingle-UniTens'].rootAssembly
+a.regenerate()
+mdb.models['SolidSingle-UniTens'].rootAssembly.features.changeKey(
+    fromName='solid-vumat', toName='vumat')
+mdb.models['SolidSingle-UniTens'].rootAssembly.features.changeKey(
+    fromName='solid-compare', toName='compare')
+x = session.xyPlots['XYPlot-1']
+session.viewports['Viewport: 1'].setValues(displayedObject=x)
+del session.xyDataObjects['XYData-1']
+del session.xyDataObjects['_LE:LE11 PI: SOLID-VUMAT E: 1 IP: 1']
+del session.xyDataObjects['_LE:LE22 PI: SOLID-COMPARE E: 1 IP: 1']
+del session.xyDataObjects['_LE:LE22 PI: SOLID-VUMAT E: 1 IP: 1']
+del session.xyDataObjects['_LE:LE23 PI: SOLID-COMPARE E: 1 IP: 1']
+del session.xyDataObjects['_LE:LE23 PI: SOLID-VUMAT E: 1 IP: 1']
+del session.xyDataObjects['_LE:LE33 PI: SOLID-COMPARE E: 1 IP: 1']
+del session.xyDataObjects['_LE:LE33 PI: SOLID-VUMAT E: 1 IP: 1']
+del session.xyDataObjects['_S:S11 PI: SOLID-COMPARE E: 1 IP: 1']
+del session.xyDataObjects['_S:S11 PI: SOLID-VUMAT E: 1 IP: 1']
+del session.xyDataObjects['_S:S22 PI: SOLID-COMPARE E: 1 IP: 1']
+del session.xyDataObjects['_S:S22 PI: SOLID-VUMAT E: 1 IP: 1']
+del session.xyDataObjects['_S:S23 PI: SOLID-COMPARE E: 1 IP: 1']
+del session.xyDataObjects['_S:S23 PI: SOLID-VUMAT E: 1 IP: 1']
+del session.xyDataObjects['_S:S33 PI: SOLID-COMPARE E: 1 IP: 1']
+del session.xyDataObjects['_S:S33 PI: SOLID-VUMAT E: 1 IP: 1']
+odb = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-UniTens-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=odb)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+odb = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-UniTens-m_1.odb']
+xyList = xyPlot.xyDataListFromField(odb=odb, outputPosition=INTEGRATION_POINT, 
+    variable=(('S', INTEGRATION_POINT, ((COMPONENT, 'S11'), )), ), 
+    elementPick=(('SOLID-VUMAT', 1, ('[#1 ]', )), ('SOLID-COMPARE', 1, (
+    '[#1 ]', )), ), )
+xyp = session.xyPlots['XYPlot-1']
+chartName = xyp.charts.keys()[0]
+chart = xyp.charts[chartName]
+curveList = session.curveSet(xyData=xyList)
+chart.setValues(curvesToPlot=curveList)
+session.charts[chartName].autoColor(lines=True, symbols=True)
+session.viewports['Viewport: 1'].setValues(displayedObject=xyp)
+cliCommand("""1""")
+#: 1
+cliCommand("""osb=session.odbs["./SolidSingle-UniTens-m_1.odb"]""")
+#* KeyError: ./SolidSingle-UniTens-m_1.odb
+execfile(
+    '/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py', 
+    __main__.__dict__)
+#: ('running job', 'SolidSingle-UniTens-m_1.inp')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       6
+#: Number of Node Sets:          5
+#: Number of Steps:              1
+#* VisError: No xy data was extracted using the provided options.
+#* File 
+#* "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py", 
+#* line 64, in <module>
+#*     '[#1 ]', )), ), )
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
