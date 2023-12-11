@@ -1,0 +1,1184 @@
+# -*- coding: mbcs -*-
+#
+# Abaqus/CAE Release 2022 replay file
+# Internal Version: 2021_09_15-19.57.30 176069
+# Run by anders on Fri Dec  8 15:55:26 2023
+#
+
+# from driverUtils import executeOnCaeGraphicsStartup
+# executeOnCaeGraphicsStartup()
+#: Executing "onCaeGraphicsStartup()" in the site directory ...
+from abaqus import *
+from abaqusConstants import *
+session.Viewport(name='Viewport: 1', origin=(0.0, 0.0), width=213.254150390625, 
+    height=117.946090698242)
+session.viewports['Viewport: 1'].makeCurrent()
+session.viewports['Viewport: 1'].maximize()
+from caeModules import *
+from driverUtils import executeOnCaeStartup
+executeOnCaeStartup()
+openMdb('Model.cae')
+#: The model database "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae" has been opened.
+session.viewports['Viewport: 1'].setValues(displayedObject=None)
+session.viewports['Viewport: 1'].partDisplay.geometryOptions.setValues(
+    referenceRepresentation=ON)
+p = mdb.models['SolidSingle-BiTens'].parts['compare']
+session.viewports['Viewport: 1'].setValues(displayedObject=p)
+execfile(
+    '/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py', 
+    __main__.__dict__)
+#: ('running job', 'SolidSingle-UniTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-UniTens-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+session.viewports['Viewport: 1'].setValues(
+    displayedObject=session.mdbData['SolidSingle-SimpleShear'])
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+#: Warning: Boundary conditions are shown in the local co-ordinate system, in which they were defined.
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=TIME_HISTORY)
+session.viewports['Viewport: 1'].animationController.play(duration=UNLIMITED)
+#: Warning: Boundary conditions are shown in the local co-ordinate system, in which they were defined.
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=NONE)
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_2.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=TIME_HISTORY)
+session.viewports['Viewport: 1'].animationController.play(duration=UNLIMITED)
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=NONE)
+a = mdb.models['SolidSingle-SimpleShear'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(step='load')
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(loads=ON, bcs=ON, 
+    predefinedFields=ON, connectors=ON, optimizationTasks=OFF, 
+    geometricRestrictions=OFF, stopConditions=OFF)
+mdb.models['SolidSingle-SimpleShear'].boundaryConditions['velTop'].setValues(
+    v3=600.0)
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+execfile(
+    '/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py', 
+    __main__.__dict__)
+#: ('running job', 'SolidSingle-UniTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-UniTens-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_2.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_2.odb'].close(
+    )
+odb = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=odb)
+o1 = session.openOdb(
+    name='/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-SimpleShear-m_2.odb')
+session.viewports['Viewport: 1'].setValues(displayedObject=o1)
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-SimpleShear-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=TIME_HISTORY)
+session.viewports['Viewport: 1'].animationController.play(duration=UNLIMITED)
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=NONE)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=TIME_HISTORY)
+session.viewports['Viewport: 1'].animationController.play(duration=UNLIMITED)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    DEFORMED, ))
+session.viewports['Viewport: 1'].animationController.stop()
+session.viewports['Viewport: 1'].animationController.showLastFrame()
+session.viewports['Viewport: 1'].animationController.stop()
+session.viewports['Viewport: 1'].animationController.showLastFrame()
+session.viewports['Viewport: 1'].animationController.stop()
+session.viewports['Viewport: 1'].animationController.decrementFrame()
+session.viewports['Viewport: 1'].animationController.stop()
+session.viewports['Viewport: 1'].animationController.decrementFrame()
+session.viewports['Viewport: 1'].animationController.stop()
+session.viewports['Viewport: 1'].animationController.decrementFrame()
+session.viewports['Viewport: 1'].animationController.stop()
+session.viewports['Viewport: 1'].animationController.decrementFrame()
+session.viewports['Viewport: 1'].animationController.stop()
+session.viewports['Viewport: 1'].animationController.decrementFrame()
+session.viewports['Viewport: 1'].animationController.stop()
+session.viewports['Viewport: 1'].animationController.decrementFrame()
+session.viewports['Viewport: 1'].animationController.stop()
+session.viewports['Viewport: 1'].animationController.decrementFrame()
+session.viewports['Viewport: 1'].animationController.stop()
+session.viewports['Viewport: 1'].animationController.decrementFrame()
+session.viewports['Viewport: 1'].animationController.stop()
+session.viewports['Viewport: 1'].animationController.decrementFrame()
+session.viewports['Viewport: 1'].animationController.stop()
+session.viewports['Viewport: 1'].animationController.decrementFrame()
+session.viewports['Viewport: 1'].animationController.stop()
+session.viewports['Viewport: 1'].animationController.decrementFrame()
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=TIME_HISTORY)
+session.viewports['Viewport: 1'].animationController.play(duration=UNLIMITED)
+session.viewports['Viewport: 1'].animationController.stop()
+session.viewports['Viewport: 1'].animationController.showLastFrame()
+session.viewports['Viewport: 1'].view.setValues(nearPlane=37.0473, 
+    farPlane=73.2562, width=26.5733, height=14.8425, cameraPosition=(57.676, 
+    18.3945, 30.2545), cameraUpVector=(-0.299091, 0.748159, -0.592285))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=37.4583, 
+    farPlane=72.8451, width=26.8681, height=15.0072, cameraPosition=(57.676, 
+    18.3945, 30.2545), cameraUpVector=(-0.572542, 0.810195, -0.125621), 
+    cameraTarget=(11.3162, 4.20889, 4.97489))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=38.9251, 
+    farPlane=71.9602, width=27.9203, height=15.5948, cameraPosition=(65.5647, 
+    10.0681, 9.13071), cameraUpVector=(-0.433634, 0.900926, -0.0171334), 
+    cameraTarget=(11.3842, 4.13715, 4.79288))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=38.7516, 
+    farPlane=72.1337, width=27.7959, height=15.5253, cameraPosition=(65.5647, 
+    10.0681, 9.13071), cameraUpVector=(-0.433243, 0.901006, -0.0221288), 
+    cameraTarget=(11.3842, 4.13715, 4.79288))
+a = mdb.models['SolidSingle-UniTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(loads=OFF, bcs=OFF, 
+    predefinedFields=OFF, connectors=OFF, adaptiveMeshConstraints=ON)
+mdb.models['SolidSingle-UniTens'].steps['load'].setValues(timePeriod=0.01, 
+    improvedDtMethod=ON)
+a = mdb.models['SolidSingle-SimpleShear'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+mdb.models['SolidSingle-SimpleShear'].steps['load'].setValues(timePeriod=0.01, 
+    improvedDtMethod=ON)
+a = mdb.models['SolidSingle-BiTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+mdb.models['SolidSingle-BiTens'].steps['load'].setValues(timePeriod=0.01, 
+    improvedDtMethod=ON)
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+execfile(
+    '/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py', 
+    __main__.__dict__)
+#: ('running job', 'SolidSingle-UniTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-UniTens-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+a = mdb.models['SolidSingle-BiTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_2.odb'].close(
+    )
+session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-SimpleShear-m_2.odb'].close(
+    )
+session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_1.odb'].close(
+    )
+session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_2.odb'].close(
+    )
+session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_1.odb'].close(
+    )
+session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_2.odb'].close(
+    )
+session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_1.odb'].close(
+    )
+o1 = session.openOdb(
+    name='/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-SimpleShear-m_2.odb')
+session.viewports['Viewport: 1'].setValues(displayedObject=o1)
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-SimpleShear-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    DEFORMED, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    DEFORMED, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+o1 = session.openOdb(
+    name='/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-UniTens-m_2.odb')
+session.viewports['Viewport: 1'].setValues(displayedObject=o1)
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-UniTens-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    DEFORMED, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    DEFORMED, ))
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=NONE)
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=TIME_HISTORY)
+session.viewports['Viewport: 1'].animationController.play(duration=UNLIMITED)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+mdb.Model(name='SolidPatch-BiTens', 
+    objectToCopy=mdb.models['SolidSingle-BiTens'])
+#: The model "SolidPatch-BiTens" has been created.
+mdb.Model(name='SolidPatch-UniTens', 
+    objectToCopy=mdb.models['SolidSingle-UniTens'])
+#: The model "SolidPatch-UniTens" has been created.
+mdb.Model(name='SolidPatch-SimpleShear', 
+    objectToCopy=mdb.models['SolidSingle-SimpleShear'])
+#: The model "SolidPatch-SimpleShear" has been created.
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+execfile(
+    '/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py', 
+    __main__.__dict__)
+#: ('running job', 'SolidSingle-UniTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-UniTens-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-UniTens-m_10')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_10.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-UniTens-m_20')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_20.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-UniTens-m_100')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_100.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_10')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_10.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_20')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_20.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_100')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_100.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_10')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_10.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_20')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_20.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_100')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_100.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+p1 = mdb.models['SolidPatch-UniTens'].parts['compare']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+session.viewports['Viewport: 1'].partDisplay.setValues(mesh=ON)
+session.viewports['Viewport: 1'].partDisplay.meshOptions.setValues(
+    meshTechnique=ON)
+session.viewports['Viewport: 1'].partDisplay.geometryOptions.setValues(
+    referenceRepresentation=OFF)
+p = mdb.models['SolidPatch-UniTens'].parts['compare']
+c = p.cells
+pickedRegions = c.getSequenceFromMask(mask=('[#1 ]', ), )
+p.deleteMesh(regions=pickedRegions)
+p = mdb.models['SolidPatch-UniTens'].parts['compare']
+e = p.edges
+pickedEdges = e.getSequenceFromMask(mask=('[#13 ]', ), )
+p.seedEdgeByNumber(edges=pickedEdges, number=3, constraint=FINER)
+p = mdb.models['SolidPatch-UniTens'].parts['compare']
+p.generateMesh()
+session.viewports['Viewport: 1'].view.setValues(nearPlane=23.6609, 
+    farPlane=49.5099, width=19.7723, height=11.1032, cameraPosition=(26.3324, 
+    25.703, 26.3324), cameraUpVector=(-0.513184, 0.573963, -0.638129), 
+    cameraTarget=(5.20979, 4.58042, 5.20979))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=24.4274, 
+    farPlane=48.935, width=20.4129, height=11.4629, cameraPosition=(-7.59947, 
+    -21.3689, -17.1743), cameraUpVector=(-0.00404814, 0.880639, -0.473771), 
+    cameraTarget=(5.2098, 4.58043, 5.2098))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=24.2448, 
+    farPlane=48.9081, width=20.2603, height=11.3772, cameraPosition=(-8.35697, 
+    26.2635, 31.5995), cameraUpVector=(0.113639, 0.52973, -0.840519), 
+    cameraTarget=(5.20782, 4.7048, 5.33715))
+p = mdb.models['SolidPatch-UniTens'].parts['compare']
+c = p.cells
+pickedRegions = c.getSequenceFromMask(mask=('[#1 ]', ), )
+p.deleteMesh(regions=pickedRegions)
+p = mdb.models['SolidPatch-UniTens'].parts['compare']
+e = p.edges
+pickedEdges = e.getSequenceFromMask(mask=('[#fff ]', ), )
+p.seedEdgeByNumber(edges=pickedEdges, number=3, constraint=FINER)
+p = mdb.models['SolidPatch-UniTens'].parts['compare']
+p.generateMesh()
+session.viewports['Viewport: 1'].view.setValues(nearPlane=24.4223, 
+    farPlane=49.1999, width=20.4086, height=11.4605, cameraPosition=(30.2878, 
+    19.2351, 27.6524), cameraUpVector=(-0.65346, 0.706489, -0.271777), 
+    cameraTarget=(5.19833, 4.70653, 5.33812))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=24.7145, 
+    farPlane=49.0089, width=20.6529, height=11.5976, cameraPosition=(31.0489, 
+    15.1704, 29.0206), cameraUpVector=(-0.51493, 0.800188, -0.307484), 
+    cameraTarget=(5.203, 4.68161, 5.34651))
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+p1 = mdb.models['SolidPatch-UniTens'].parts['vumat']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=24.1187, 
+    farPlane=48.6448, width=20.1549, height=11.318, cameraPosition=(22.2481, 
+    15.6423, -25.2175), cameraUpVector=(0.570419, 0.205995, 0.795103), 
+    cameraTarget=(5.20979, 4.58042, 5.20979))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=25.2255, 
+    farPlane=47.7614, width=21.0798, height=11.8374, cameraPosition=(1.55684, 
+    -13.4417, -26.3055), cameraUpVector=(0.616192, -0.504884, 0.604483), 
+    cameraTarget=(5.32561, 4.74321, 5.21588))
+p = mdb.models['SolidPatch-UniTens'].parts['vumat']
+c = p.cells
+pickedRegions = c.getSequenceFromMask(mask=('[#1 ]', ), )
+p.deleteMesh(regions=pickedRegions)
+p = mdb.models['SolidPatch-UniTens'].parts['vumat']
+e = p.edges
+pickedEdges = e.getSequenceFromMask(mask=('[#fff ]', ), )
+p.seedEdgeByNumber(edges=pickedEdges, number=3, constraint=FINER)
+p = mdb.models['SolidPatch-UniTens'].parts['vumat']
+p.generateMesh()
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+p1 = mdb.models['SolidPatch-SimpleShear'].parts['compare']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=25.0997, 
+    farPlane=48.2967, width=20.9747, height=11.7784, cameraPosition=(7.53877, 
+    -18.3155, -23.2304), cameraUpVector=(0.488847, 0.84613, -0.21235), 
+    cameraTarget=(5.20979, 4.58042, 5.20979))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=24.1228, 
+    farPlane=48.9277, width=20.1584, height=11.32, cameraPosition=(-23.1651, 
+    -9.43322, -13.2408), cameraUpVector=(0.540081, 0.581529, -0.608388), 
+    cameraTarget=(5.11537, 4.60773, 5.24051))
+p = mdb.models['SolidPatch-SimpleShear'].parts['compare']
+c = p.cells
+pickedRegions = c.getSequenceFromMask(mask=('[#1 ]', ), )
+p.deleteMesh(regions=pickedRegions)
+p = mdb.models['SolidPatch-SimpleShear'].parts['compare']
+e = p.edges
+pickedEdges = e.getSequenceFromMask(mask=('[#fff ]', ), )
+p.seedEdgeByNumber(edges=pickedEdges, number=3, constraint=FINER)
+p = mdb.models['SolidPatch-SimpleShear'].parts['compare']
+p.generateMesh()
+p1 = mdb.models['SolidPatch-SimpleShear'].parts['vumat']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+p = mdb.models['SolidPatch-SimpleShear'].parts['vumat']
+c = p.cells
+pickedRegions = c.getSequenceFromMask(mask=('[#1 ]', ), )
+p.deleteMesh(regions=pickedRegions)
+p = mdb.models['SolidPatch-SimpleShear'].parts['vumat']
+e = p.edges
+pickedEdges = e.getSequenceFromMask(mask=('[#ffb ]', ), )
+p.seedEdgeByNumber(edges=pickedEdges, number=3, constraint=FINER)
+p = mdb.models['SolidPatch-SimpleShear'].parts['vumat']
+p.generateMesh()
+p1 = mdb.models['SolidPatch-SimpleShear'].parts['compare']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+p1 = mdb.models['SolidPatch-BiTens'].parts['compare']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=22.2738, 
+    farPlane=50.897, width=29.7488, height=16.7055, viewOffsetX=2.90397, 
+    viewOffsetY=-0.649516)
+p = mdb.models['SolidPatch-BiTens'].parts['compare']
+c = p.cells
+pickedRegions = c.getSequenceFromMask(mask=('[#1 ]', ), )
+p.deleteMesh(regions=pickedRegions)
+p = mdb.models['SolidPatch-BiTens'].parts['compare']
+e = p.edges
+pickedEdges = e.getSequenceFromMask(mask=('[#fff ]', ), )
+p.seedEdgeByNumber(edges=pickedEdges, number=3, constraint=FINER)
+p = mdb.models['SolidPatch-BiTens'].parts['compare']
+p.generateMesh()
+p1 = mdb.models['SolidPatch-BiTens'].parts['vumat']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=24.0953, 
+    farPlane=49.0755, width=20.1354, height=11.307, viewOffsetX=-0.00606823, 
+    viewOffsetY=-0.0329223)
+p = mdb.models['SolidPatch-BiTens'].parts['vumat']
+c = p.cells
+pickedRegions = c.getSequenceFromMask(mask=('[#1 ]', ), )
+p.deleteMesh(regions=pickedRegions)
+p = mdb.models['SolidPatch-BiTens'].parts['vumat']
+e = p.edges
+pickedEdges = e.getSequenceFromMask(mask=('[#fff ]', ), )
+p.seedEdgeByNumber(edges=pickedEdges, number=3, constraint=FINER)
+p = mdb.models['SolidPatch-BiTens'].parts['vumat']
+p.generateMesh()
+p1 = mdb.models['SolidPatch-BiTens'].parts['compare']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+execfile(
+    '/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py', 
+    __main__.__dict__)
+#: ('running job', 'SolidSingle-UniTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-UniTens-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-UniTens-m_10')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_10.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-UniTens-m_20')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_20.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-UniTens-m_100')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_100.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_10')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_10.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_20')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_20.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-BiTens-m_100')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-BiTens-m_100.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_10')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_10.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_20')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_20.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidSingle-SimpleShear-m_100')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-SimpleShear-m_100.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-UniTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-UniTens-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-UniTens-m_10')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_10.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-UniTens-m_20')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_20.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-UniTens-m_100')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_100.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-BiTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-BiTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-BiTens-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-BiTens-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-BiTens-m_10')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-BiTens-m_10.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-BiTens-m_20')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-BiTens-m_20.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-BiTens-m_100')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-BiTens-m_100.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       8
+#: Number of Node Sets:          8
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-SimpleShear-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-SimpleShear-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-SimpleShear-m_2')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-SimpleShear-m_2.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-SimpleShear-m_10')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-SimpleShear-m_10.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-SimpleShear-m_20')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-SimpleShear-m_20.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-SimpleShear-m_100')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-SimpleShear-m_100.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       12
+#: Number of Node Sets:          12
+#: Number of Steps:              1
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_2.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=TIME_HISTORY)
+session.viewports['Viewport: 1'].animationController.play(duration=UNLIMITED)
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=NONE)
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=TIME_HISTORY)
+session.viewports['Viewport: 1'].animationController.play(duration=UNLIMITED)
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=NONE)
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-SimpleShear-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-SimpleShear-m_10.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+a = mdb.models['SolidPatch-UniTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(step='Initial')
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(
+    adaptiveMeshConstraints=OFF)
+a = mdb.models['SolidPatch-UniTens'].rootAssembly
+a.regenerate()
+session.viewports['Viewport: 1'].partDisplay.setValues(mesh=OFF)
+session.viewports['Viewport: 1'].partDisplay.meshOptions.setValues(
+    meshTechnique=OFF)
+session.viewports['Viewport: 1'].partDisplay.geometryOptions.setValues(
+    referenceRepresentation=ON)
+p1 = mdb.models['SolidPatch-UniTens'].parts['compare']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+session.viewports['Viewport: 1'].partDisplay.setValues(mesh=ON)
+session.viewports['Viewport: 1'].partDisplay.meshOptions.setValues(
+    meshTechnique=ON)
+session.viewports['Viewport: 1'].partDisplay.geometryOptions.setValues(
+    referenceRepresentation=OFF)
+a = mdb.models['SolidPatch-UniTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(mesh=ON)
+session.viewports['Viewport: 1'].assemblyDisplay.meshOptions.setValues(
+    meshTechnique=ON)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(mesh=OFF)
+session.viewports['Viewport: 1'].assemblyDisplay.meshOptions.setValues(
+    meshTechnique=OFF)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(loads=ON, bcs=ON, 
+    predefinedFields=ON, connectors=ON)
+session.viewports['Viewport: 1'].setValues(
+    displayedObject=session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_1.odb'])
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidSingle-UniTens-m_1.odb'].close(
+    )
+odb = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-BiTens-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=odb)
+o1 = session.openOdb(
+    name='/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidPatch-UniTens-m_1.odb')
+session.viewports['Viewport: 1'].setValues(displayedObject=o1)
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidPatch-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+#* VisError: The output database 
+#* /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_1.odb 
+#* disk file has changed.
+#* 
+#* The current plot operation has been canceled, re-open the file to view the 
+#* results
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-BiTens-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+o1 = session.openOdb(
+    name='/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-UniTens-m_1.odb')
+session.viewports['Viewport: 1'].setValues(displayedObject=o1)
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidSingle-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       4
+#: Number of Node Sets:          4
+#: Number of Steps:              1
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+o1 = session.openOdb(
+    name='/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/SolidPatch-UniTens-m_1.odb')
+session.viewports['Viewport: 1'].setValues(displayedObject=o1)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=35.9921, 
+    farPlane=71.7085, width=29.7381, height=16.6102, viewOffsetX=-0.597692, 
+    viewOffsetY=0.225646)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=37.3762, 
+    farPlane=69.2025, width=30.8817, height=17.2489, cameraPosition=(-2.1576, 
+    28.1397, 52.7419), cameraUpVector=(0.52103, 0.642515, -0.561874), 
+    cameraTarget=(11.8378, 4.02576, 5.70814), viewOffsetX=-0.620676, 
+    viewOffsetY=0.234323)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=39.3908, 
+    farPlane=67.3394, width=32.5463, height=18.1787, cameraPosition=(19.37, 
+    7.93783, 58.9809), cameraUpVector=(0.109141, 0.906068, -0.408814), 
+    cameraTarget=(11.4934, 4.63455, 4.97559), viewOffsetX=-0.654131, 
+    viewOffsetY=0.246953)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=36.6088, 
+    farPlane=70.1108, width=30.2477, height=16.8948, cameraPosition=(-6.88387, 
+    45.8365, 36.0578), cameraUpVector=(0.891955, 0.22912, -0.38977), 
+    cameraTarget=(11.4353, 3.6842, 6.44158), viewOffsetX=-0.607933, 
+    viewOffsetY=0.229512)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=35.9293, 
+    farPlane=71.2888, width=29.6863, height=16.5812, cameraPosition=(53.3759, 
+    4.12829, 38.6178), cameraUpVector=(0.0471905, 0.801082, -0.596691), 
+    cameraTarget=(10.1796, 4.45731, 5.09906), viewOffsetX=-0.59665, 
+    viewOffsetY=0.225252)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=36.0718, 
+    farPlane=71.1464, width=29.8041, height=16.647, cameraPosition=(53.5649, 
+    4.52702, 38.3781), cameraUpVector=(-0.244198, 0.944495, -0.219766), 
+    cameraTarget=(10.3686, 4.85604, 4.85937), viewOffsetX=-0.599017, 
+    viewOffsetY=0.226145)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=35.2897, 
+    farPlane=72.1652, width=29.1579, height=16.2861, cameraPosition=(50.7376, 
+    30.3464, 31.4655), cameraUpVector=(-0.649715, 0.670975, -0.357301), 
+    cameraTarget=(10.4982, 4.45578, 5.00803), viewOffsetX=-0.586029, 
+    viewOffsetY=0.221242)
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=TIME_HISTORY)
+session.viewports['Viewport: 1'].animationController.play(duration=UNLIMITED)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=TIME_HISTORY)
+session.viewports['Viewport: 1'].animationController.play(duration=UNLIMITED)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+a = mdb.models['SolidPatch-UniTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+a = mdb.models['SolidPatch-UniTens'].rootAssembly
+f1 = a.instances['vumat'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#2 ]', ), )
+f2 = a.instances['compare'].faces
+faces2 = f2.getSequenceFromMask(mask=('[#2 ]', ), )
+region = a.Set(faces=faces1+faces2, name='Set-5')
+mdb.models['SolidPatch-UniTens'].YsymmBC(name='symmetry-top', 
+    createStepName='Initial', region=region, localCsys=None)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=42.3292, 
+    farPlane=66.4546, width=30.3619, height=16.9586, cameraPosition=(10.5329, 
+    21.4279, 56.8634), cameraUpVector=(-0.140333, 0.778531, -0.611715), 
+    cameraTarget=(11.3162, 4.20889, 4.97489))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=36.6822, 
+    farPlane=71.106, width=26.3114, height=14.6962, cameraPosition=(-20.5746, 
+    20.3187, 46.2946), cameraUpVector=(0.408247, 0.801322, -0.437284), 
+    cameraTarget=(11.479, 4.21469, 5.0302))
+a = mdb.models['SolidPatch-UniTens'].rootAssembly
+f1 = a.instances['vumat'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#1 ]', ), )
+f2 = a.instances['compare'].faces
+faces2 = f2.getSequenceFromMask(mask=('[#1 ]', ), )
+region = a.Set(faces=faces1+faces2, name='Set-6')
+mdb.models['SolidPatch-UniTens'].XsymmBC(name='symmetry-side', 
+    createStepName='Initial', region=region, localCsys=None)
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+a = mdb.models['SolidPatch-SimpleShear'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=36.6267, 
+    farPlane=71.1426, width=26.2716, height=14.674, cameraPosition=(-21.4174, 
+    23.927, 44.0803), cameraUpVector=(0.456793, 0.757853, -0.465831), 
+    cameraTarget=(11.3162, 4.20889, 4.97489))
+a = mdb.models['SolidPatch-SimpleShear'].rootAssembly
+f1 = a.instances['vumat'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#1 ]', ), )
+f2 = a.instances['compare'].faces
+faces2 = f2.getSequenceFromMask(mask=('[#1 ]', ), )
+region = a.Set(faces=faces1+faces2, name='Set-13')
+mdb.models['SolidPatch-SimpleShear'].XsymmBC(name='symmetry-sides', 
+    createStepName='Initial', region=region, localCsys=None)
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+a = mdb.models['SolidPatch-BiTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(step='load')
+session.viewports['Viewport: 1'].view.setValues(nearPlane=37.7369, 
+    farPlane=72.3294, width=27.0679, height=15.1187, cameraPosition=(47.2391, 
+    17.8603, -33.9186), cameraUpVector=(-0.505555, 0.813583, 0.287222), 
+    cameraTarget=(11.3162, 4.20889, 4.97489))
+a = mdb.models['SolidPatch-BiTens'].rootAssembly
+f1 = a.instances['compare'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#20 ]', ), )
+f2 = a.instances['vumat'].faces
+faces2 = f2.getSequenceFromMask(mask=('[#20 ]', ), )
+region = a.Set(faces=faces1+faces2, name='Set-9')
+mdb.models['SolidPatch-BiTens'].ZsymmBC(name='symmetry-bottom', 
+    createStepName='load', region=region, localCsys=None)
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".

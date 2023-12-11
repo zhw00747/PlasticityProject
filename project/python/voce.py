@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import pandas as pd
 
-p = np.linspace(0, 1, 1000)
+p = np.linspace(0, 3, 3000)
 
 s0 = 290.7
 Q = [129.2, 209.8, 455.3]

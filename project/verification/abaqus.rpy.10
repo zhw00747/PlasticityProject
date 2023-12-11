@@ -1,0 +1,668 @@
+# -*- coding: mbcs -*-
+#
+# Abaqus/CAE Release 2022 replay file
+# Internal Version: 2021_09_15-19.57.30 176069
+# Run by anders on Fri Dec  8 18:41:38 2023
+#
+
+# from driverUtils import executeOnCaeGraphicsStartup
+# executeOnCaeGraphicsStartup()
+#: Executing "onCaeGraphicsStartup()" in the site directory ...
+from abaqus import *
+from abaqusConstants import *
+session.Viewport(name='Viewport: 1', origin=(0.0, 0.0), width=213.254150390625, 
+    height=117.946090698242)
+session.viewports['Viewport: 1'].makeCurrent()
+session.viewports['Viewport: 1'].maximize()
+from caeModules import *
+from driverUtils import executeOnCaeStartup
+executeOnCaeStartup()
+openMdb('Model.cae')
+#: The model database "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae" has been opened.
+session.viewports['Viewport: 1'].setValues(displayedObject=None)
+session.viewports['Viewport: 1'].partDisplay.geometryOptions.setValues(
+    referenceRepresentation=ON)
+p = mdb.models['SolidPatch-BiTens'].parts['compare']
+session.viewports['Viewport: 1'].setValues(displayedObject=p)
+execfile(
+    '/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py', 
+    __main__.__dict__)
+#: ('running job', 'SolidPatch-UniTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       6
+#: Number of Node Sets:          6
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-BiTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-BiTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       9
+#: Number of Node Sets:          9
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-SimpleShear-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-SimpleShear-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       13
+#: Number of Node Sets:          13
+#: Number of Steps:              1
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=TIME_HISTORY)
+session.viewports['Viewport: 1'].animationController.play(duration=UNLIMITED)
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=NONE)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=38.6219, 
+    farPlane=69.129, width=20.003, height=9.3376, viewOffsetX=-3.6864, 
+    viewOffsetY=2.02092)
+leaf = dgo.LeafFromPartInstance(partInstanceName=('VUMAT', ))
+session.viewports['Viewport: 1'].odbDisplay.displayGroup.remove(leaf=leaf)
+leaf = dgo.LeafFromPartInstance(partInstanceName=('VUMAT', ))
+session.viewports['Viewport: 1'].odbDisplay.displayGroup.add(leaf=leaf)
+leaf = dgo.LeafFromOdbElementPick(elementPick=(('VUMAT', 1, ('[#1 ]', )), ), )
+session.viewports['Viewport: 1'].odbDisplay.displayGroup.replace(leaf=leaf)
+leaf = dgo.Leaf(leafType=DEFAULT_MODEL)
+session.viewports['Viewport: 1'].odbDisplay.displayGroup.replace(leaf=leaf)
+leaf = dgo.LeafFromOdbElementPick(elementPick=(('VUMAT', 1, ('[#1 ]', )), ), )
+session.viewports['Viewport: 1'].odbDisplay.displayGroup.remove(leaf=leaf)
+leaf = dgo.LeafFromOdbElementPick(elementPick=(('VUMAT', 1, ('[#200 ]', )), ), 
+    )
+session.viewports['Viewport: 1'].odbDisplay.displayGroup.remove(leaf=leaf)
+session.viewports['Viewport: 1'].view.setValues(width=33.7864, height=15.7718, 
+    viewOffsetX=-0.149075, viewOffsetY=0.152466)
+leaf = dgo.LeafFromOdbElementPick(elementPick=(('VUMAT', 1, ('[#1000 ]', )), ), 
+    )
+session.viewports['Viewport: 1'].odbDisplay.displayGroup.remove(leaf=leaf)
+leaf = dgo.LeafFromOdbElementPick(elementPick=(('VUMAT', 1, ('[#8 ]', )), ), )
+session.viewports['Viewport: 1'].odbDisplay.displayGroup.remove(leaf=leaf)
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-BiTens-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=37.987, 
+    farPlane=73.6327, width=34.6391, height=16.1699, viewOffsetX=0.460899, 
+    viewOffsetY=-0.0454984)
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=TIME_HISTORY)
+session.viewports['Viewport: 1'].animationController.play(duration=UNLIMITED)
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=NONE)
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-SimpleShear-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=32.5063, 
+    farPlane=73.3971, width=43.5116, height=20.3116, viewOffsetX=-0.572525, 
+    viewOffsetY=-0.385286)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=33.4087, 
+    farPlane=69.922, width=44.7194, height=20.8754, cameraPosition=(-4.36538, 
+    0.50179, 57.1133), cameraUpVector=(-0.133432, 0.943225, -0.304175), 
+    cameraTarget=(13.1524, 5.68342, 5.5788), viewOffsetX=-0.588418, 
+    viewOffsetY=-0.395981)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=30.8412, 
+    farPlane=71.7254, width=41.2826, height=19.2711, cameraPosition=(-13.3445, 
+    23.7663, 49.1539), cameraUpVector=(0.373032, 0.758719, -0.534034), 
+    cameraTarget=(13.9121, 4.04858, 6.0515), viewOffsetX=-0.543197, 
+    viewOffsetY=-0.365549)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=33.2278, 
+    farPlane=70.4611, width=44.4772, height=20.7624, cameraPosition=(59.8866, 
+    21.1154, 6.179), cameraUpVector=(-0.604136, 0.792925, 0.0793055), 
+    cameraTarget=(7.87284, 4.32418, 7.64617), viewOffsetX=-0.585232, 
+    viewOffsetY=-0.393837)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=31.4916, 
+    farPlane=72.6385, width=42.1533, height=19.6775, cameraPosition=(58.1287, 
+    18.5587, 24.3324), cameraUpVector=(-0.58247, 0.81222, -0.0320356), 
+    cameraTarget=(8.297, 4.56681, 6.70959), viewOffsetX=-0.554653, 
+    viewOffsetY=-0.373258)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=33.3123, 
+    farPlane=71.3845, width=44.5904, height=20.8152, cameraPosition=(-5.88701, 
+    23.6547, 53.8985), cameraUpVector=(0.251117, 0.761267, -0.597841), 
+    cameraTarget=(12.4158, 4.11824, 6.22389), viewOffsetX=-0.586721, 
+    viewOffsetY=-0.394838)
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+leaf = dgo.LeafFromOdbElementPick(elementPick=(('COMPARE', 4, ('[#1209 ]', )), 
+    ('VUMAT', 4, ('[#1209 ]', )), ), )
+session.viewports['Viewport: 1'].odbDisplay.displayGroup.remove(leaf=leaf)
+odb = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_1.odb']
+xyList = xyPlot.xyDataListFromField(odb=odb, outputPosition=INTEGRATION_POINT, 
+    variable=(('LE', INTEGRATION_POINT, ((COMPONENT, 'LE11'), (COMPONENT, 
+    'LE22'), (COMPONENT, 'LE33'), (COMPONENT, 'LE23'), )), ('S', 
+    INTEGRATION_POINT, ((COMPONENT, 'S11'), (COMPONENT, 'S22'), (COMPONENT, 
+    'S33'), (COMPONENT, 'S23'), )), ), elementPick=(('VUMAT', 1, ('[#2000 ]', 
+    )), ('COMPARE', 1, ('[#2000 ]', )), ), )
+xyp = session.XYPlot('XYPlot-1')
+chartName = xyp.charts.keys()[0]
+chart = xyp.charts[chartName]
+curveList = session.curveSet(xyData=xyList)
+chart.setValues(curvesToPlot=curveList)
+session.charts[chartName].autoColor(lines=True, symbols=True)
+session.viewports['Viewport: 1'].setValues(displayedObject=xyp)
+odb = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=odb)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+odb = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_1.odb']
+xyList = xyPlot.xyDataListFromField(odb=odb, outputPosition=ELEMENT_CENTROID, 
+    variable=(('LE', INTEGRATION_POINT, ((COMPONENT, 'LE11'), (COMPONENT, 
+    'LE22'), (COMPONENT, 'LE33'), (COMPONENT, 'LE23'), )), ('S', 
+    INTEGRATION_POINT, ((COMPONENT, 'S11'), (COMPONENT, 'S22'), (COMPONENT, 
+    'S33'), (COMPONENT, 'S23'), )), ), elementPick=(('VUMAT', 1, ('[#2000 ]', 
+    )), ('COMPARE', 1, ('[#2000 ]', )), ), )
+xyp = session.xyPlots['XYPlot-1']
+chartName = xyp.charts.keys()[0]
+chart = xyp.charts[chartName]
+curveList = session.curveSet(xyData=xyList)
+chart.setValues(curvesToPlot=curveList)
+session.charts[chartName].autoColor(lines=True, symbols=True)
+session.viewports['Viewport: 1'].setValues(displayedObject=xyp)
+execfile(
+    '/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py', 
+    __main__.__dict__)
+#: ('running job', 'SolidPatch-UniTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       6
+#: Number of Node Sets:          6
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-BiTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-BiTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       9
+#: Number of Node Sets:          9
+#: Number of Steps:              1
+#: ('running job', 'SolidPatch-SimpleShear-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./SolidPatch-SimpleShear-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       13
+#: Number of Node Sets:          13
+#: Number of Steps:              1
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+mdb.Model(name='SolidShell-UniTens', 
+    objectToCopy=mdb.models['SolidSingle-UniTens'])
+#: The model "SolidShell-UniTens" has been created.
+p1 = mdb.models['SolidShell-UniTens'].parts['compare']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+del mdb.models['SolidShell-UniTens'].parts['compare']
+p = mdb.models['SolidShell-UniTens'].parts['vumat']
+session.viewports['Viewport: 1'].setValues(displayedObject=p)
+del mdb.models['SolidShell-UniTens'].parts['vumat']
+s = mdb.models['SolidShell-UniTens'].ConstrainedSketch(name='__profile__', 
+    sheetSize=30.0)
+g, v, d, c = s.geometry, s.vertices, s.dimensions, s.constraints
+s.setPrimaryObject(option=STANDALONE)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=24.2161, 
+    farPlane=32.3524, width=25.8006, height=12.8508, cameraPosition=(-0.687812, 
+    -0.680739, 28.2843), cameraTarget=(-0.687812, -0.680739, 0))
+session.viewports['Viewport: 1'].view.setValues(cameraPosition=(1.56073, 
+    3.78533, 28.2843), cameraTarget=(1.56073, 3.78533, 0))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=22.549, 
+    farPlane=34.0196, width=36.3737, height=18.117, cameraPosition=(0.397469, 
+    2.78042, 28.2843), cameraTarget=(0.397469, 2.78042, 0))
+session.viewports['Viewport: 1'].view.setValues(cameraPosition=(0.11298, 
+    6.0301, 28.2843), cameraTarget=(0.11298, 6.0301, 0))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=22.7762, 
+    farPlane=33.7924, width=33.5499, height=16.7105, cameraPosition=(0.352493, 
+    6.06081, 28.2843), cameraTarget=(0.352493, 6.06081, 0))
+s.rectangle(point1=(0.0, 0.0), point2=(10.0, 10.0))
+p = mdb.models['SolidShell-UniTens'].Part(name='vumat', 
+    dimensionality=TWO_D_PLANAR, type=DEFORMABLE_BODY)
+p = mdb.models['SolidShell-UniTens'].parts['vumat']
+p.BaseShell(sketch=s)
+s.unsetPrimaryObject()
+p = mdb.models['SolidShell-UniTens'].parts['vumat']
+session.viewports['Viewport: 1'].setValues(displayedObject=p)
+del mdb.models['SolidShell-UniTens'].sketches['__profile__']
+session.viewports['Viewport: 1'].view.setValues(nearPlane=24.1689, 
+    farPlane=32.3996, width=26.0238, height=12.1482, viewOffsetX=1.07244, 
+    viewOffsetY=0.731221)
+session.viewports['Viewport: 1'].partDisplay.setValues(mesh=ON)
+session.viewports['Viewport: 1'].partDisplay.meshOptions.setValues(
+    meshTechnique=ON)
+session.viewports['Viewport: 1'].partDisplay.geometryOptions.setValues(
+    referenceRepresentation=OFF)
+p = mdb.models['SolidShell-UniTens'].parts['vumat']
+e = p.edges
+pickedEdges = e.getSequenceFromMask(mask=('[#f ]', ), )
+p.seedEdgeByNumber(edges=pickedEdges, number=1, constraint=FINER)
+elemType1 = mesh.ElemType(elemCode=CPS4R, elemLibrary=EXPLICIT, 
+    secondOrderAccuracy=OFF, hourglassControl=DEFAULT, 
+    distortionControl=DEFAULT)
+elemType2 = mesh.ElemType(elemCode=CPS3, elemLibrary=EXPLICIT)
+p = mdb.models['SolidShell-UniTens'].parts['vumat']
+f = p.faces
+faces = f.getSequenceFromMask(mask=('[#1 ]', ), )
+pickedRegions =(faces, )
+p.setElementType(regions=pickedRegions, elemTypes=(elemType1, elemType2))
+p = mdb.models['SolidShell-UniTens'].parts['vumat']
+p.generateMesh()
+session.viewports['Viewport: 1'].view.setValues(nearPlane=24.0942, 
+    farPlane=32.4744, width=25.9433, height=12.165, cameraPosition=(5.1077, 
+    4.86023, 28.2843), cameraUpVector=(-0.115963, 0.993254, 0), cameraTarget=(
+    5.1077, 4.86023, 0), viewOffsetX=1.06912, viewOffsetY=0.728959)
+session.viewports['Viewport: 1'].partDisplay.setValues(sectionAssignments=ON, 
+    engineeringFeatures=ON, mesh=OFF)
+session.viewports['Viewport: 1'].partDisplay.meshOptions.setValues(
+    meshTechnique=OFF)
+del mdb.models['SolidShell-UniTens'].sections['compare']
+del mdb.models['SolidShell-UniTens'].sections['vumat']
+mdb.models['SolidShell-UniTens'].HomogeneousShellSection(name='vumat', 
+    preIntegrate=OFF, material='VUMAT', thicknessType=UNIFORM, thickness=0.1, 
+    thicknessField='', nodalThicknessField='', idealization=NO_IDEALIZATION, 
+    poissonDefinition=DEFAULT, thicknessModulus=None, temperature=GRADIENT, 
+    useDensity=OFF, integrationRule=SIMPSON, numIntPts=5)
+mdb.models['SolidShell-UniTens'].Section(name='compare', 
+    objectToCopy=mdb.models['SolidShell-UniTens'].sections['vumat'])
+mdb.models['SolidShell-UniTens'].sections['compare'].setValues(
+    preIntegrate=OFF, material='elastic-plastic', thicknessType=UNIFORM, 
+    thickness=0.1, thicknessField='', nodalThicknessField='', 
+    idealization=NO_IDEALIZATION, integrationRule=SIMPSON, numIntPts=5)
+mdb.models['SolidShell-UniTens'].HomogeneousShellSection(name='Section-3', 
+    preIntegrate=OFF, material='elastic-plastic', thicknessType=UNIFORM, 
+    thickness=1.0, thicknessField='', nodalThicknessField='', 
+    idealization=NO_IDEALIZATION, poissonDefinition=DEFAULT, 
+    thicknessModulus=None, temperature=GRADIENT, useDensity=OFF, 
+    integrationRule=SIMPSON, numIntPts=5)
+session.viewports['Viewport: 1'].partDisplay.setValues(sectionAssignments=OFF, 
+    engineeringFeatures=OFF, mesh=ON)
+session.viewports['Viewport: 1'].partDisplay.meshOptions.setValues(
+    meshTechnique=ON)
+session.viewports['Viewport: 1'].partDisplay.setValues(sectionAssignments=ON, 
+    engineeringFeatures=ON, mesh=OFF)
+session.viewports['Viewport: 1'].partDisplay.meshOptions.setValues(
+    meshTechnique=OFF)
+a = mdb.models['SolidShell-UniTens'].rootAssembly
+a.regenerate()
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+#* FeatureError: Regeneration failed
+a = mdb.models['SolidShell-UniTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(
+    optimizationTasks=OFF, geometricRestrictions=OFF, stopConditions=OFF)
+a = mdb.models['SolidShell-UniTens'].rootAssembly
+a.regenerate()
+a = mdb.models['SolidShell-UniTens'].rootAssembly
+del a.features['compare']
+a = mdb.models['SolidShell-UniTens'].rootAssembly
+del a.features['vumat']
+session.viewports['Viewport: 1'].view.setValues(nearPlane=23.4105, 
+    farPlane=33.158, width=24.747, height=10.0109, viewOffsetX=0.408259, 
+    viewOffsetY=-0.315301)
+a1 = mdb.models['SolidShell-UniTens'].rootAssembly
+p = mdb.models['SolidShell-UniTens'].parts['vumat']
+a1.Instance(name='vumat-1', part=p, dependent=ON)
+mdb.models['SolidShell-UniTens'].rootAssembly.features.changeKey(
+    fromName='vumat-1', toName='vumat')
+p1 = mdb.models['SolidShell-UniTens'].parts['vumat']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+session.viewports['Viewport: 1'].partDisplay.setValues(sectionAssignments=OFF, 
+    engineeringFeatures=OFF)
+session.viewports['Viewport: 1'].partDisplay.geometryOptions.setValues(
+    referenceRepresentation=ON)
+p1 = mdb.models['SolidShell-UniTens'].parts['vumat']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+mdb.models['SolidShell-UniTens'].parts['vumat'].setValues(space=THREE_D, 
+    type=DEFORMABLE_BODY)
+session.viewports['Viewport: 1'].partDisplay.setValues(mesh=ON)
+session.viewports['Viewport: 1'].partDisplay.meshOptions.setValues(
+    meshTechnique=ON)
+session.viewports['Viewport: 1'].partDisplay.geometryOptions.setValues(
+    referenceRepresentation=OFF)
+elemType1 = mesh.ElemType(elemCode=S4R, elemLibrary=EXPLICIT, 
+    secondOrderAccuracy=OFF, hourglassControl=DEFAULT)
+elemType2 = mesh.ElemType(elemCode=S3R, elemLibrary=EXPLICIT)
+p = mdb.models['SolidShell-UniTens'].parts['vumat']
+f = p.faces
+faces = f.getSequenceFromMask(mask=('[#1 ]', ), )
+pickedRegions =(faces, )
+p.setElementType(regions=pickedRegions, elemTypes=(elemType1, elemType2))
+p = mdb.models['SolidShell-UniTens'].parts['vumat']
+p.generateMesh()
+session.viewports['Viewport: 1'].partDisplay.setValues(sectionAssignments=ON, 
+    engineeringFeatures=ON, mesh=OFF)
+session.viewports['Viewport: 1'].partDisplay.meshOptions.setValues(
+    meshTechnique=OFF)
+del mdb.models['SolidShell-UniTens'].sections['Section-3']
+p = mdb.models['SolidShell-UniTens'].parts['vumat']
+f = p.faces
+faces = f.getSequenceFromMask(mask=('[#1 ]', ), )
+region = regionToolset.Region(faces=faces)
+p = mdb.models['SolidShell-UniTens'].parts['vumat']
+p.SectionAssignment(region=region, sectionName='vumat', offset=0.0, 
+    offsetType=MIDDLE_SURFACE, offsetField='', 
+    thicknessAssignment=FROM_SECTION)
+session.viewports['Viewport: 1'].partDisplay.setValues(sectionAssignments=OFF, 
+    engineeringFeatures=OFF)
+session.viewports['Viewport: 1'].partDisplay.geometryOptions.setValues(
+    referenceRepresentation=ON)
+p1 = mdb.models['SolidShell-UniTens'].parts['vumat']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+p = mdb.models['SolidShell-UniTens'].Part(name='compare', 
+    objectToCopy=mdb.models['SolidShell-UniTens'].parts['vumat'])
+session.viewports['Viewport: 1'].setValues(displayedObject=p)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=22.2544, 
+    farPlane=34.3142, width=30.5906, height=12.3748, viewOffsetX=2.39706, 
+    viewOffsetY=0.515927)
+session.viewports['Viewport: 1'].partDisplay.setValues(mesh=ON)
+session.viewports['Viewport: 1'].partDisplay.meshOptions.setValues(
+    meshTechnique=ON)
+session.viewports['Viewport: 1'].partDisplay.geometryOptions.setValues(
+    referenceRepresentation=OFF)
+p1 = mdb.models['SolidShell-UniTens'].parts['vumat']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+session.viewports['Viewport: 1'].partDisplay.setValues(sectionAssignments=ON, 
+    engineeringFeatures=ON, mesh=OFF)
+session.viewports['Viewport: 1'].partDisplay.meshOptions.setValues(
+    meshTechnique=OFF)
+p1 = mdb.models['SolidShell-UniTens'].parts['vumat']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+mdb.models['SolidShell-UniTens'].parts['vumat'].sectionAssignments[0].setValues(
+    sectionName='compare')
+a = mdb.models['SolidShell-UniTens'].rootAssembly
+a.regenerate()
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+a1 = mdb.models['SolidShell-UniTens'].rootAssembly
+a1.regenerate()
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(loads=ON, bcs=ON, 
+    predefinedFields=ON, connectors=ON)
+del mdb.models['SolidShell-UniTens'].rootAssembly.sets['Set-3']
+del mdb.models['SolidShell-UniTens'].boundaryConditions['symmetry-bottom']
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(step='load')
+del mdb.models['SolidShell-UniTens'].boundaryConditions['velocity']
+session.viewports['Viewport: 1'].view.setValues(nearPlane=21.3413, 
+    farPlane=35.2272, width=35.1998, height=14.2394, viewOffsetX=3.84708, 
+    viewOffsetY=0.88765)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(step='Initial')
+a = mdb.models['SolidShell-UniTens'].rootAssembly
+e1 = a.instances['vumat'].edges
+edges1 = e1.getSequenceFromMask(mask=('[#8 ]', ), )
+region = regionToolset.Region(edges=edges1)
+mdb.models['SolidShell-UniTens'].XsymmBC(name='symmmetry_bottom', 
+    createStepName='Initial', region=region, localCsys=None)
+a = mdb.models['SolidShell-UniTens'].rootAssembly
+e1 = a.instances['vumat'].edges
+edges1 = e1.getSequenceFromMask(mask=('[#1 ]', ), )
+region = regionToolset.Region(edges=edges1)
+mdb.models['SolidShell-UniTens'].YsymmBC(name='symmetry-side', 
+    createStepName='Initial', region=region, localCsys=None)
+a = mdb.models['SolidShell-UniTens'].rootAssembly
+f1 = a.instances['vumat'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#1 ]', ), )
+region = regionToolset.Region(faces=faces1)
+mdb.models['SolidShell-UniTens'].DisplacementBC(name='fixed_z', 
+    createStepName='Initial', region=region, u1=UNSET, u2=UNSET, u3=SET, 
+    ur1=UNSET, ur2=UNSET, ur3=UNSET, amplitude=UNSET, distributionType=UNIFORM, 
+    fieldName='', localCsys=None)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(step='load')
+a = mdb.models['SolidShell-UniTens'].rootAssembly
+e1 = a.instances['vumat'].edges
+edges1 = e1.getSequenceFromMask(mask=('[#2 ]', ), )
+region = regionToolset.Region(edges=edges1)
+mdb.models['SolidShell-UniTens'].VelocityBC(name='velocity', 
+    createStepName='load', region=region, v1=300.0, v2=UNSET, v3=UNSET, 
+    vr1=UNSET, vr2=UNSET, vr3=UNSET, amplitude='Amp-1', localCsys=None, 
+    distributionType=UNIFORM, fieldName='')
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+mdb.models.changeKey(fromName='SolidShell-UniTens', 
+    toName='ShellSingle-UniTens')
+a = mdb.models['ShellSingle-UniTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+execfile(
+    '/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py', 
+    __main__.__dict__)
+#: ('running job', 'ShellSingle-UniTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./ShellSingle-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     1
+#: Number of Meshes:             1
+#: Number of Element Sets:       0
+#: Number of Node Sets:          0
+#: Number of Steps:              1
+#: Error: invalid modeltype when creating XYList
+#* TypeError: 'str' object is not callable
+#* File 
+#* "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py", 
+#* line 99, in <module>
+#*     exit(1)
+o7 = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./ShellSingle-UniTens-m_1.odb']
+session.viewports['Viewport: 1'].setValues(displayedObject=o7)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=TIME_HISTORY)
+session.viewports['Viewport: 1'].animationController.play(duration=UNLIMITED)
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=NONE)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=26.8826, 
+    farPlane=57.5252, width=22.444, height=11.0137, viewOffsetX=-0.639743, 
+    viewOffsetY=0.0774668)
+odb = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./ShellSingle-UniTens-m_1.odb']
+xyList = xyPlot.xyDataListFromField(odb=odb, outputPosition=ELEMENT_CENTROID, 
+    variable=(('LE', INTEGRATION_POINT, ((COMPONENT, 'LE11'), (COMPONENT, 
+    'LE22'), (COMPONENT, 'LE33'), )), ('S', INTEGRATION_POINT, ((COMPONENT, 
+    'S11'), (COMPONENT, 'S22'), (COMPONENT, 'S33'), )), ), elementPick=((
+    'VUMAT', 1, ('[#1 ]', )), ), )
+xyp = session.xyPlots['XYPlot-1']
+chartName = xyp.charts.keys()[0]
+chart = xyp.charts[chartName]
+curveList = session.curveSet(xyData=xyList)
+chart.setValues(curvesToPlot=curveList)
+session.charts[chartName].autoColor(lines=True, symbols=True)
+session.viewports['Viewport: 1'].setValues(displayedObject=xyp)
+execfile(
+    '/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py', 
+    __main__.__dict__)
+#: ('running job', 'ShellSingle-UniTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./ShellSingle-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     1
+#: Number of Meshes:             1
+#: Number of Element Sets:       0
+#: Number of Node Sets:          0
+#: Number of Steps:              1
+session.viewports['Viewport: 1'].view.setValues(nearPlane=27.8545, 
+    farPlane=57.4931, width=25.2128, height=12.3724, viewOffsetX=9.53674e-07)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=27.8019, 
+    farPlane=57.5967, width=25.1652, height=12.349, cameraPosition=(30.813, 
+    27.6414, 25.3934), cameraUpVector=(-0.573845, 0.609767, -0.546704), 
+    cameraTarget=(5.1278, 4.42818, 0.44401), viewOffsetX=9.51874e-07)
+a = mdb.models['ShellSingle-UniTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(loads=OFF, bcs=OFF, 
+    predefinedFields=OFF, connectors=OFF)
+a1 = mdb.models['ShellSingle-UniTens'].rootAssembly
+p = mdb.models['ShellSingle-UniTens'].parts['compare']
+a1.Instance(name='compare-1', part=p, dependent=ON)
+p1 = a1.instances['compare-1']
+p1.translate(vector=(11.0, 0.0, 0.0))
+session.viewports['Viewport: 1'].view.fitView()
+mdb.models['ShellSingle-UniTens'].rootAssembly.features.changeKey(
+    fromName='compare-1', toName='compare')
+p1 = mdb.models['ShellSingle-UniTens'].parts['vumat']
+session.viewports['Viewport: 1'].setValues(displayedObject=p1)
+a = mdb.models['ShellSingle-UniTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(loads=ON, bcs=ON, 
+    predefinedFields=ON, connectors=ON)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=41.6675, 
+    farPlane=51.3701, width=24.6655, height=12.1038, viewOffsetX=0.44038, 
+    viewOffsetY=0.38205)
+mdb.models['ShellSingle-UniTens'].boundaryConditions.delete(('velocity', 
+    'fixed_z', 'symmetry-side', 'symmmetry_bottom', ))
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(step='Initial')
+a = mdb.models['ShellSingle-UniTens'].rootAssembly
+e1 = a.instances['vumat'].edges
+edges1 = e1.getSequenceFromMask(mask=('[#8 ]', ), )
+e2 = a.instances['compare'].edges
+edges2 = e2.getSequenceFromMask(mask=('[#8 ]', ), )
+region = regionToolset.Region(edges=edges1+edges2)
+mdb.models['ShellSingle-UniTens'].XsymmBC(name='symmetry-bottom', 
+    createStepName='Initial', region=region, localCsys=None)
+a = mdb.models['ShellSingle-UniTens'].rootAssembly
+e1 = a.instances['vumat'].edges
+edges1 = e1.getSequenceFromMask(mask=('[#1 ]', ), )
+e2 = a.instances['compare'].edges
+edges2 = e2.getSequenceFromMask(mask=('[#1 ]', ), )
+region = regionToolset.Region(edges=edges1+edges2)
+mdb.models['ShellSingle-UniTens'].YsymmBC(name='symmetry-side', 
+    createStepName='Initial', region=region, localCsys=None)
+a = mdb.models['ShellSingle-UniTens'].rootAssembly
+f1 = a.instances['vumat'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#1 ]', ), )
+f2 = a.instances['compare'].faces
+faces2 = f2.getSequenceFromMask(mask=('[#1 ]', ), )
+region = regionToolset.Region(faces=faces1+faces2)
+mdb.models['ShellSingle-UniTens'].ZsymmBC(name='symmetry-z', 
+    createStepName='Initial', region=region, localCsys=None)
+session.viewports['Viewport: 1'].assemblyDisplay.setValues(step='load')
+a = mdb.models['ShellSingle-UniTens'].rootAssembly
+e1 = a.instances['vumat'].edges
+edges1 = e1.getSequenceFromMask(mask=('[#2 ]', ), )
+e2 = a.instances['compare'].edges
+edges2 = e2.getSequenceFromMask(mask=('[#2 ]', ), )
+region = regionToolset.Region(edges=edges1+edges2)
+mdb.models['ShellSingle-UniTens'].VelocityBC(name='velocity', 
+    createStepName='load', region=region, v1=300.0, v2=UNSET, v3=UNSET, 
+    vr1=UNSET, vr2=UNSET, vr3=UNSET, amplitude='Amp-1', localCsys=None, 
+    distributionType=UNIFORM, fieldName='')
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".
+execfile(
+    '/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py', 
+    __main__.__dict__)
+#: ('running job', 'ShellSingle-UniTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./ShellSingle-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       0
+#: Number of Node Sets:          0
+#: Number of Steps:              1
+#* VisError: No xy data was extracted using the provided options.
+#* File 
+#* "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py", 
+#* line 102, in <module>
+#*     'VUMAT', 1, ('[#1 ]', )), ), )
+execfile(
+    '/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py', 
+    __main__.__dict__)
+#: ('running job', 'ShellSingle-UniTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./ShellSingle-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       0
+#: Number of Node Sets:          0
+#: Number of Steps:              1
+a = mdb.models['ShellSingle-UniTens'].rootAssembly
+session.viewports['Viewport: 1'].setValues(displayedObject=a)
+session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./ShellSingle-UniTens-m_1.odb'].close(
+    )
+o1 = session.openOdb(
+    name='/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/ShellSingle-UniTens-m_1.odb')
+session.viewports['Viewport: 1'].setValues(displayedObject=o1)
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/ShellSingle-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       0
+#: Number of Node Sets:          0
+#: Number of Steps:              1
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].view.setValues(nearPlane=46.085, 
+    farPlane=94.574, width=36.648, height=17.9838, viewOffsetX=-0.0138221, 
+    viewOffsetY=-0.015873)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=49.8897, 
+    farPlane=92.8709, width=39.6735, height=19.4685, cameraPosition=(15.7628, 
+    -12.9188, 69.1409), cameraUpVector=(-0.108518, 0.989941, -0.0907837), 
+    cameraTarget=(11.2988, 4.14692, 0.559577), viewOffsetX=-0.0149632, 
+    viewOffsetY=-0.0171834)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=46.4194, 
+    farPlane=95.7694, width=36.9138, height=18.1143, cameraPosition=(40.1286, 
+    11.3943, 64.8892), cameraUpVector=(-0.226601, 0.903088, -0.364808), 
+    cameraTarget=(11.4903, 4.33971, 0.510303), viewOffsetX=-0.0139224, 
+    viewOffsetY=-0.0159881)
+session.viewports['Viewport: 1'].animationController.setValues(
+    animationType=TIME_HISTORY)
+session.viewports['Viewport: 1'].animationController.play(duration=UNLIMITED)
+session.viewports['Viewport: 1'].view.setValues(nearPlane=49.9505, 
+    farPlane=92.6011, width=39.7219, height=19.4922, cameraPosition=(17.3151, 
+    7.54335, 71.0317), cameraUpVector=(-0.0560889, 0.926369, -0.372418), 
+    cameraTarget=(11.4224, 4.32703, 0.537019), viewOffsetX=-0.0149815, 
+    viewOffsetY=-0.0172043)
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+odb = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/ShellSingle-UniTens-m_1.odb']
+xyList = xyPlot.xyDataListFromField(odb=odb, outputPosition=ELEMENT_CENTROID, 
+    variable=(('LE', INTEGRATION_POINT, ((COMPONENT, 'LE11'), (COMPONENT, 
+    'LE22'), (COMPONENT, 'LE33'), )), ('S', INTEGRATION_POINT, ((COMPONENT, 
+    'S11'), (COMPONENT, 'S22'), (COMPONENT, 'S33'), )), ), elementPick=((
+    'VUMAT', 1, ('[#1 ]', )), ('COMPARE', 1, ('[#1 ]', )), ), )
+xyp = session.xyPlots['XYPlot-1']
+chartName = xyp.charts.keys()[0]
+chart = xyp.charts[chartName]
+curveList = session.curveSet(xyData=xyList)
+chart.setValues(curvesToPlot=curveList)
+session.charts[chartName].autoColor(lines=True, symbols=True)
+session.viewports['Viewport: 1'].setValues(displayedObject=xyp)
+execfile(
+    '/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/run_sims.py', 
+    __main__.__dict__)
+#: ('running job', 'ShellSingle-UniTens-m_1')
+#: Model: /home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./ShellSingle-UniTens-m_1.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     2
+#: Number of Meshes:             2
+#: Number of Element Sets:       0
+#: Number of Node Sets:          0
+#: Number of Steps:              1
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    CONTOURS_ON_DEF, ))
+session.viewports['Viewport: 1'].odbDisplay.display.setValues(plotState=(
+    UNDEFORMED, ))
+odb = session.odbs['/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/./ShellSingle-UniTens-m_1.odb']
+xyList = xyPlot.xyDataListFromField(odb=odb, outputPosition=ELEMENT_CENTROID, 
+    variable=(('S', INTEGRATION_POINT, ((INVARIANT, 'Mises'), )), ), 
+    elementPick=(('VUMAT', 1, ('[#1 ]', )), ('COMPARE', 1, ('[#1 ]', )), ), )
+xyp = session.xyPlots['XYPlot-1']
+chartName = xyp.charts.keys()[0]
+chart = xyp.charts[chartName]
+curveList = session.curveSet(xyData=xyList)
+chart.setValues(curvesToPlot=curveList)
+session.charts[chartName].autoColor(lines=True, symbols=True)
+session.viewports['Viewport: 1'].setValues(displayedObject=xyp)
+mdb.save()
+#: The model database has been saved to "/home/anders/Documents/H2023/PlasticityTheory/PlasticityProject/project/verification/Model.cae".

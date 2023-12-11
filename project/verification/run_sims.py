@@ -1,7 +1,3 @@
-from abaqus import *
-from abaqusConstants import *
-from caeModules import *
-
 # fmt: off
 
 def add_vumat_material(input_file_no_ext, m):
@@ -21,7 +17,13 @@ def add_vumat_material(input_file_no_ext, m):
 2
 **1, p, "Euivalent plastic strain" 
 **2, T, "Temperature"
+*TRANSVERSE SHEAR 
+**Calculated as 5/6*G*t
+6578.947,6578.947,0.0
     '''.format(m)
+
+
+
 
     with open(input_file, 'r') as file:
         lines = file.readlines()
@@ -33,84 +35,119 @@ def add_vumat_material(input_file_no_ext, m):
         file.writelines(lines)
     return output_file_no_ext
 
-herhsey_m = [1,2,10,20,100]
-herhsey_m = [1,2]
 
-models = ['SolidSingle-UniTens','SolidSingle-BiTens', 'SolidSingle-SimpleShear']
+m_h = [1,2,10,20,100]
 
-for model in models:
-    mdb.Job(name=model, model=model, 
-        description='', type=ANALYSIS, atTime=None, waitMinutes=0, waitHours=0, 
-        queue=None, memory=90, memoryUnits=PERCENTAGE, explicitPrecision=SINGLE, 
-        nodalOutputPrecision=SINGLE, echoPrint=OFF, modelPrint=OFF, 
-        contactPrint=OFF, historyPrint=OFF, userSubroutine='', scratch='', 
-        resultsFormat=ODB, parallelizationMethodExplicit=DOMAIN, numDomains=1, 
-        activateLoadBalancing=False, numThreadsPerMpiProcess=1, 
-        multiprocessingMode=DEFAULT, numCpus=1)
-    mdb.jobs[model].writeInput(consistencyChecking=OFF)
+m_h = [2]
+#m_h = [1]
 
-    data = ""
-    
-    for m in herhsey_m:
-        jobname = add_vumat_material(model,m)
-
-        print("running job",jobname)
-        import subprocess
-        subprocess.call(['bash','run.sh',jobname])
-
-        odb = session.openOdb(
-        name='./'+jobname+'.odb')
-        session.viewports['Viewport: 1'].setValues(displayedObject=odb)
-        xyList = xyPlot.xyDataListFromField(odb=odb, outputPosition=INTEGRATION_POINT, 
-            variable=(('S', INTEGRATION_POINT, ((COMPONENT, 'S11'),
-                                                (COMPONENT, 'S22'),
-                                                (COMPONENT, 'S33'),
-                                                (COMPONENT, 'S23'),)),
-                      ('LE', INTEGRATION_POINT, ((COMPONENT, 'LE11'),
-                                                (COMPONENT, 'LE22'),
-                                                (COMPONENT, 'LE33'),
-                                                (COMPONENT, 'LE23')),)), 
-            elementPick=(('VUMAT', 1, ('[#1 ]', )), ('COMPARE', 1, (
-            '[#1 ]', )), ), )
-        
-        # xyList = xyPlot.xyDataListFromField(odb=odb, outputPosition=INTEGRATION_POINT, 
-        #     variable=(('LE', INTEGRATION_POINT, ((COMPONENT, 'LE11'), )), ('S', 
-        #     INTEGRATION_POINT, ((COMPONENT, 'S11'),
-        #                                         (COMPONENT, 'S22'),
-        #                                         (COMPONENT, 'S33'),
-        #                                         (COMPONENT, 'S23'), )), ), elementPick=(('VUMAT', 1, (
-        #     '[#1 ]', )), ), )
-        
-        for xyData in xyList:
-            name = xyData.name
-            data += name+"-m_"+str(m)+"\n"
-            for pair in xyData.data:
-                data += str(pair[0]) + ","+str(pair[1])+"\n"
-
-
-
-     
-            # x_values = xyData.data[0]
-            # for x in x_values:
-            #     print(x)
-
-        #xyp = session.xyPlots['XYPlot-1']
-        #chartName = xyp.charts.keys()[0]
-        #chart = xyp.charts[chartName]
-        #curveList = session.curveSet(xyData=xyList)
-        #chart.setValues(curvesToPlot=curveList)
-        #session.charts[chartName].autoColor(lines=True, symbols=True)
-        #session.viewports['Viewport: 1'].setValues(displayedObject=xyp)
+models = ['SolidPatch-UniTens',
+        'SolidPatch-BiTens',
+        'SolidPatch-SimpleShear',
+        'SolidSingle-UniTens',
+        'SolidSingle-BiTens', 
+        'SolidSingle-SimpleShear']
 
         
-        
-        
-        
-        
-        
+models = ["SolidSingle-UniTens", 
+          'SolidSingle-BiTens']
 
-    
-    
-    output_name = "./output/"+model +".txt"
-    with open(output_name,"w") as xy_out:
-        xy_out.writelines(data)
+if __name__=="__main__":
+    from abaqus import *
+    from abaqusConstants import *
+    from caeModules import *
+
+    for model in models:
+        mdb.Job(name=model, model=model, 
+            description='', type=ANALYSIS, atTime=None, waitMinutes=0, waitHours=0, 
+            queue=None, memory=90, memoryUnits=PERCENTAGE, explicitPrecision=SINGLE, 
+            nodalOutputPrecision=SINGLE, echoPrint=OFF, modelPrint=OFF, 
+            contactPrint=OFF, historyPrint=OFF, userSubroutine='', scratch='', 
+            resultsFormat=ODB, parallelizationMethodExplicit=DOMAIN, numDomains=1, 
+            activateLoadBalancing=False, numThreadsPerMpiProcess=1, 
+            multiprocessingMode=DEFAULT, numCpus=1)
+        mdb.jobs[model].writeInput(consistencyChecking=OFF)
+
+        data = ""
+        
+        for m in m_h:
+            jobname = add_vumat_material(model,m)
+
+            print("running job",jobname)
+            import subprocess
+            subprocess.call(['bash','run.sh',jobname])
+
+            odb = session.openOdb(
+            name='./'+jobname+'.odb')
+            session.viewports['Viewport: 1'].setValues(displayedObject=odb)
+            
+            modeltype = model.split("-")[0]
+            if modeltype=="SolidSingle":
+                xyList = xyPlot.xyDataListFromField(odb=odb, outputPosition=INTEGRATION_POINT, 
+                    variable=(('S', INTEGRATION_POINT, ((COMPONENT, 'S11'),
+                                                        (COMPONENT, 'S22'),
+                                                        (COMPONENT, 'S33'),
+                                                        (COMPONENT, 'S23'),)),
+                            ('LE', INTEGRATION_POINT, ((COMPONENT, 'LE11'),
+                                                        (COMPONENT, 'LE22'),
+                                                        (COMPONENT, 'LE33'),
+                                                        (COMPONENT, 'LE23')),)), 
+                    elementPick=(('VUMAT', 1, ('[#1 ]', )), ('COMPARE', 1, (
+                    '[#1 ]', )), ), )
+            elif modeltype=="SolidPatch":
+                xyList = xyPlot.xyDataListFromField(odb=odb, outputPosition=INTEGRATION_POINT, 
+                    variable=(('LE', INTEGRATION_POINT, ((COMPONENT, 'LE11'), (COMPONENT, 
+                    'LE22'), (COMPONENT, 'LE33'), (COMPONENT, 'LE23'), )), ('S', 
+                    INTEGRATION_POINT, ((COMPONENT, 'S11'), (COMPONENT, 'S22'), (COMPONENT, 
+                    'S33'), (COMPONENT, 'S23'), )), ), elementPick=(('VUMAT', 1, ('[#2000 ]', 
+                    )), ('COMPARE', 1, ('[#2000 ]', )), ), )
+            elif modeltype=="ShellSingle":
+                xyList = xyPlot.xyDataListFromField(odb=odb, outputPosition=ELEMENT_CENTROID, 
+                    variable=(('LE', INTEGRATION_POINT, ((COMPONENT, 'LE11'), (COMPONENT, 
+                    'LE22'), (COMPONENT, 'LE33'), )), ('S', INTEGRATION_POINT, ((COMPONENT, 
+                    'S11'), (COMPONENT, 'S22'), (COMPONENT, 'S33'), )), ), elementPick=((
+                    'VUMAT', 1, ('[#1 ]', )), ('COMPARE', 1, ('[#1 ]', )), ), )
+            else:
+                print("Error: invalid modeltype when creating XYList")
+                exit(1)
+            # xyList = xyPlot.xyDataListFromField(odb=odb, outputPosition=INTEGRATION_POINT, 
+            #     variable=(('LE', INTEGRATION_POINT, ((COMPONENT, 'LE11'), )), ('S', 
+            #     INTEGRATION_POINT, ((COMPONENT, 'S11'),
+            #                                         (COMPONENT, 'S22'),
+            #                                         (COMPONENT, 'S33'),
+            #                                         (COMPONENT, 'S23'), )), ), elementPick=(('VUMAT', 1, (
+            #     '[#1 ]', )), ), )
+            
+            for xyData in xyList:
+                name = xyData.name
+                data += name+"-m_"+str(m)+"\n"
+                for pair in xyData.data:
+                    data += str(pair[0]) + ","+str(pair[1])+"\n"
+
+
+
+        
+                # x_values = xyData.data[0]
+                # for x in x_values:
+                #     print(x)
+
+            #xyp = session.xyPlots['XYPlot-1']
+            #chartName = xyp.charts.keys()[0]
+            #chart = xyp.charts[chartName]
+            #curveList = session.curveSet(xyData=xyList)
+            #chart.setValues(curvesToPlot=curveList)
+            #session.charts[chartName].autoColor(lines=True, symbols=True)
+            #session.viewports['Viewport: 1'].setValues(displayedObject=xyp)
+
+            
+            
+            
+            
+            
+            
+
+        
+        
+        output_name = "./output/"+model +".txt"
+        with open(output_name,"w") as xy_out:
+            xy_out.writelines(data)

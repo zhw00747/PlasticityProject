@@ -275,18 +275,27 @@
 !-----Calulating Lode angle: (This includes a fix in case the argument 
 !-----is slightly out of the allowed range for arccos (-1 to 1) 
 !-----------------------------------------------------------------------
-         tmp = 3*sqrt(3.)/2*J3/J2**1.5
-         call assert((tmp.ge.(-1.-1e-6)).and.(tmp.le.(1.+1e-6)),
-     <        "arccos must take args from -1 to 1")
-         Lode = 1.0/3*acos(max(-1.0,min(tmp,1.0)))
-         !print*, "Lode",Lode
-         call assert((Lode.ge.(0.0-sing_tol)).and.(Lode.le.(PI/3+sing_tol)), 
-     <        "0 <= Lode <= pi/3") 
-!-----Principal stresses
          sH = (s11 + s22 + s33)/3
-         s1 = sH + 2/sqrt(3.)*sqrt(J2)*cos(Lode)
-         s2 = sH + 2/sqrt(3.)*sqrt(J2)*cos(2*PI/3 - Lode)
-         s3 = sH + 2/sqrt(3.)*sqrt(J2)*cos(2*PI/3 + Lode)
+         if (abs(J2)<sing_tol)then
+            s1 = sH
+            s2 = sH
+            s3 = sH
+         else
+!-----------------------------------------------------------------------
+            tmp = 3*sqrt(3.)/2*J3/J2**1.5
+            call assert((tmp.ge.(-1.-sing_tol)).and.
+     <          (tmp.le.(1.+sing_tol)),
+     <           "arccos must take args from -1 to 1")
+            Lode = 1.0/3*acos(max(-1.0,min(tmp,1.0)))
+            call assert((Lode.ge.(0.0-sing_tol)).and.
+     <          (Lode.le.(PI/3+sing_tol)), 
+     <           "0 <= Lode <= pi/3") 
+!-----Principal stresses
+            s1 = sH + 2/sqrt(3.)*sqrt(J2)*cos(Lode)
+            s2 = sH + 2/sqrt(3.)*sqrt(J2)*cos(2*PI/3 - Lode)
+            s3 = sH + 2/sqrt(3.)*sqrt(J2)*cos(2*PI/3 + Lode)
+         endif
+!-----------------------------------------------------------------------
          A = s1 - s2
          B = s2 - s3
          C = s1 - s3
@@ -300,7 +309,7 @@
 
          !call phi_mises(s11,s22,s33,s12,s23,s31,phi)
          !print*, "phi mises",phi
-         phi = (0.5*(A**n + B**n + C**n))**(1/n)
+         phi = (0.5*(A**n + B**n + C**n))**(1.0/n)
          !print*,"PHI",phi
 
          call assert((phi.ge.0.0),
@@ -321,18 +330,7 @@
 !-----------------------------------------------------------------------
          !f = phi - sigmaY*Gamma
          f = phi - sigmaY*Gamma*vp
-         print*,"p",p
-         print*,"phi",phi
-         print*,"Gamma",Gamma
-         print*,"vp",vp
-         print*,"sigma0",sigma0
-         print*,"R",R
-         print*,"Q1",Q1
-         print*,"C1",C1
-         print*,"Q2",Q2
-         print*,"C2",C2
-         print*,"Q3",Q3
-         print*,"C3",C3
+
 
          if (i.eq.0) then
 !-----Yield function
